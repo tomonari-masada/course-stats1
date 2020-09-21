@@ -1,0 +1,17 @@
+\FontMath
+\frametitle{データ例}
+\begin{lstlisting}[language=R]
+#spurters
+x <- c(18, 40, 15, 17, 20, 44, 38)
+#controls
+y <- c(-4, 0, -19, 24, 19, 10, 5, 10,
+      29, 13, -9, -8, 20, -1, 12, 21,
+      -7, 14, 13, 20, 11, 16, 15, 27,
+      23, 36, -33, 34, 13, 11, -19, 21,
+      6, 25, 30,22, -28, 15, 26, -1, -2,
+      43, 23, 22, 25, 16, 10, 29)
+iqData <- data.frame(Treatment =
+      c(rep("Spurters", length(x)),
+      rep("Controls", length(y))),
+      Gain = c(x, y))
+\end{lstlisting}

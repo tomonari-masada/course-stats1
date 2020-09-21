@@ -1,0 +1,296 @@
+\documentclass[aspectratio=169,unicode,dvipdfmx,14pt]{beamer}
+
+\input{mycmds.tex}
+
+\title{ \\ベイズ推測（ベイズ推論）\\ Bayesian inference}
+\author{\texorpdfstring{正田 備也\newline\href{mailto:masada@rikkyo.ac.jp}{masada@rikkyo.ac.jp}}{正田 備也}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{予測分布}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{真の分布}
+\begin{itemize}
+\item 観測データとして、$d$次元ユークリッド空間$\mathbb{R}^d$上の$n$個の点の集合$\bm{x}_1,\ldots,\bm{x}_n$が与えられているとする
+\item 観測データをひとつの記号で$\mathcal{D}$と書くことにする
+\begin{itemize}
+\item つまり、$\mathcal{D}=\{ \bm{x}_1,\ldots,\bm{x}_n \}$
+\end{itemize}
+\item $\bm{x}_i$は、独立に同じ分布$q(\bm{x})$にしたがうと考えることにする
+\begin{itemize}
+\item つまり、$q(\mathcal{D}) = \prod_{i=1}^n q(\bm{x}_i)$
+\end{itemize}
+\item しかしこの分布$q(\bm{x})$を直接知る方法はない
+\item そこで、与えられた$\mathcal{D}$から$q(\bm{x})$を推測することを、統計的推測ないし統計的学習という
+\end{itemize}
+\end{frame}
+
+\begin{frame}{確率モデル probabilistic model}
+\begin{itemize}
+\item 真の分布を推測するとき、私たちはあるパラメータ$\bm{\eta}$をもつ確率分布$p(\bm{x}|\bm{\eta})$を準備する
+\begin{itemize}
+\item $p(\bm{x}|\bm{\eta})$を確率モデルと呼ぶ
+\end{itemize}
+\item また、パラメータを決めること自体にも不確かさがあるとする場合、パラメータがしたがう事前分布$p(\bm{\eta})$も準備する
+\begin{itemize}
+\item 事前分布のパラメータ（ハイパーパラメータ）はまだ書かずにおく
+\end{itemize}
+\item このとき事後分布は以下のように書ける
+\begin{align}
+p(\bm{\eta} | \mathcal{D}) = \frac{1}{Z_n} p(\bm{\eta}) p(\mathcal{D}|\bm{\eta})
+= \frac{1}{Z_n} p(\bm{\eta}) \prod_{i=1}^n p(\bm{x}_i | \bm{\eta})
+\label{eq:posterior}
+\end{align}
+\item $Z_n$については次のスライドで
+\end{itemize}
+\end{frame}
+
+\begin{frame}{周辺尤度}
+\begin{itemize}
+\item 式\eqref{eq:posterior}の事後分布の規格化定数$Z_n$を分配関数とも呼ぶ
+\begin{itemize}
+\item 分配関数partition functionは物理方面から来ている用語
+\end{itemize}
+\item $Z_n$は規格化定数なので、$Z_n = \int p(\bm{\eta}) p(\mathcal{D}|\bm{\eta}) d\bm{\eta}$を満たす
+\item すると、$Z_n = p(\mathcal{D})$となる
+\item $p(\mathcal{D})$を周辺尤度もしくはエビデンスevidenceと呼ぶ
+\begin{itemize}
+\item 論文ではmarginal likelihoodよりevidenceのほうをよく見かける
+\end{itemize}
+\item すなわち、事後分布は以下のようにも書ける
+\begin{align}
+p(\bm{\eta} | \mathcal{D}) = \frac{ p(\bm{\eta}) p(\mathcal{D}|\bm{\eta}) }{ p(\mathcal{D}) }
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{観測データを生成する分布の推定(1/2)}
+\begin{itemize}
+\item 観測データ$\mathcal{D}$から、それを生成する分布$\hat{p}(\bm{x})$を推定する方法はいろいろある
+\item 観測データ$\mathcal{D}=\{\bm{x}_1,\ldots,\bm{x}_N\}$が与えられているとき、パラメータ$\bm{\eta}$の関数$\prod_{i=1}^N p(\bm{x}_i|\bm{\eta})$を尤度関数と呼ぶ
+\item[1.] 尤度関数を最大にするパラメータ$\bm{\eta}_{\mbox{\scriptsize ML}}$を最尤推定量といい、$p(\bm{x}_i | \bm{\eta}_{\mbox{\scriptsize ML}})$を推測の結果$\hat{p}(\bm{x})$とする方法を、最尤推定という
+\item[2.] 事後分布の最大値を与えるパラメータ$\bm{\eta}_{\mbox{\scriptsize MAP}}$を事後確率最大化推定量といい、$p(\bm{x}_i | \bm{\eta}_{\mbox{\scriptsize MAP}})$を推測の結果$\hat{p}(\bm{x})$とする方法を、事後確率最大化推定（もしくはMAP推定）という
+\end{itemize}
+\end{frame}
+
+\begin{frame}{観測データを生成する分布の推定(2/2)}
+\begin{itemize}
+\item[3.] ベイズ的なモデリングの課題は事後分布を求めることだったが、
+事後分布を使うと、以下で定義する予測分布$p(\bm{x}|\mathcal{D})$をもって推測の結果$\hat{p}(\bm{x})$とすることができる
+\item 事後分布$p(\bm{\eta} | \mathcal{D})$によって確率モデル$p(\bm{x}|\bm{\eta})$を平均化したもの、
+つまり、$p(\bm{\eta} | \mathcal{D})$に関する$p(\bm{x}|\bm{\eta})$の期待値を、予測分布と呼ぶ
+\begin{align}
+p(\bm{x}|\mathcal{D}) = \int p(\bm{x}|\bm{\eta}) p(\bm{\eta} | \mathcal{D}) d\bm{\eta}
+\label{eq:predictive}
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ベイズ推測}
+\begin{itemize}
+\item ベイズ推測Bayesian inferenceとは、「真の分布は、おおよそ予測分布だろう」と推測することである
+\begin{itemize}
+\item[cf.] 渡辺澄夫『ベイズ統計の理論と方法』コロナ社、5頁
+\end{itemize}
+\item[] \ 
+\item 以下、正規分布と多項分布の場合に、共役事前分布を使ったときに予測分布がどのような分布になるかを説明する
+\end{itemize}
+\end{frame}
+
+\section{正規分布の場合}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{単変量正規分布を使ったベイズ的モデリング}
+\begin{itemize}
+\item 観測データ$\mathcal{D}=\{x_1,\ldots,x_N\}$が独立に同じ正規分布$\mathcal{N}(\mu,\tau^{-1})$にしたがうと仮定
+\item 平均$\mu$と精度$\tau$の事前分布として正規ガンマ分布$\mbox{NG}(\mu,\tau;\mu_0, \lambda_0, \alpha, \beta)$を使う
+\item 正規ガンマ分布の確率密度関数は
+\begin{align}
+p(\mu, \tau ; \mu_0, \lambda_0, \alpha, \beta)
+& = p(\mu | \tau ; \mu_0, \lambda_0, \alpha, \beta) p(\tau ; \alpha, \beta)
+\notag \\ &
+= \frac{\beta^\alpha\sqrt{\lambda_0}}{\Gamma(\alpha)\sqrt{2\pi}}
+\tau^{\alpha-\frac{1}{2}}e^{-\beta\tau}e^{-\frac{\lambda_0\tau(\mu - \mu_0)^2}{2}}
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{共役事前分布としての正規ガンマ分布}
+\begin{itemize}
+\item 正規ガンマ分布は共役事前分布
+\item よって事後分布も正規ガンマ分布となる
+\item 事後分布$p(\mu,\tau|\mathcal{D}; \mu_0, \lambda_0, \alpha, \beta)$は以下のように書ける
+\begin{itemize}
+\item 前回の講義資料を参照
+\end{itemize}
+\begin{align}
+& p(\mu,\tau|\mathcal{D}; \mu_0, \lambda_0, \alpha, \beta) 
+\notag \\ & \propto
+\tau^{\alpha + \frac{N}{2} - \frac{1}{2}}
+\exp \bigg[ - \tau \bigg( \beta + \frac{Ns}{2} + \frac{ \lambda_0 N (\bar{x} - \mu_0)^2 }{ 2( \lambda_0 + N ) }
+\bigg) \bigg]
+\notag \\ & \mbox{ \ }
+\times \exp \bigg[ - \frac{\tau}{2} ( \lambda_0 + N ) \bigg( \mu - \frac{ \lambda_0 \mu_0 + N\bar{x} }{ \lambda_0 + N } \bigg)^2 \bigg]
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{予測分布}
+\begin{itemize}
+\item 上記の設定のもとでの予測分布$p(x | \mathcal{D})$は
+$p(x|\mathcal{D}) = \int p(x|\mu,\tau)p(\mu,\tau|\mathcal{D}) d\mu d\tau$によって求められる
+\item 事後分布は、$p(\mu,\tau|\mathcal{D})=p(\mu|\tau,\mathcal{D})p(\tau|\mathcal{D})$と、正規分布とガンマ分布の積で書ける（正規ガンマ分布だから）。よって
+\begin{align}
+p(x|\mathcal{D}) = \int p(x|\mu,\tau)p(\mu|\tau,\mathcal{D})p(\tau|\mathcal{D}) d\mu d\tau
+\end{align}
+\vspace{-.2in}
+\begin{itemize}
+\item $p(x|\mu,\tau) \propto \exp[ - \frac{\tau}{2} (x - \mu)^2 ]$
+\item $p(\mu|\tau,\mathcal{D}) \propto \exp [ - \frac{\tau( \lambda_0 + N )}{2}  ( \mu - \frac{ \lambda_0 \mu_0 + N\bar{x} }{ \lambda_0 + N } )^2 ]$
+\item $p(\tau|\mathcal{D}) \propto \tau^{\alpha + \frac{N}{2} - 1}
+\exp [ - \tau ( \beta + \frac{Ns}{2} + \frac{ \lambda_0 N (\bar{x} - \mu_0)^2 }{ 2( \lambda_0 + N ) } ) ]$
+\end{itemize}
+\item この予測分布がどういう分布になるかを、以下で示す
+\end{itemize}
+\end{frame}
+
+\begin{frame}{t-分布 Student's t-distribution}
+\begin{itemize}
+\item $X_1,\ldots,X_n$を平均$\mu$、標準偏差$\sigma$の正規分布に独立にしたがう確率変数とする
+\item 標本平均を$\bar{X}=\frac{\sum_i X_i}{n}$、不偏分散を$S^2=\frac{\sum_i (X_i - \bar{X})^2}{n-1}$とする
+\item このとき、$t = \frac{\bar{X} - \mu}{S / \sqrt{n}}$と定義される値は、自由度$\nu=n-1$のt-分布にしたがう
+\item t-分布の確率密度関数は、以下のようになる
+\begin{align}
+p(t;\nu) = \frac{\Gamma((\nu+1)/2)}{\sqrt{\nu\pi}\Gamma(\nu/2)}(1 + t^2/\nu)^{-(\nu+1)/2}
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{t location-scale distribution}
+\begin{itemize}
+\item 平均が$\mu$、スケールが$\sigma^2$、自由度が$\nu$のt location-scale distributionの確率密度関数は、以下のとおり
+\begin{align}
+p(x;\mu,\sigma^2) =\frac{\Gamma((\nu+1)/2)}{\sigma\sqrt{\nu\pi}\Gamma(\nu/2)} \bigg( 1 + \frac{(x - \mu)^2}{\nu\sigma^2} \bigg)^{ - (\nu+1) / 2 }
+\end{align}
+\item $\mu=0$、$\sigma=1$のとき、t-分布に一致する
+\begin{itemize}
+\item 英語版Wikipedia「\href{https://en.wikipedia.org/wiki/Student's_t-distribution}{t-分布}」の「\href{https://en.wikipedia.org/wiki/Student's_t-distribution\#Bayesian_inference}{4.2 Bayesian Inference}」を参照
+\item MATLABの\href{https://www.mathworks.com/help/stats/prob.tlocationscaledistribution.html}{tLocationScaleDistributionの項}も参照
+\end{itemize}
+\item 以下では、予測分布がこのt location-scale distributionになることを示す
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\FontMath
+準備として、正規ガンマ分布$\mbox{NG}(\mu,\tau|\mu_0, \lambda_0, \alpha, \beta)$において
+$\alpha=\beta=\frac{\nu}{2}$である場合、以下が成立することを確認しておく（証明はしない）。
+(cf. \href{https://www.cs.ubc.ca/~murphyk/Teaching/CS340-Fall07/reading/NG.pdf}{CS340 (Machine learning) Fall 2007 @ UBC})
+\begin{align}
+t_\nu (\mu|\mu_0,\lambda_0^{-1}) = \int_0^\infty \mbox{NG}(\mu,\tau|\mu_0, \lambda_0, \frac{\nu}{2}, \frac{\nu}{2}) d\tau
+= \int_0^\infty \mathcal{N}(\mu|\mu_0,(\lambda_0\tau)^{-1})\mbox{Ga}(\tau|\frac{\nu}{2},\frac{\nu}{2}) d\tau
+\end{align}
+ただし、$t_\nu (x|\mu,\sigma^2)$は、平均$\mu$、スケール$\sigma^2$、自由度$\nu$のt location-scale distributionである。
+
+$x \sim \mbox{Ga}(\alpha,\beta)$のとき、$cx \sim \mbox{Ga}(\alpha,\frac{\beta}{c})$となる。よって
+\begin{align}
+\int_0^\infty \mathcal{N}(\mu|\mu_0,(\lambda_0\tau)^{-1})\mbox{Ga}(\tau|\alpha,\beta) d\tau
+& = \int_0^\infty \mathcal{N}(\mu|\mu_0,(\lambda_0\tau)^{-1})\mbox{Ga}(\tau|\alpha,\frac{\beta}{\alpha}\alpha) d\tau
+\notag \\ & =
+\int_0^\infty \mathcal{N}(\mu|\mu_0,(\lambda_0\tau)^{-1})\mbox{Ga}(\frac{\alpha}{\beta}\tau|\alpha,\alpha) d\tau
+\notag \\ & =
+\int_0^\infty \mathcal{N}(\mu|\mu_0,(\frac{\beta}{\alpha}\lambda_0\tau^\prime)^{-1})\mbox{Ga}(\tau^\prime|\alpha,\alpha) d\tau^\prime
+\notag \\ & =
+t_{2\alpha}(\mu|\mu_0,\frac{\beta}{\alpha\lambda_0})
+\label{eq:t-dist}
+\end{align}
+\end{frame}
+
+\begin{frame}
+\FontMath
+もうひとつの準備として、異なる二つの単変量正規分布の密度関数の積について、以下の結果を確認しておく。
+
+この結果は、\href{https://www.johndcook.com/blog/2012/10/29/product-of-normal-pdfs/}{このブログ記事}において提示されているものだが、\href{https://www.ics.uci.edu/~welling/teaching/KernelsICS273B/MatrixCookBook.pdf}{The Matrix Cookbook}の7.2.6.で提示されている結果の特殊例でもある。
+
+\ \\
+平均が$m$で標準偏差が$s$の単変量正規分布の密度関数を$f(x;m,s)$と書くことにすると
+\begin{align}
+f(x;\mu_1,\sigma_1)f(x;\mu_2,\sigma_2) 
+= f\Big(\mu_1;\mu_2,\sqrt{\sigma_1^2+\sigma_2^2}\Big) f(x;\mu,\sigma)
+\end{align}
+ただし、
+\begin{align}
+\mu & =\frac{\sigma_1^{-2}\mu_1 + \sigma_2^{-2}\mu_2}{\sigma_1^{-2} + \sigma_2^{-2}} \\
+\sigma^2 &= \frac{\sigma_1^2\sigma_2^2}{\sigma_1^2 + \sigma_2^2}
+\end{align}
+\end{frame}
+
+
+\begin{frame}
+\FontMath
+$p(\mu|\tau,\mathcal{D}) \propto \exp [ - \frac{\tau( \lambda_0 + N )}{2}  ( \mu - \frac{ \lambda_0 \mu_0 + N\bar{x} }{ \lambda_0 + N } )^2 ]$において$\mu_N = \frac{ \lambda_0 \mu_0 + N\bar{x} }{ \lambda_0 + N }, \tau_N = \tau(\lambda_0 + N)$とおく。
+
+前のスライドの結果を使うべく、$\mu_1 = x, \sigma_1 = \tau^{-1/2}, \mu_2 = \mu_N, \sigma_2 = \tau_N^{-1/2}$とおくと
+\begin{align}
+& p(x|\mu,\tau) p(\mu|\tau,\mathcal{D})
+\propto
+\exp\bigg[ - \frac{ \tau\tau_N }{2(\tau + \tau_N)} (x - \mu_N)^2 \bigg]
+\exp\bigg[ - \frac{ \tau + \tau_N }{2} \Big(\mu - \frac{ \tau_N x + \tau \mu_N }{ \tau + \tau_N }\Big)^2 \bigg]
+\notag \\ & =
+\exp\bigg[ - \frac{ \tau( \lambda_0 + N ) }{2(\lambda_0 + N + 1)} (x - \mu_N)^2 \bigg]
+\exp\bigg[ - \frac{ \tau( \lambda_0 + N + 1 ) }{2} \Big(\mu - \frac{ ( \lambda_0 + N ) x + \mu_N }{ \lambda_0 + N + 1 }\Big)^2 \bigg]
+\end{align}
+よって、$\alpha_N=\alpha+\frac{N}{2}, \beta_N = \beta + \frac{Ns}{2} + \frac{ \lambda_0 N (\bar{x} - \mu_0)^2 }{ 2( \lambda_0 + N ) }$、さらに$\lambda_N = \lambda_0 + N$とおくと、
+\begin{align}
+& p(x|\mu,\tau) p(\mu|\tau,\mathcal{D})p(\tau|\mathcal{D})
+\propto
+\exp\bigg[ - \frac{ \tau( \lambda_0 + N ) }{2(\lambda_0 + N + 1)} (x - \mu_N)^2 \bigg]
+\notag \\ & \mbox{ \ } \times
+\exp\bigg[ - \frac{ \tau( \lambda_0 + N + 1 ) }{2} \Big(\mu - \frac{ ( \lambda_0 + N ) x + \mu_N }{ \lambda_0 + N + 1 }\Big)^2 \bigg] \times
+\tau^{\alpha_N - 1} e^{ - \tau \beta_N }
+\notag \\ & \mbox{ \ } = \tau^{\alpha_N - 1} e^{ - \tau \beta_N }
+\exp\bigg[ - \frac{ \tau \lambda_N }{2(\lambda_N + 1)} (x - \mu_N)^2 \bigg]
+\times \exp\bigg[ - \frac{ \tau( \lambda_N + 1 ) }{2} \Big(\mu - \frac{ \lambda_N x + \mu_N }{ \lambda_N + 1 }\Big)^2 \bigg]
+\end{align}
+\end{frame}
+
+\begin{frame}
+\FontMath
+$\mu$を積分消去すると
+\begin{align}
+p(x, \tau|\mathcal{D})
+= \int_{-\infty}^\infty p(x|\mu,\tau) p(\mu|\tau,\mathcal{D})p(\tau|\mathcal{D}) d\mu
+\propto
+\tau^{\alpha_N - \frac{1}{2}}
+e^{ - \tau \beta_N } \exp\bigg[ - \frac{ \tau \lambda_N }{2(\lambda_N + 1)} (x - \mu_N)^2 \bigg]
+\end{align}
+この式は$p(x, \tau|\mathcal{D})$が正規ガンマ分布の密度関数であることを示している。
+
+そこで、$\tau$を積分消去するために式\eqref{eq:t-dist}の結果を使うと、
+\begin{align}
+p(x|\mathcal{D}) = \int p(x, \tau|\mathcal{D}) d\tau
+= t_{2\alpha_N} ( x | \mu_N, \frac{\beta_N(\lambda_N + 1)}{\alpha_N\lambda_N} ) 
+\end{align}
+したがって、予測分布は、平均$\mu_N$、スケール$\frac{\beta_N(\lambda_N + 1)}{\alpha_N\lambda_N}$、自由度$2\alpha_N$のt location-scale distributionである。
+\end{frame}
+
+\section{多項分布の場合}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\end{document}
