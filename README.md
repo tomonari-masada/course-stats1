@@ -6,7 +6,7 @@
 
 01 イントロ
 ------
-* slide
+* [slide](../blob/master/01_introduction.pdf)
 
 02 二項分布
 ------
