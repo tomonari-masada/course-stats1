@@ -487,7 +487,7 @@ p(\theta|x) \propto p(x|\theta)p(\theta)
 \begin{itemize}
 \item コインの表が出る確率がいくらかなんて全く分からないという状態からスタートすることにする
 \begin{itemize}
-\item 常識的には「ほぼ1/2」と仮定するのが自然だが、今回はこうする。
+\item 常識的には「ほぼ1/2」と仮定するのが自然だが、今回はこうする
 \end{itemize}
 \item そこで、表が出る確率$\phi_1$が区間$[0,1]$のどの値をとるかについては、一様分布を仮定することにする
 \item つまり、$p(\phi_1)=1$と仮定する
@@ -511,9 +511,9 @@ $p(\phi_1)$は一様分布だと仮定したので、$p(\phi_1)=1$。また、
 尤度$p(x_1 = \mbox{H} | \phi_1)$は$\phi_1$に等しい。
 よって、
 \begin{align}
-p(\phi_1 | x_1 = \mbox{H}) \propto \phi_1
+p(\phi_1 | x_1 = \mbox{H}) \propto \phi_1 \times 1 = \phi_1
 \end{align}
-右辺を正則化する。つまり、$[0,1]$で積分して1になるようにする。
+右辺を規格化する。つまり、$[0,1]$で積分して1になるようにする。
 $\int_0^1 \phi_1 d\phi_1 = \Big[ \frac{\phi_1^2}{2} \Big]_0^1 = \frac{1}{2}$より、
 右辺を$\frac{1}{2}$で割って
 \begin{align}
@@ -549,7 +549,7 @@ $p(\phi_1)$は一様分布だと仮定したので、$p(\phi_1)=1$。また、
 \begin{align}
 p(\phi_1 | x_1 = \mbox{H}, x_2 = \mbox{T}) \propto \phi_1(1-\phi_1)
 \end{align}
-右辺を正則化する。つまり、$[0,1]$で積分して1になるようにする。
+右辺を規格化する。つまり、$[0,1]$で積分して1になるようにする。
 $\int_0^1 \phi_1(1-\phi_1) d\phi_1 = \Big[ \frac{\phi_1^2}{2} - \frac{\phi_1^3}{3} \Big]_0^1= \frac{1}{6}$より、
 右辺を$\frac{1}{6}$で割って
 \begin{align}
@@ -585,7 +585,7 @@ $p(\phi_1)$は一様分布だと仮定したので、$p(\phi_1)=1$。また、
 \begin{align}
 p(\phi_1 | x_1 = \mbox{H}, x_2 = \mbox{T}, x_3 = \mbox{H}) \propto \phi_1^2(1-\phi_1)
 \end{align}
-右辺を正則化する。つまり、$[0,1]$で積分して1になるようにする。
+右辺を規格化する。つまり、$[0,1]$で積分して1になるようにする。
 $\int_0^1 \phi_1^2(1-\phi_1) d\phi_1 =\Big[ \frac{\phi_1^3}{3} - \frac{\phi_1^4}{4} \Big]_0^1= \frac{1}{12}$より、
 右辺を$\frac{1}{12}$で割って
 \begin{align}
