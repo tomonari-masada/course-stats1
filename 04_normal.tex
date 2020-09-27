@@ -40,7 +40,7 @@
 \item 平均$\mu$、標準偏差$\sigma$の単変量正規分布を、以下$\mathcal{N}(\mu,\sigma^2)$と書く
 \item 確率変数$x$が$\mathcal{N}(\mu,\sigma^2)$に従うことを、以下$x\sim\mathcal{N}(\mu,\sigma^2)$と書く
 \end{itemize}
-\item 単変量正規分布$x\sim\mathcal{N}(\mu,\sigma^2)$の確率密度関数は：
+\item 単変量正規分布$x\sim\mathcal{N}(\mu,\sigma^2)$の確率密度関数pdfは：
 \begin{align}
 p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\sigma^2} \Big)
 \end{align}
@@ -54,7 +54,7 @@ p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\
 \begin{itemize}
 \item $\frac{1}{\sqrt{2\pi\sigma^2}}$って、何？
 \begin{itemize}
-\item $-\infty$から$\infty$まで積分すると1になるようにするには、この値を掛け算しておかないといけない、という意味
+\item $-\infty$から$\infty$までの範囲で積分すると1になるようにするには、この値を掛け算しておかないといけない、という意味
 \item ひとことで言えば、規格化定数
 \end{itemize}
 \item 逆に言えば、$\int_{-\infty}^\infty \exp\Big( - \frac{(x - \mu)^2}{2\sigma^2} \Big) dx = \sqrt{2\pi\sigma^2}$が成り立つ、ということ
@@ -92,7 +92,7 @@ p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\
 
 \begin{frame}{標準正規分布}
 \begin{itemize}
-\item 平均が0、標準偏差が1の単変数正規分布$\mathcal{N}(0,1)$のことを、\textbf{標準正規分布}と呼ぶ
+\item 平均が0、標準偏差が1の単変数正規分布$\mathcal{N}(0,1)$のことを、標準正規分布と呼ぶ
 \item 標準正規分布に従う確率変数を$x$とする
 \item このとき、$y=\sigma x+\mu$は平均$\mu$、標準偏差$\sigma$の正規分布$\mathcal{N}(\mu,\sigma)$にしたがう
 \begin{itemize}
@@ -112,7 +112,7 @@ $\mathcal{N}(\mu_x,\sigma_x^2)$と$\mathcal{N}(\mu_y,\sigma_y^2)$にしたがう
 $p(x;\mu_x,\sigma_x)$と$p(y;\mu_y,\sigma_y)$と書く
 \item $x$と$y$は独立なので、同時分布の確率密度関数$p(x,y)$は$p(x;\mu_x,\sigma_x)p(y;\mu_y,\sigma_y)$と積で書ける
 \item $z=x+y$とおくと、$y=z-x$
-\item $y$を$z-x$で置き換えて、$x$を積分消去する（次のスライドから）
+\item $y$を$z-x$で置き換えて、$x$を積分消去integrate outする
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -220,7 +220,7 @@ $\int_{-\infty}^\infty e^{-a(x+b)^2} = \sqrt{\frac{\pi}{a}}$を使った。
 \item 正規分布の密度関数は、ラクダのコブのような形をしている
 \item ところで、たった今、異なる正規分布にしたがう独立な2つの確率変数の値の和が正規分布にしたがうことを示した
 \item しかし、独立な2つの確率変数が、いずれもコブ状の密度関数をもつ分布にしたがうなら、それら確率変数の和がしたがう確率分布の密度関数には、2つのコブがあるのでは？
-\item ・・・これはよくある勘違い。確率変数の足し算を考えることと、密度関数の足し算を考えることとは、全く別のこと
+\item …これはよくある勘違い。確率変数の足し算を考えることと、密度関数の足し算を考えることとは、全く別のこと
 \item では、2つのコブがある分布はどのような場合に作られる？
 \end{itemize}
 \end{frame}
@@ -252,14 +252,10 @@ $\int_{-\infty}^\infty e^{-a(x+b)^2} = \sqrt{\frac{\pi}{a}}$を使った。
 \begin{align}
 \mathcal{N}(\sum_m a_m \mu_m, \sum_m a_m^2 \sigma_m^2)
 \end{align}
-\begin{itemize}
-\item[] \
-\item いずれにせよ、複数の確率変数の線形結合が従う分布と、複数の分布の混合分布とは、分布として全く異なるということに注意
-\end{itemize}
 \end{itemize}
 \end{frame}
 
-\section{単変量正規分布を使ったモデリング}
+\section{単変量正規分布の最尤推定}
 
 \begin{frame}\frametitle{Contents}
 \Large \tableofcontents[currentsection]
@@ -308,17 +304,17 @@ $\frac{\partial \ln p(\mathcal{D};\mu,\sigma)}{\partial \sigma} = 0$より
 $\sigma^2 = \frac{\sum_i (x_i - \mu)^2}{N} = \frac{\sum_i (x_i - \bar{x})^2}{N}$（標本分散）
 \end{frame}
 
-\begin{frame}{分散の推定値}
-\begin{itemize}
-\item 最尤推定で求まる分散の推定値は、不偏分散とは異なる
-\item 最尤推定で求まったのは、標本分散
-\item 標本分散の期待値は、母分散に一致しない
-\item 不偏分散（下の式）の期待値は、母分散に一致する
-\begin{align}
-\hat{\sigma}^2 = \frac{1}{N - 1}\sum_{i=1}^N \frac{(x_i - \bar{x})^2}{N}
-\end{align}
-\end{itemize}
-\end{frame}
+%\begin{frame}{分散の推定値}
+%\begin{itemize}
+%\item 最尤推定で求まる分散の推定値は、不偏分散とは異なる
+%\item 最尤推定で求まったのは、標本分散
+%\item 標本分散の期待値は、母分散に一致しない
+%\item 不偏分散（下の式）の期待値は、母分散に一致する
+%\begin{align}
+%\hat{\sigma}^2 = \frac{1}{N - 1}\sum_{i=1}^N \frac{(x_i - \bar{x})^2}{N}
+%\end{align}
+%\end{itemize}
+%\end{frame}
 
 \section{多変量正規分布}
 
@@ -369,7 +365,7 @@ p(\bm{x};\bm{\mu},\bm{\Sigma}) = \frac{1}{\sqrt{(2\pi)^d|\bm{\Sigma}|}}\exp\bigg
 \begin{itemize}
 \item これが、共分散行列の対角成分、つまり分散に対応する
 \end{itemize}
-\item これに加えて、第1成分と第2成分、第1成分と第3成分など、成分どうしの関連も考慮する
+\item これに加えて、第1成分と第2成分、第1成分と第3成分など、異なる成分間の関連も考慮する
 \begin{itemize}
 \item これが、共分散行列の非対角成分、つまり共分散に対応する
 \end{itemize}
@@ -408,6 +404,7 @@ $\bm{\Sigma} = \begin{bmatrix} 1 & -0.5 \\ -0.5 & 1.5 \end{bmatrix}$
 \begin{center}
 \includegraphics[scale=0.4]{normal_distribution_3.png}
 \end{center}
+\caption{二変量正規分布の密度関数の例}
 \end{figure}
 \end{column}
 \end{columns}
@@ -415,15 +412,15 @@ $\bm{\Sigma} = \begin{bmatrix} 1 & -0.5 \\ -0.5 & 1.5 \end{bmatrix}$
 
 \begin{frame}{問題4-1}
 \begin{itemize}
-\item $\bm{\Sigma} = \begin{bmatrix} \sigma_{11} & \sigma_{12} \\ \sigma_{12} & \sigma_{22} \end{bmatrix}$の行列式$\mbox{det}\bm{\Sigma}$を求めよ。
-\item $\bm{\Sigma} = \begin{bmatrix} \sigma_{11} & \sigma_{12} \\ \sigma_{12} & \sigma_{22} \end{bmatrix}$の逆行列$\bm{\Sigma}^{-1}$を求めよ。
+\item $\bm{\Sigma} = \begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix}$の行列式$\mbox{det}\bm{\Sigma}$を求めよ。
+\item $\bm{\Sigma} = \begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix}$の逆行列$\bm{\Sigma}^{-1}$を求めよ。
 \end{itemize}
 \end{frame}
 
 \begin{frame}{二変量正規分布の別のパラメータ化(1/2)}
 \begin{itemize}
-\item 同じ確率分布でも、パラメータ化parameterizationの方法がいくつもありうる
-\item 二変量正規分布では、分散共分散行列を以下のようにパラメータ化することがある
+\item 同じ確率分布でも、パラメータ化parameterizationの方法が複数あることがある
+\item 二変量正規分布では、共分散行列を以下のようにパラメータ化することがある
 \begin{itemize}
 \item 自由度は3で変わらないことに注意
 \end{itemize}
@@ -436,13 +433,19 @@ $\bm{\Sigma} = \begin{bmatrix} 1 & -0.5 \\ -0.5 & 1.5 \end{bmatrix}$
 
 \begin{frame}{二変量正規分布の別のパラメータ化(2/2)}
 \begin{itemize}
-\item このパラメータ化のもとでは$\bm{\Sigma}$の行列式と逆行列は：
+\item このパラメータ化のもとでは$\bm{\Sigma}$の行列式と逆行列は
 \end{itemize}
 \begin{align}
 \mbox{det}\bm{\Sigma} &= \sigma_1^2\sigma_2^2(1-\rho^2) \\
 \bm{\Sigma}^{-1} &= \frac{1}{\mbox{det}\bm{\Sigma}}
 \begin{bmatrix} \sigma_2^2 & -\rho\sigma_1\sigma_2 \\ -\rho\sigma_1\sigma_2 & \sigma_1^2 \end{bmatrix}
 \end{align}
+\end{frame}
+
+\section{多変量正規分布の最尤推定}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
 \end{frame}
 
 \begin{frame}{多変量正規分布の最尤推定}
@@ -517,7 +520,7 @@ N - \bigg( \sum_i
 \end{align}
 \end{frame}
 
-\section{多変量正規分布を使ったモデリングの応用}
+\section{多変量正規分布の最尤推定の応用}
 
 \begin{frame}\frametitle{Contents}
 \Large \tableofcontents[currentsection]
@@ -542,17 +545,17 @@ N - \bigg( \sum_i
 \begin{frame}{観測データの異常度}
 \begin{itemize}
 \item 最尤推定で求めた平均ベクトルを$\hat{\bm{\mu}}$、共分散行列を$\hat{\bm{\Sigma}}$とする
-\item この推定値を使うと正規分布の密度関数は以下のようになる：
+\item この推定値を使うと正規分布の密度関数は
 \begin{align}
 p(\bm{x};\hat{\bm{\mu}},\hat{\bm{\Sigma}}) = 
 \frac{1}{\sqrt{(2\pi)^d|\hat{\bm{\Sigma}}|}} \exp \bigg\{
 - \frac{1}{2} (\bm{x} - \hat{\bm{\mu}})^\intercal \hat{\bm{\Sigma}}^{-1}
 (\bm{x} - \hat{\bm{\mu}}) \bigg\}
 \end{align}
-\item そして観測データ$\bm{x}$の異常度を$-\ln p(\bm{x};\hat{\bm{\mu}},\hat{\bm{\Sigma}})$と定義する
+\item そして、観測データ$\bm{x}$の異常度を$-\ln p(\bm{x};\hat{\bm{\mu}},\hat{\bm{\Sigma}})$と定義する
 \begin{itemize}
-\item 直感的には推定された平均ベクトル$\hat{\bm{\mu}}$から遠いほど異常
-\item ただし単にユークリッド距離を使っているのではない
+\item 直感的には、推定された平均ベクトル$\hat{\bm{\mu}}$から遠いほど異常
+\item ただし、ユークリッド距離を使っているのではない
 \end{itemize}
 \end{itemize}
 \end{frame}
