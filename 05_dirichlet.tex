@@ -2,7 +2,7 @@
 
 \input{mycmds.tex}
 
-\title{ \\ディリクレ分布}
+\title{ \\多項分布を使った\\ベイズ的モデリング}
 \author{\texorpdfstring{正田 備也\newline\href{mailto:masada@rikkyo.ac.jp}{masada@rikkyo.ac.jp}}{正田 備也}}
 \date{}
 
@@ -20,16 +20,17 @@
 
 \begin{frame}{カテゴリカル分布}
 \begin{itemize}
-\item $V=\{\mbox{v}_1,\ldots,\mbox{v}_W\}$を$W$種類のアイテムの集合とする
+\item $\mbox{V}=\{\mbox{v}_1,\ldots,\mbox{v}_W\}$を$W$種類のアイテムの集合とする
 \begin{itemize}
 \item[例1.] サイコロの目（$W=6$）
 \item[例2.] 自然言語の語彙($W=\mbox{数千〜数十万}$)
 \end{itemize}
-\item カテゴリカル分布は$V$上に定義された離散確率分布
+\item カテゴリカル分布は$\mbox{V}$上に定義された離散確率分布
 \item パラメータは$\bm{\phi}=(\phi_1,\ldots,\phi_W)$
 \begin{itemize}
 \item アイテム$\mbox{v}_w$が出現する確率$\phi_w$
 \item $\sum_{w=1}^W \phi_w = 1$を満たす
+\item 自由度は$W-1$
 \item[] \ 
 \item[] \ 
 \end{itemize}
@@ -60,19 +61,12 @@
 
 \begin{frame}{多項分布はどのような集合の上に定義されるか}
 \begin{itemize}
-\item カテゴリカル分布はアイテムの集合の上に定義される
-\begin{itemize}
-\item すべてのアイテムにわたって確率を合計すると$1$になる
-\end{itemize}
 \item 多項分布は``計$n$回の試行のうち各アイテムが何回ずつ出現するかの、可能な全ての場合の集合''の上に定義される
+\item $W$種類のアイテムから重複を許して$n$個を選ぶすべての場合にわたって確率を合計すると、1になる
 \begin{itemize}
-\item 多項分布は、各アイテムの出現回数が同じで、出現順が違うだけの試行列を区別できない
-\item $W$種類のアイテムから重複を許して$n$個を選ぶすべての場合にわたって確率を合計すると1になる
-\begin{itemize}
-\item $W$種類のアイテムから重複を許して$n$個を選ぶ場合の数はいくら？
+\item $W$種類のアイテムから重複を許して$n$個を選ぶ場合の数は？
 \item $n$個の「◯」と$W-1$個の「｜」（仕切り）を並べる場合の数と同じ
 \item[例.] 「◯ ◯ ｜｜ ◯ ｜ ◯ ◯ ◯ 」は、$n=6$で、$\mbox{v}_1$が2回、$\mbox{v}_2$が0回、$\mbox{v}_3$が1回、$\mbox{v}_4$が3回、それぞれ出現する場合を表す
-\end{itemize}
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -80,15 +74,15 @@
 \begin{frame}{多項分布の確率質量関数}
 \begin{itemize}
 \item アイテム$\mbox{v}_w$の出現回数を$c_w$と書くことにする
-\item 総試行回数を$n$とすると、当然$\sum_w c_w = n$が成り立つ
+\item 総試行回数を$n$とすると、$\sum_w c_w = n$が成り立つ
 \item このとき、多項分布の確率質量関数pmfは以下ように書ける
 \begin{align}
-p((c_1,\ldots,c_W);\bm{\phi},n) = \frac{n!}{\prod_w c_w!}\prod_w\phi_w^{c_w}
+p((c_1,\ldots,c_W);\bm{\phi},n) = \frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W \phi_w^{c_w}
 \end{align}
 \begin{itemize}
-\item $\frac{n!}{\prod_w c_w!}$の部分は、$n$回の試行のうちアイテム$\mbox{v}_w$が$c_w$回出現するような試行の列の総数をあらわしている
-\item 多項分布は、各アイテムの出現回数が同じで、出現順が違うだけの試行列を区別できない
+\item $\frac{n!}{\prod_w c_w!} = \frac{n!}{c_1!\cdots c_W!}$の部分は、$n$回の試行のうち、アイテム$\mbox{v}_w$が$c_w$回出現するような試行の列の総数をあらわしている
 \end{itemize}
+\item 多項分布は、各アイテムの出現回数が同じで、出現順が違うだけの試行列を区別できない
 \end{itemize}
 \end{frame}
 
@@ -101,11 +95,11 @@ p((c_1,\ldots,c_W);\bm{\phi},n) = \frac{n!}{\prod_w c_w!}\prod_w\phi_w^{c_w}
 
 \begin{frame}{多項分布によるモデリングに登場する変数}
 \begin{itemize}
-\item アイテムの出現列を表す観測変数$\bm{x}=\{x_1,\ldots,x_n\}$
+\item アイテムの出現列を表す確率変数$\bm{x}=\{x_1,\ldots,x_n\}$
 \begin{itemize}
 \item $x_i$は、$i$番目に出現したアイテムを表す\underline{確率変数}
 \item[例.] $x_i = \mbox{``apple''}$は「$i$番目に出現する単語は``apple''」という意味
-\item 観測変数なので、値はすでに与えられている（値が既知の変数）
+\item $x_i$の値はすでに観測されている（値が既知の変数）
 \end{itemize}
 \item 多項分布のパラメータ$\bm{\phi}=(\phi_1,\ldots,\phi_W)$
 \begin{itemize}
@@ -127,6 +121,9 @@ p((c_1,\ldots,c_W);\bm{\phi},n) = \frac{n!}{\prod_w c_w!}\prod_w\phi_w^{c_w}
 p(\bm{x};\bm{\phi},n)=\frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W\phi_w^{c_w}
 \end{align}
 \item 尤度を最大化する$\bm{\phi}$の値を推定値とするのが最尤推定
+\begin{itemize}
+\item 最尤推定のほかにも$\bm{\phi}$の値を推定する方法はある
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -151,8 +148,8 @@ p(\bm{x};\bm{\phi},n)=\frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W\phi_w^{c_w}
 \begin{frame}{ベイズ的なモデリングとは}
 \begin{itemize}
 \item 統計モデルは観測データの不確かさuncertaintyを表現する
-\item たが、ベイズ的なデータのモデリングでは、観測データをもとにして統計モデルのパラメータを決めること自体も不確かさuncertaintyをはらんでいると考える
-\item そこで、パラメータも確率変数とみなし、それが確率分布にしたがっているものとしてモデリングする
+\item だが、ベイズ的な統計モデリングでは、観測データをもとにして統計モデルのパラメータを決めること自体にも不確かさuncertaintyがあると考える
+\item そこで、パラメータも確率変数とみなし、パラメータも確率分布にしたがっているものとしてモデリングする
 \item そこで導入されるのが事前分布である
 \item 事前分布はパラメータがしたがう確率分布として導入される
 \end{itemize}
@@ -162,7 +159,7 @@ p(\bm{x};\bm{\phi},n)=\frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W\phi_w^{c_w}
 \begin{figure}[htbp]
 \begin{center}
 \vspace{-1.1in}
-\includegraphics[scale=0.45]{bayesian_modeling.pdf}
+\includegraphics[scale=0.45]{Nebo_figures.nebo_Page_1.pdf}
 %\caption{}
 %\label{}
 \end{center}
