@@ -430,6 +430,73 @@ p(\bm{x}_q | \hat{\bm{\phi}}_d) = \frac{n_q!}{\prod_w c_{q,w}!} \prod_w \bigg( \
 \end{itemize}
 \end{frame}
 
+\section{テキストデータのモデリング}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{bag-of-wordsモデル}
+\begin{itemize}
+\item テキストデータのモデリングでは、よくbag-of-wordsモデルが使われる
+\item bag-of-wordsモデルでは、単語の出現順序は考慮しない
+\item つまり、単語の出現頻度だけを考慮して生成モデルを作る
+\begin{itemize}
+\item 語順を無視したテキストデータ分析でも、かなりのことが分かる
+\end{itemize}
+\item 言い換えれば、bag-of-wordsモデルでは、文書は単語のmultisetとしてモデル化される
+\begin{itemize}
+\item multisetとは、同じアイテムが重複して含まれることもある集合
+\begin{itemize}
+\item 通常の集合setは、要素はその集合に含まれるか含まれないかのどちらか
+\end{itemize}
+\item[例.]  買い物かごの中身
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{例. 買い物かごの中身}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=0.14]{bagofwords.png}
+\label{}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}{出現頻度から確率へ}
+\begin{itemize}
+\item 各単語の出現頻度が分かっている
+\begin{itemize}
+\item 観測データ＝各単語の出現頻度
+\end{itemize}
+\item これをもとに各単語の出現確率を求める
+\begin{itemize}
+\item どうすればいい？
+\item[例.] 前のスライドで、リンゴの出現確率は？
+\item モデルが違うと答えが違ってくる
+\item $\mbox{リンゴの出現確率}=2/7$はひとつの答えにすぎない
+\end{itemize}
+\end{itemize}
+\begin{textblock*}{0.4\linewidth}(300pt, 60pt)
+    \centering
+    \includegraphics[width=.8\linewidth]{bagofwords.png}
+\end{textblock*}
+\end{frame}
+
+\begin{frame}{bag-of-wordsではないモデル}
+\begin{itemize}
+\item $i$番目に出現する単語が何か、
+つまり、$x_i$がどんな値をとるかが、それ以前にどんな単語が出現したかに依存して決まる、
+つまり、$x_1,\ldots,x_{i-1}$という$i-1$個の確率変数の値に依存して決まるモデルは、
+bag-of-wordsモデルではない
+\item このように、それまでに出現した単語に依存して次の単語の出現確率が定まるモデルをautoregressiveモデルという
+\begin{itemize}
+\item 逆に言えば、bag-of-wordsモデルは$p(x_i|x_{i-1},\ldots,x_1)=p(x_i)$が成り立つことを仮定している
+\end{itemize}
+\item autoregressiveモデルも、最近はよく使われる
+\end{itemize}
+\end{frame}
 
 
 \end{document}
