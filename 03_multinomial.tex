@@ -302,10 +302,10 @@ $\frac{\partial L(\bm{\phi})}{\partial \lambda} = 0$より$\sum_w \frac{c_w}{\la
 $\hat{\phi}_{d,w} = \frac{c_{d,w}}{\sum_w c_{d,w}}$と与える
 \item この単語確率によってクエリ$\bm{x}_q$が生成される確率は：
 \begin{align}
-p(\bm{x}_q | \hat{\bm{\phi}}_d) = \frac{n_q!}{\prod_w c_{q,w}!} \prod_w \bigg( \frac{c_{d,w}}{n_d} \bigg)^{c_{q,w}}
+p(\bm{x}_q | \hat{\bm{\phi}}_d) = \frac{n_q!}{\prod_w c_{q,w}!} \prod_w \bigg( \frac{c_{d,w}}{c_d} \bigg)^{c_{q,w}}
 \end{align}
 \begin{itemize}
-\item $n_d \equiv \sum_w c_{d,w}$ （$d$番目の文書の文書長）
+\item $c_d \equiv \sum_w c_{d,w}$ （$d$番目の文書の文書長）
 \item $c_{q,w}$はクエリにおける単語$\mbox{v}_w$の出現頻度
 \end{itemize}
 \item $p(\bm{x}_q | \hat{\bm{\phi}}_d)$の降順に、文書をソートすればよい

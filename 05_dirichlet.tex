@@ -197,7 +197,7 @@ p(\bm{x};\bm{\phi},n)=\frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W\phi_w^{c_w}
 \end{itemize}
 \item $W$個のパラメータ$\phi_1,\ldots,\phi_W$は、いずれも非負で、和が1
 \item 非負で和が1になる実数の組$\bm{\phi}=(\phi_1,\ldots,\phi_W)$は無数にある
-\item パラメータのこれら無数の組の上に、確率分布を定義したい
+\item これら無数の組の上に、確率分布を定義したい
 \item 非負で和が1になる実数の組の上に定義される確率分布なら、事前分布として使える
 \end{itemize}
 \end{frame}
@@ -205,18 +205,18 @@ p(\bm{x};\bm{\phi},n)=\frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W\phi_w^{c_w}
 \begin{frame}{ディリクレ分布 Dirichlet distribution}
 \begin{itemize}
 \item 非負で和が1になる実数の組は無数にある
-\item ディリクレ分布は、それら無数の組の上に定義された確率分布のひとつ
+\item ディリクレ分布は、それら無数の組の上に定義される確率分布のひとつ
 \begin{itemize}
-\item つまり、ディリクレ分布のsupportは$W-1$次元単体simplex
+\item つまり、ディリクレ分布の台supportは$W-1$次元単体simplex
 \end{itemize}
 \item 多項分布のパラメータがしたがう事前分布として利用できる
-\item ディリクレ分布の確率密度関数は以下の通り：
+\item ディリクレ分布の確率密度関数は
 \begin{align}
 p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(\beta_w)}
 \prod_{w=1}^W \phi_w^{\beta_w - 1}
 \end{align}
 \begin{itemize}
-\item $\Gamma(\cdot)$はガンマ関数
+\item $\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(\beta_w)}$は規格化定数で、$\Gamma(\cdot)$はガンマ関数
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -239,11 +239,12 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \Gamma(x+1)=x\Gamma(x) 
 \label{eq:gamma}
 \end{align}
-\item この授業でガンマ関数について把握すべきことは上の式だけ
-\item 上式より、自然数$n$について$\Gamma(n+1)=n!$
+\item この授業でガンマ関数について把握すべきことは式\eqref{eq:gamma}だけ
+\item 上式より、自然数$n$について、$\Gamma(n+1)=n!$
 \begin{itemize}
 \item 式\eqref{eq:gamma}はガンマ関数の定義から導かれるが、定義は知らなくてよい
 \item ガンマ関数は実際は複素数について定義されるが、ここでは実数、しかも正の実数を引数とする場合しか扱わない
+\item ディリクレ分布の規格化定数が$\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(\beta_w)}$であることの証明は、割愛する
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -275,31 +276,24 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \end{table}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{ベータ分布の二項分布に対する関係 (1/2)}
 \begin{itemize}
-\item $\bm{\phi}=(\phi_1,\phi_2)$の場合
-\begin{itemize}
-\item 「$\phi_1$の値を選ぶこと」＝「二項分布をひとつ選ぶこと」
+\item 「二項分布をひとつ選ぶこと」＝「$\phi_1$の値を選ぶこと」
 \end{itemize}
-\end{itemize}
-\begin{figure}[htbp]
+\begin{figure}[t]
 \begin{center}
-\includegraphics[scale=0.15]{beta1.png}
+\includegraphics[scale=0.13]{beta1.png}
 \end{center}
 \end{figure}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{ベータ分布の二項分布に対する関係 (2/2)}
 \begin{itemize}
-\item $\bm{\phi}=(\phi_1,\phi_2)$の場合
-\begin{itemize}
-\item $[0,1]$上の1点を選ぶこと＝二項分布をひとつ選ぶこと
-\end{itemize}
+\item 「二項分布をひとつ選ぶこと」＝「$[0,1]$上の1点を選ぶこと」
 \end{itemize}
 \begin{figure}[t]
 \begin{center}
-\vspace{-.3in}
-\includegraphics[scale=0.15]{beta2.png}
+\includegraphics[scale=0.13]{beta2.png}
 \end{center}
 \end{figure}
 \end{frame}
@@ -307,7 +301,7 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \begin{frame}{分布の分布としてのベータ分布}
 \begin{itemize}
 \item ベータ分布は$[0,1]$（$1$次元単体）の上に定義される
-\item $[0,1]$上の一点一点が別々の二項分布に対応している
+\item $[0,1]$上の一点一点が、別々の二項分布に対応している
 \begin{itemize}
 \item[例.] $0.6\in[0,1]$は$\bm{\phi}=(0.6,0.4)$をパラメータとする二項分布に対応
 \item 2つのパラメータのうち一方を決めると他方は自動的に決まる
@@ -357,32 +351,34 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \end{frame}
 
 \begin{frame}{事後分布 posterior distribution}
+\vspace{-.2in}
 \begin{align}
 p(\bm{\phi}|\bm{x};\bm{\beta}) \propto p(\bm{x}|\bm{\phi})p(\bm{\phi};\bm{\beta})
+\label{eq:bayes_posterior}
 \end{align}
 \vspace{-.2in}
 \begin{itemize}
 \item ベイズ的モデリングは、事後分布を求めることを課題とする
 \item 事後分布はモデルパラメータ$\bm{\phi}$が従う確率分布で、観測データ$\bm{x}$が所与の条件付き確率分布
-\item 事後分布は、上のように、ベイズ則によって観測データの尤度$p(\bm{x}|\bm{\phi})$と事前分布$p(\bm{\phi};\bm{\beta})$とから導き出される
+\item 事後分布は、式\eqref{eq:bayes_posterior}のように、ベイズ則によって観測データの尤度$p(\bm{x}|\bm{\phi})$と事前分布$p(\bm{\phi};\bm{\beta})$とから導き出される
 \begin{itemize}
-\item 事後分布は、パラメータが取りうる値のすべてについて、それぞれがどのくらいありえそうかを表している
+\item 事後分布$p(\bm{\phi}|\bm{x};\bm{\beta})$は、パラメータが取りうる値の全てについて、それぞれがどのくらいありえそうかを表している
 \end{itemize}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{事後分布を求めることと最尤推定との違い}
-\vspace{-.2in}
+\begin{itemize}
+\item 最尤推定は、データ尤度$p(\bm{x}|\bm{\phi})$をパラメータ$\bm{\phi}$の関数とみなして最大化することで、$\bm{\phi}$の値をひとつに決める
+\begin{align}
+\argmax_{\bm{\phi}} p(\bm{x}|\bm{\phi})
+\notag
+\end{align}
+\item 一方、ベイズ的なモデリングでは、パラメータ$\bm{\phi}$が取りうる全ての値について、各々どのくらいありえそうかを表している事後分布$p(\bm{\phi}|\bm{x};\bm{\beta})$を、求める
 \begin{align}
 p(\bm{\phi}|\bm{x};\bm{\beta}) \propto p(\bm{x}|\bm{\phi})p(\bm{\phi};\bm{\beta})
+\notag
 \end{align}
-\vspace{-.2in}
-\begin{itemize}
-\item 最尤推定は、データ尤度$p(\bm{x}|\bm{\phi})$をパラメータ$\bm{\phi}$の関数とみなして最大化することで、$\bm{\phi}$が取りうる値のすべてのなかからひとつだけ一番良い値を選ぶ
-\item 一方、事後分布$p(\bm{\phi}|\bm{x};\bm{\beta})$は、パラメータ$\bm{\phi}$が取りうる全ての値について、各がどのくらいありえそうかを表している
-\begin{itemize}
-\item ベイズ的なモデリングでは、観測データ$\bm{x}$が与えられているという条件のもとで、パラメータ$\bm{\phi}$の取りうる様々な値が、それぞれどのくらいありえそうかを求めることを目指す
-\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -394,12 +390,8 @@ p(\bm{\phi}|\bm{x};\bm{\beta}) \propto p(\bm{x}|\bm{\phi})p(\bm{\phi};\bm{\beta}
 \vspace{-.2in}
 \begin{itemize}
 \item 上の式は、事前分布$p(\bm{\phi};\bm{\beta})$が尤度$p(\bm{x}|\bm{\phi})$によって重み付けし直されて事後分布になる、という式
-\begin{itemize}
 \item $\bm{\phi}$が尤度$p(\bm{x}|\bm{\phi})$を大きくするような値だと、右辺においてそれだけ大きな値が掛け算される
-\item よって、左辺の事後分布で、$\bm{\phi}$がそのような値を取る確率は大
-\item しかし、事後分布は、事前分布がどんな分布かにも左右される
-\item よって、$p(\bm{\phi}|\bm{x};\bm{\beta})$を最大化する$\bm{\phi}$の値は、尤度$p(\bm{x}|\bm{\phi})$を最大化する$\bm{\phi}$の値とは、一般に異なる
-\end{itemize}
+\item よって、左辺の事後分布で$\bm{\phi}$がそのような値を取る確率は大
 \end{itemize}
 \end{frame}
 
@@ -418,11 +410,10 @@ p(\bm{\phi}|\bm{x};\bm{\beta}) \propto p(\bm{x}|\bm{\phi})p(\bm{\phi};\bm{\beta}
 \end{frame}
 
 \begin{frame}{問題5-1}
+\large
 \begin{itemize}
 \item ディリクレ分布が共役事前分布であることを示せ
-\begin{itemize}
 \item ヒント：尤度が多項分布を使って表されるとき、事前分布をディリクレ分布にすると、事後分布もディリクレ分布になることを示せばよい
-\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -458,9 +449,9 @@ p(\bm{\phi} | \bm{x}; \bm{\beta}) = \frac{\Gamma(n + \sum_w \beta_w)}{\prod_w \G
 \hat{\bm{\phi}}_{\mbox{\scriptsize MAP}} = \argmax_{\bm{\phi}} p(\bm{\phi}|\bm{x};\bm{\beta})
 \end{align}
 \begin{itemize}
-\item しばしば、MAP推定と略される（MAP; maximum a posteriori）
+\item MAP推定と略される（MAP; maximum a posteriori）
 \end{itemize}
-\item 下記の最尤推定と同様、モデルパラメータ$\bm{\phi}$の値をひとつ選ぶ推定方法である
+\item 下記の最尤推定と同様、モデルパラメータ$\bm{\phi}$の値をひとつ選ぶ推定方法
 \begin{align}
 \hat{\bm{\phi}}_{\mbox{\scriptsize ML}} = \argmax_{\bm{\phi}} p(\bm{x};\bm{\phi})
 \end{align}
@@ -476,7 +467,7 @@ p(\bm{\phi} | \bm{x}; \bm{\beta}) = \frac{\Gamma(n + \sum_w \beta_w)}{\prod_w \G
 \begin{itemize}
 \item 問：なぜこうなるか、示せ
 \end{itemize}
-\item 実際の単語の出現頻度ではなく、$\beta_w - 1$回だけ下駄を履かせた出現頻度で確率を計算していることになる
+\item アイテムの実際の出現頻度ではなく、$\beta_w - 1$回だけ下駄を履かせた出現頻度で確率を計算していることになる
 \begin{itemize}
 \item 単語の出現確率を求めるとき、このように下駄を履かせた回数を代わりに使うことを、スムージングsmoothingという
 \end{itemize}
@@ -500,7 +491,7 @@ p(\bm{\phi} | \bm{x}; \bm{\beta}) = \frac{\Gamma(n + \sum_w \beta_w)}{\prod_w \G
 \item どう実装すればいい？
 \item 実装例
 \begin{itemize}
-\item ひとつひとつの文書について別々に単語出現確率$\bm{\phi}$を最尤推定
+\item ひとつひとつの文書について別々に単語出現確率$\bm{\phi}$を\underline{MAP推定}
 \item 推定された$\bm{\phi}$を使って、クエリの生成確率を計算
 \item この生成確率を高くする順に文書をソート
 \end{itemize}
@@ -545,18 +536,9 @@ $\beta_w - 1$の部分を$\lambda p_w$で置き換えることが多い
 \item つまり、
 $\hat{\phi}_{d,w} = \frac{c_{d,w} + \lambda p_w}{c_d + \lambda}$とする
 \begin{itemize}
-\item $c_d$は$d$番目の文書の長さ
+\item $c_d \equiv \sum_w c_{d,w}$は$d$番目の文書の長さ
 \end{itemize}
 \item $\lambda$は検証用クエリの検索性能を見ながらチューニングする
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{ベイズ推定を応用する}
-\begin{itemize}
-\item 最尤推定や最大事後確率推定を情報検索に応用する方法は分かった
-\item 事後分布をそのままこのように応用する方法はないのか？
-\item これについては、またいずれ。
 \end{itemize}
 \end{frame}
 
