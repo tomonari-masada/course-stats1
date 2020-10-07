@@ -180,6 +180,48 @@ p((c_1,\ldots,c_W);\bm{\phi},n) = \frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W \ph
 \end{itemize}
 \end{frame}
 
+\begin{frame}{例：ah, uh, ohの3単語しかない言語 (1/2)}
+\begin{itemize}
+\item 長さ4の文書をすべて書いてみる
+\end{itemize}
+\begin{table}[t]
+\begin{center}
+\scriptsize
+\begin{tabular}{ccccccc}
+ah ah ah ah.  & ah ah ah uh.  & ah ah ah oh.  & ah ah uh ah.  & ah ah uh uh.  & ah ah uh oh.  & ah ah oh ah. \\
+ah ah oh uh.  & ah ah oh oh.  & ah uh ah ah.  & ah uh ah uh.  & ah uh ah oh.  & ah uh uh ah.  & ah uh uh uh. \\
+ah uh uh oh.  & ah uh oh ah.  & ah uh oh uh.  & ah uh oh oh.  & ah oh ah ah.  & ah oh ah uh.  & ah oh ah oh. \\
+ah oh uh ah.  & ah oh uh uh.  & ah oh uh oh.  & ah oh oh ah.  & ah oh oh uh.  & ah oh oh oh.  & uh ah ah ah. \\
+uh ah ah uh.  & uh ah ah oh.  & uh ah uh ah.  & uh ah uh uh.  & uh ah uh oh.  & uh ah oh ah.  & uh ah oh uh. \\
+uh ah oh oh.  & uh uh ah ah.  & uh uh ah uh.  & uh uh ah oh.  & uh uh uh ah.  & uh uh uh uh.  & uh uh uh oh. \\
+uh uh oh ah.  & uh uh oh uh.  & uh uh oh oh.  & uh oh ah ah.  & uh oh ah uh.  & uh oh ah oh.  & uh oh uh ah. \\
+uh oh uh uh.  & uh oh uh oh.  & uh oh oh ah.  & uh oh oh uh.  & uh oh oh oh.  & oh ah ah ah.  & oh ah ah uh. \\
+oh ah ah oh.  & oh ah uh ah.  & oh ah uh uh.  & oh ah uh oh.  & oh ah oh ah.  & oh ah oh uh.  & oh ah oh oh. \\
+oh uh ah ah.  & oh uh ah uh.  & oh uh ah oh.  & oh uh uh ah.  & oh uh uh uh.  & oh uh uh oh.  & oh uh oh ah. \\
+oh uh oh uh.  & oh uh oh oh.  & oh oh ah ah.  & oh oh ah uh.  & oh oh ah oh.  & oh oh uh ah.  & oh oh uh uh. \\
+oh oh uh oh.  & oh oh oh ah.  & oh oh oh uh.  & oh oh oh oh.  & & & 
+\end{tabular}
+\end{center}
+\label{tbl:multinomial_ex}
+\end{table}
+\end{frame}
+
+
+\begin{frame}{例：ah, uh, ohの3単語しかない言語 (2/2)}
+\small
+"ah ah ah ah." x 1, "uh uh uh uh." x 1, "oh oh oh oh." x 1 \\
+... 合計 3\\
+"ah ah ah uh." x 4, "ah ah ah oh." x 4, \\
+"uh uh uh ah." x 4, "uh uh uh oh." x 4, \\
+"oh oh oh ah." x 4, "oh oh oh uh." x 4 \\
+... 合計 24\\
+"ah ah uh uh." x 6, "ah ah oh oh." x 6, "uh uh oh oh" x 6 \\
+... 合計 18\\
+"ah ah uh oh." x 12, "ah uh uh oh." x 12, "ah uh oh oh." x 12 \\
+... 合計 36
+\end{frame}
+
+
 \section{多項分布の最尤推定}
 
 \begin{frame}\frametitle{Contents}
