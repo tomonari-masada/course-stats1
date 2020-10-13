@@ -29,14 +29,14 @@
 \begin{itemize}
 \item つまり、$q(\mathcal{D}) = \prod_{i=1}^n q(\bm{x}_i)$
 \end{itemize}
-\item しかしこの分布$q(\bm{x})$を直接知る方法はない
-\item そこで、与えられた$\mathcal{D}$から$q(\bm{x})$を推測することを、統計的推測ないし統計的学習という
+\item しかし、この分布$q(\bm{x})$を直接知る方法はない
+\item そこで、$\mathcal{D}$から$q(\bm{x})$を推測することを、統計的推測ないし統計的学習という
 \end{itemize}
 \end{frame}
 
 \begin{frame}{確率モデル probabilistic model}
 \begin{itemize}
-\item 真の分布を推測するとき、私たちはあるパラメータ$\bm{\eta}$をもつ確率分布$p(\bm{x}|\bm{\eta})$を準備する
+\item 真の分布を推測するとき、私たちは、あるパラメータ$\bm{\eta}$をもつ確率分布$p(\bm{x}|\bm{\eta})$を準備する
 \begin{itemize}
 \item $p(\bm{x}|\bm{\eta})$を確率モデルと呼ぶ
 \end{itemize}
@@ -61,8 +61,8 @@ p(\bm{\eta} | \mathcal{D}) = \frac{1}{Z_n} p(\bm{\eta}) p(\mathcal{D}|\bm{\eta})
 \item 分配関数partition functionは物理方面から来ている用語
 \end{itemize}
 \item $Z_n$は規格化定数なので、$Z_n = \int p(\bm{\eta}) p(\mathcal{D}|\bm{\eta}) d\bm{\eta}$を満たす
-\item すると、$Z_n = p(\mathcal{D})$となる
-\item $p(\mathcal{D})$を周辺尤度もしくはエビデンスevidenceと呼ぶ
+\item つまり、$Z_n = p(\mathcal{D})$
+\item $p(\mathcal{D})$を、周辺尤度、もしくは、エビデンスevidenceと呼ぶ
 \begin{itemize}
 \item 論文ではmarginal likelihoodよりevidenceのほうをよく見かける
 \end{itemize}
@@ -102,7 +102,7 @@ p(\bm{x}|\mathcal{D}) = \int p(\bm{x}|\bm{\eta}) p(\bm{\eta} | \mathcal{D}) d\bm
 \item[cf.] 渡辺澄夫『ベイズ統計の理論と方法』コロナ社、5頁
 \end{itemize}
 \item[] \ 
-\item 以下、正規分布と多項分布の場合に、共役事前分布を使ったときに予測分布がどのような分布になるかを説明する
+\item 以下、正規分布と多項分布の場合について、共役事前分布を使ったときに予測分布がどのような分布になるかを説明する
 \end{itemize}
 \end{frame}
 
@@ -292,5 +292,55 @@ p(x|\mathcal{D}) = \int p(x, \tau|\mathcal{D}) d\tau
 \begin{frame}\frametitle{Contents}
 \Large \tableofcontents[currentsection]
 \end{frame}
+
+\begin{frame}{多項分布を使ったベイズ的モデリング}
+\begin{itemize}
+\item 観測データ$\mathcal{D}=\{x_1,\ldots,x_N\}$が独立に同じカテゴリカル分布$\mbox{Cat}(\bm{\phi})$にしたがうと仮定
+\begin{itemize}
+\item 例えば、$x_{62} = \mbox{``apple''}$は、62番目に出現した単語が``apple''だ、という意味
+\end{itemize}
+\item $\bm{\phi}$の事前分布としてディリクレ分布$\mbox{Dir}(\bm{\beta})$を使う
+\item ディリクレ分布の確率密度関数は
+\begin{align}
+p(\bm{\phi}; \bm{\beta}) = \frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W \Gamma(\beta_w)}
+\prod_{w=1}^W \phi_W^{\beta_w - 1}
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{共役事前分布としてのディリクレ分布}
+\begin{itemize}
+\item 正規ガンマ分布は共役事前分布
+\item よって事後分布も正規ガンマ分布となる
+\item 事後分布$p(\bm{\phi}|\mathcal{D}; \bm{\beta})$は以下のように書ける
+\begin{align}
+p(\bm{\phi}|\mathcal{D}; \bm{\beta}) = 
+\frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
+\prod_{w=1}^W \phi_W^{c_w + \beta_w - 1}
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{予測分布}
+\begin{itemize}
+\item 多項分布の場合、予測分布についても多数の単語出現からなる観測データの予測分布を考えることが多い
+\item 予測分布を求めたい単語列（つまり文書）を$\bm{x}_0$とする
+\item $\bm{x}_0 = \{x_{0,1}, \ldots, x_{0,n_0}\}$とする。
+\item 上記の設定のもとでの予測分布$p(\bm{x}_0 | \mathcal{D};\bm{\beta})$は
+$p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mathcal{D};\bm{\beta}) d\bm{\phi}$によって求められる
+\item この予測分布がどういう分布になるかを、以下で示す
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\FontMath
+\begin{align}
+& p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mathcal{D};\bm{\beta}) d\bm{\phi}
+\notag \\ & =
+\int \phi_x \frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
+\prod_{w=1}^W \phi_W^{c_w + \beta_w - 1} d\bm{\phi}
+\end{align}
+\end{frame}
+
 
 \end{document}
