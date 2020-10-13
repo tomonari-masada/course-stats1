@@ -323,8 +323,8 @@ p(\bm{\phi}|\mathcal{D}; \bm{\beta}) =
 
 \begin{frame}{予測分布}
 \begin{itemize}
-\item 多項分布の場合、予測分布についても多数の単語出現からなる観測データの予測分布を考えることが多い
-\item 予測分布を求めたい単語列（つまり文書）を$\bm{x}_0$とする
+\item 多項分布の場合、予測分布についても、多数の単語出現からなる観測データの予測分布を考えることが多い
+\item その予測分布を求めたい単語列（つまり文書）を$\bm{x}_0$とする
 \item $\bm{x}_0 = \{x_{0,1}, \ldots, x_{0,n_0}\}$とする。
 \item 上記の設定のもとでの予測分布$p(\bm{x}_0 | \mathcal{D};\bm{\beta})$は
 $p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mathcal{D};\bm{\beta}) d\bm{\phi}$によって求められる
@@ -337,10 +337,53 @@ $p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mat
 \begin{align}
 & p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mathcal{D};\bm{\beta}) d\bm{\phi}
 \notag \\ & =
-\int \phi_x \frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
-\prod_{w=1}^W \phi_W^{c_w + \beta_w - 1} d\bm{\phi}
+\int \bigg(
+\frac{n_0!}{\prod_{w=1}^W c_{0,w}!} \prod_{w=1}^W \phi_w^{c_{0,w}} \times
+\frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
+\prod_{w=1}^W \phi_W^{c_w + \beta_w - 1} \bigg) d\bm{\phi}
+\notag \\ & =
+\frac{n_0!}{\prod_{w=1}^W c_{0,w}!}
+\frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
+\int \prod_{w=1}^W \phi_W^{c_w + c_{0,w} + \beta_w - 1} d\bm{\phi}
+\notag \\ & =
+\frac{n_0!}{\prod_{w=1}^W c_{0,w}!}
+\frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
+\frac{\prod_{w=1}^W \Gamma(c_w+c_{0,w}+\beta_w)}
+{\Gamma( \sum_{w=1}^W (c_w + c_{0,w} + \beta_w) )}
+\notag \\ & =
+\frac{n_0! \Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\Gamma( \sum_{w=1}^W (c_w + c_{0,w} + \beta_w) )}
+\prod_{w=1}^W
+\frac{\Gamma(c_w+c_{0,w}+\beta_w)}{c_{0,w}!\Gamma(c_w + \beta_w)}
+\notag \\ & =
+\frac{n_0 (n_0-1) \cdots 2 \cdot 1}{( n+n_0-1+\beta_\Sigma)( n+n_0-2+\beta_\Sigma) \cdots (n+1+\beta_\Sigma)(n + \beta_\Sigma)}
+\notag \\ & \mbox{ \ \ } \times
+\prod_{w=1}^W
+\frac{(c_w+c_{0,w}-1+\beta_w)(c_w+c_{0,w}-2+\beta_w)\cdots(c_w+1+\beta_w)(c_w+\beta_w) }
+{c_{0,w} (c_{0,w} - 1) \cdots 2 \cdot 1}
 \end{align}
 \end{frame}
 
+\begin{frame}{ディリクレ多項分布}
+\begin{itemize}
+\item パラメータ
+\begin{itemize}
+\item $\alpha_1, \ldots, \alpha_K)$ s.t. $\alpha_k > 0$ for $1 \leq k \leq K$
+\end{itemize}
+\item 確率密度関数
+\begin{align}
+p(\bm{x} | \bm{\alpha}) = \frac{\Gamma(\sum_k \alpha_k)}{\prod_k \Gamma(\alpha_k)}
+\frac{\prod_k \Gamma(\alpha_k + n_k)}{\Gamma(\sum_k \alpha_k + n_k)}
+\end{align}
+\item 導出
+\begin{align}
+p(\bm{x} | \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} | \bm{\alpha}) d\bm{\theta}
+\end{align}
+\vspace{-.2in}
+\begin{itemize}
+\item $p(\bm{x}|\bm{\theta})$はパラメータが$\bm{\theta}$の多項分布の確率質量関数
+\item $p(\bm{\theta} | \bm{\alpha})$はパラメータが$\bm{\alpha}$のディリクレ分布の確率密度関数
+\end{itemize}
+\end{itemize}
+\end{frame}
 
 \end{document}
