@@ -363,7 +363,7 @@ $p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mat
 \end{align}
 \end{frame}
 
-\begin{frame}{ディリクレ多項分布}
+\begin{frame}{ディリクレ多項分布（Polya分布）}
 \begin{itemize}
 \item パラメータ
 \begin{itemize}
@@ -385,5 +385,45 @@ p(\bm{x} | \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} | \bm{\alpha}
 \end{itemize}
 \end{itemize}
 \end{frame}
+
+\section{まとめ}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{まとめ：予測分布とは何だったか}
+\begin{itemize}
+\item 事前分布$p(\bm{\eta})$と尤度$p(\mathcal{D}|\bm{\eta})$から、
+事後分布$p(\bm{\eta} | \mathcal{D})$を求める
+\begin{align}
+p(\bm{\eta} | \mathcal{D}) = \frac{1}{Z_n} p(\bm{\eta}) p(\mathcal{D}|\bm{\eta})
+= \frac{1}{Z_n} p(\bm{\eta}) \prod_{i=1}^n p(\bm{x}_i | \bm{\eta})
+\end{align}
+\vspace{-.2in}
+\begin{itemize}
+\item 事後分布$p(\bm{\eta} | \mathcal{D})$は、モデルパラメータが取りうるあらゆる値に重み付けをしている、
+と見なせる
+\end{itemize}
+\item 下記の予測分布$p(\bm{x}_0|\mathcal{D})$を使うと、
+事後分布$p(\bm{\eta} | \mathcal{D})$によるパラメータへの重み付けを反映するかたちで、
+未知データ$\bm{x}_0$の確率を計算できる
+\begin{align}
+p(\bm{x}_0|\mathcal{D}) = \int p(\bm{x}_0|\bm{\eta}) p(\bm{\eta} | \mathcal{D}) d\bm{\eta}
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{予測分布の別の見方}
+\begin{itemize}
+\item 予測分布を求めることは、観測データがしたがう新しい分布を作り出すこと、とも言える
+\item 正規分布と正規ガンマ分布から、t location-scale 分布
+\item 多項分布とディリクレ分布から、ディリクレ多項分布 
+\begin{itemize}
+\item ただし、今回の２つの例のように、予測分布の確率密度関数（or 確率質量関数）を式の計算で求めることができてしまうケースは、少ない。
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 
 \end{document}
