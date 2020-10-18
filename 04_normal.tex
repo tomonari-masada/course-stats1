@@ -23,7 +23,7 @@
 \item ガウス分布 Gaussian distributionとも呼ばれる
 \item 連続量をモデル化するときによく使われる
 \begin{itemize}
-\item 下図は2変量正規分布の確率密度関数の例：
+\item 下図は2変量正規分布の確率密度関数の例
 \end{itemize}
 \end{itemize}
 \begin{figure}
@@ -40,7 +40,7 @@
 \item 平均$\mu$、標準偏差$\sigma$の単変量正規分布を、以下$\mathcal{N}(\mu,\sigma^2)$と書く
 \item 確率変数$x$が$\mathcal{N}(\mu,\sigma^2)$に従うことを、以下$x\sim\mathcal{N}(\mu,\sigma^2)$と書く
 \end{itemize}
-\item 単変量正規分布$x\sim\mathcal{N}(\mu,\sigma^2)$の確率密度関数pdfは：
+\item 単変量正規分布$x\sim\mathcal{N}(\mu,\sigma^2)$の確率密度関数pdfは
 \begin{align}
 p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\sigma^2} \Big)
 \end{align}
@@ -252,7 +252,7 @@ $\int_{-\infty}^\infty e^{-a(x+b)^2} = \sqrt{\frac{\pi}{a}}$を使った。
 \end{itemize}
 \item $M$個の確率変数$x_1,\ldots,x_M$が、それぞれ独立に正規分布$\mathcal{N}(\mu_1,\sigma_1^2), 
 \ldots, \mathcal{N}(\mu_M,\sigma_M^2)$にしたがうとする。
-\item このとき、$\sum_{m=1}^M a_m x_m$は、以下の正規分布にしたがう：
+\item このとき、$\sum_{m=1}^M a_m x_m$は、以下の正規分布にしたがう
 \begin{align}
 \mathcal{N}(\sum_m a_m \mu_m, \sum_m a_m^2 \sigma_m^2)
 \end{align}
@@ -454,7 +454,7 @@ $\bm{\Sigma} = \begin{bmatrix} 1 & -0.5 \\ -0.5 & 1.5 \end{bmatrix}$
 
 \begin{frame}{多変量正規分布の最尤推定}
 \begin{itemize}
-\item 観測データ$\mathcal{D}=\{ \bm{x}_1,\ldots,\bm{x}_N\}$の各$\bm{x}_i$が独立に同じ正規分布$\mathcal{N}(\bm{\mu},\bm{\Sigma})$にしたがうと仮定すると、$\mathcal{D}$の尤度は：
+\item 観測データ$\mathcal{D}=\{ \bm{x}_1,\ldots,\bm{x}_N\}$の各$\bm{x}_i$が独立に同じ正規分布$\mathcal{N}(\bm{\mu},\bm{\Sigma})$にしたがうと仮定すると、$\mathcal{D}$の尤度は
 \begin{align}
 & p(\mathcal{D};\bm{\mu},\bm{\Sigma})
 = \prod_{i=1}^N p(\bm{x}_i;\bm{\mu},\bm{\Sigma})
