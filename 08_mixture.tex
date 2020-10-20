@@ -23,7 +23,7 @@
 \item これまでは、データ集合$\mathcal{D}=\{\bm{x}_1, \ldots, \bm{x}_N\}$全体に対して、
 一つの確率分布を使うモデリングだけ議論していた
 \item しかし、多くのデータ集合は、たった一つの分布ではモデリングし切れない多様性を含んでいる
-\item 例えば、数値データの集合であれば、その周辺の数値が頻繁に出現するという数値が、複数あったりする
+\item 例えば、数値データの集合であれば、それに近い数値が頻繁に出現するという数値が、複数あったりする
 \begin{itemize}
 \item 例：多峰性をもつデータ集合
 \end{itemize}
@@ -227,7 +227,7 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 \item $z_i$は、値が観測されない確率変数、すなわち潜在変数
 \begin{itemize}
 \item つまり、$\mathcal{D} = \{ x_1, \ldots, x_N \}$
-\item 一方、潜在変数の集合を$\mathcal{Z} = \{ z_1, \ldots, z_N \}$とする
+\item 一方、潜在変数latent variablesの集合を$\mathcal{Z} = \{ z_1, \ldots, z_N \}$とする
 \end{itemize}
 \item このとき、下の$p(\mathcal{D}, \mathcal{Z})$は、観測データの尤度$p(\mathcal{D})$ではない
 \vspace{-.13in}
@@ -240,13 +240,14 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 \end{itemize}
 \end{frame}
 
-\begin{frame}{周辺尤度 marginal likelihood}
+\begin{frame}{観測データの尤度}
 \vspace{-.05in}
 \begin{itemize}
 \item 潜在変数を含むモデリングの場合、観測データの尤度$p(\mathcal{D})$は、
-潜在変数を周辺化marginalizeしてはじめて得られる
-\item 周辺化が与える尤度を周辺尤度marginal likelihoodと呼ぶ
-\vspace{-.1in}
+潜在変数を周辺化して得られる
+\begin{itemize}
+\item $p(\mathcal{D})$
+\end{itemize}
 \begin{align}
 p(\mathcal{D}) & = \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
 = \sum_{z_1=1}^K \sum_{z_2=1}^K \cdots \sum_{z_{N-1}=1}^K \sum_{z_N=1}^K p(\mathcal{D}, \mathcal{Z})
@@ -258,9 +259,9 @@ p(\mathcal{D}) & = \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
 \end{itemize}
 \end{frame}
 
-\begin{frame}{対数周辺尤度 log marginal likelihood}
+\begin{frame}{観測データの対数尤度}
 \begin{itemize}
-\item 周辺尤度の対数は、式\eqref{eq:joint_MN}より、以下のように書ける
+\item 混合正規分布の場合の観測データの対数尤度は、式\eqref{eq:joint_MN}より、以下のとおり
 \vspace{-.1in}
 \begin{align}
 & \ln p(\mathcal{D}) = \ln \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
@@ -271,20 +272,46 @@ p(\mathcal{D}) & = \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
 \notag \\ &
 = \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg] \bigg)
 \end{align}
-\item この対数周辺尤度を最大化したいのだけれどもできない、というとき、どうすればいいかを、以下で説明する
 \end{itemize}
 \end{frame}
 
-\begin{frame}{積の対数と和の対数（天国と地獄？）}
+\begin{frame}{観測データの対数尤度の最大化}
+\begin{itemize}
+\item あとは、$\ln p(\mathcal{D})$を最大にする$\bm{\theta}=(\theta_1,\ldots,\theta_K)$や$\mu_1,\ldots,\mu_K$や$\sigma_1,\ldots,\sigma_K$を求めれば良い・・・？？？
+\vspace{.3in}
+\begin{itemize}
+\item （偏微分の計算をしようとしてみると、問題がそう簡単ではなさそうであることに気づかれると思います。）
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{積の対数と和の対数}
 \begin{itemize}
 \item 何かを掛け算したものの対数は、何かの対数の和に書き直せるので、扱いやすい
 \begin{align}
 \log(a \times b) = \log(a) + \log(b)
 \end{align}
-\item しかし、何かを足し算したものの対数は、それ以上変形のしようがないので、扱いにくい
+\item 何かを足し算したものの対数は、それ以上変形のしようがないので、扱いにくい
 \begin{align}
 \log(a + b) = \ldots
 \end{align}\end{itemize}
+\end{frame}
+
+\begin{frame}{イェンセンの不等式（対数関数の場合）}
+\begin{itemize}
+\item $p_1,\ldots,p_K$を、$\sum_k p_k=1$を満たす正の実数とする
+\item また、$x_1,\ldots, x_K$を正の実数とする
+\item このとき、以下の不等式が成り立つ
+\begin{align}
+\ln \bigg( \sum_{k=1}^K p_k x_k \bigg) \geq \sum_{k=1}^K p_k \ln(x_k)
+\end{align}
+\begin{itemize}
+\item 和の対数（扱いにくい！）の下界lower boundを、
+対数の和（扱いやすい！）として得るため、イェンセンの不等式をよく使う
+\item なお、対数関数に限らず、上に凸な関数なら、上の不等式は成立
+\end{itemize}
+\end{itemize}
 \end{frame}
 
 
