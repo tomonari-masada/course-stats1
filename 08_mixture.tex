@@ -340,21 +340,6 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \end{itemize}
 \end{frame}
 
-\begin{frame}{観測データの尤度の下界}
-\vspace{-.05in}
-\begin{itemize}
-\item 混合正規分布の場合、$\sum_{z_i=1}^K p(z_i ; \bm{\theta}) = 1$が成り立つ
-\item イェンセンの不等式で観測データ尤度$p(\mathcal{X})$の下界を求める
-\begin{align}
-& \ln p(\mathcal{X})
-= \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K p(z_i) ; \bm{\theta} p(x_i | z_i ; \mu_{z_i} , \sigma_{z_i}) \bigg)
-\notag \\ &
-\geq \sum_{i=1}^N \sum_{z_i=1}^K p(z_i) \ln p(x_i | z_i)
-\end{align}
-\item この下界を$\ell(\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \})$と書くことにする
-\item $\ln p(\mathcal{X})$の代わりに$\ell$を最大化してパラメータを推定する
-\end{itemize}
-\end{frame}
 
 
 \end{document}
