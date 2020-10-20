@@ -305,7 +305,7 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \end{itemize}
 \end{frame}
 
-\begin{frame}{観測データの対数尤度の最大化}
+\begin{frame}{観測データの対数尤度の最大化？}
 \begin{itemize}
 \item あとは、対数尤度$\ln p(\mathcal{X}) = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)$を最大にする$\bm{\theta}=(\theta_1,\ldots,\theta_K)$や$\mu_1,\ldots,\mu_K$や$\sigma_1,\ldots,\sigma_K$を求めれば良い・・・？？？
 \end{itemize}
@@ -340,6 +340,69 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \end{itemize}
 \end{frame}
 
+\begin{frame}{観測データの対数尤度の下界}
+\begin{itemize}
+\item イェンセンの不等式を利用して$\ln p(\mathcal{X})$の下界を得たい
+\item そこで各$x_i$について$q_{i,k} \mbox{ for } k=1,\ldots,K$という$\sum_k q_{i,k}=1$を満たす変数を用意する
+\begin{align}
+& \ln p(\mathcal{X}) = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
+\notag \\ & = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K q_{i,k} \frac{p(z_i) p(x_i | z_i)}{q_{i,k}} \Big)
+\geq 
+\sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+\end{align}
+\vspace{-.4in}
+\item この下界を$\ell(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})$と書くことにする
+\end{itemize}
+\end{frame}
+
+\begin{frame}{観測データの対数尤度の下界の最大化}
+\begin{itemize}
+\item そして、$\ln p(\mathcal{X})$の代わりに$\ell(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})$を最大化することで、
+パラメータを推定する
+\item 混合正規分布の場合
+\begin{align}
+p(z_i=k) & = \theta_k \\
+p(x_i | z_i=k) & = \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp \bigg( - \frac{ ( x_i - \mu_k)^2 }{ 2\sigma_k^2 } \bigg)
+\end{align}
+\item 以下、推定計算を行う
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\FontMath
+\begin{align}
+& L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\}) 
+= \ell(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})
++ \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
++ \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
+\notag \\ &
+= \sum_{i=1}^N \sum_{k=1}^K q_{i,k} \ln\frac{\theta_k p(x_i | z_i = k)}{q_{i,k}}
++ \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
++ \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
+\notag \\ &
+= 
+\sum_{i=1}^N \sum_{k=1}^K q_{i,k} \ln \big( \theta_k p(x_i | z_i = k) \big)
+- \sum_{i=1}^N \sum_{k=1}^K q_{i,k} \ln q_{i,k}
++ \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
++ \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
+\end{align}
+\begin{align}
+\frac{\partial L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})}{\partial q_{i,k}}
+= \ln \big( \theta_k p(x_i | z_i = k) \big) - \ln q_{i,k} - 1 - \lambda_i
+\end{align}
+$\frac{\partial L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})}{\partial q_{i,k}}$ = 0と$\sum_k q_{i,k}=1$より
+$q_{i,k} = \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z_i = k) }$を得る。
+\end{frame}
+
+\begin{frame}
+\FontMath
+\begin{align}
+\frac{\partial L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})}{\partial \theta_k}
+= \sum_{i=1}^N \frac{ q_{i,k} }{ \theta_k } - \lambda_0
+\end{align}
+$\frac{\partial L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})}{\partial \theta_k} = 0$と$\sum_k \theta_k = 1$より
+$\theta_k = \frac{ \sum_{i=1}^N q_{i,k} }{ \sum_{k=1}^K \sum_{i=1}^N q_{i,k} } = \frac{ \sum_{i=1}^N q_{i,k} }{ N }$を得る。
+\end{frame}
 
 
 \end{document}
