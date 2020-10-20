@@ -246,7 +246,7 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 \item 潜在変数を含むモデリングの場合、観測データの尤度$p(\mathcal{D})$は、
 潜在変数を周辺化して得られる
 \begin{itemize}
-\item $p(\mathcal{D})$
+\item $\mathcal{D}$を不完全データincomplete dataと呼ぶことがある
 \end{itemize}
 \begin{align}
 p(\mathcal{D}) & = \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
@@ -261,7 +261,7 @@ p(\mathcal{D}) & = \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
 
 \begin{frame}{観測データの対数尤度}
 \begin{itemize}
-\item 混合正規分布の場合の観測データの対数尤度は、式\eqref{eq:joint_MN}より、以下のとおり
+\item 混合正規分布の場合の観測データの対数尤度は、式\eqref{eq:joint_MN}より
 \vspace{-.1in}
 \begin{align}
 & \ln p(\mathcal{D}) = \ln \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
