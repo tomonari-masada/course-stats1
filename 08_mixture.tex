@@ -65,7 +65,8 @@ $K$個のコンポーネントから一つ選ぶ
 
 \begin{frame}{混合正規分布}
 \begin{itemize}
-\item 混合正規分布を使ったモデリングでは、データの集合$\{\bm{x}_1, \ldots, \bm{x}_N\}$が以下のように生成されると仮定する
+\item 混合正規分布を使ったモデリングでは、
+データの集合$\{\bm{x}_1, \ldots, \bm{x}_N\}$が以下のように生成されると仮定する
 \end{itemize}
 \begin{enumerate}
 \item $i$番目のデータ$\bm{x}_i$を生成するため、まず、カテゴリカル分布$\mbox{Cat}(\bm{\theta})$から、
@@ -102,18 +103,20 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 
 \begin{frame}{単変量正規分布の混合分布における同時分布}
 \begin{itemize}
-\item 単変量正規分布の混合分布によるモデリングでは、
-データ集合$\{x_1, \ldots, x_N\}$と、コンポーネントへの所属を表す情報$\{z_1,\ldots,z_N\}$との、
-同時分布が、以下のように得られる
-\vspace{-.1in}
+\item 単変量正規分布の混合分布を使うと、
+観測されたデータを表す確率変数$\mathcal{X} = \{x_1, \ldots, x_N\}$とコンポーネントへの所属を表す確率変数$\mathcal{Z} = \{z_1,\ldots,z_N\}$との同時分布は
+\vspace{-.15in}
 \begin{align}
-& p( \{ x_1,\ldots,x_N \}, \{ z_1,\ldots,z_N \} ;\bm{\theta},\bm{\mu},\bm{\sigma})
+& p( \mathcal{X}, \mathcal{Z} ;\bm{\theta},\bm{\mu},\bm{\sigma})
 = \prod_{i=1}^N p(x_i, z_i ; \theta_{z_i}, \sigma_{z_i}) \notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
+= \prod_{i=1}^N p(z_i) p(x_i | z_i)
 \label{eq:joint_MN}
 \end{align}
+\vspace{-.4in}
 \begin{itemize}
-\item 個々のデータは、（同じ分布からではないにせよ）独立に生成されると仮定している
+\item $p(z_i)$はカテゴリカル分布$\mbox{Cat}(\bm{\theta})$のpmf
+\item $p(x_i | z_i)$は$z_i$が表すコンポーネントの正規分布$\mathcal{N}(\bm{\mu}_{z_i}, \bm{\Sigma}_{z_i})$のpdf
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -144,6 +147,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \vspace{-.15in}
 \begin{align}
 & p(\mathcal{D};\bm{\theta},\mu_1,\ldots,\mu_K,\sigma_1,\ldots,\sigma_K)
+= p(\mathcal{D};\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \} )
 \notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
 \notag \\ &
@@ -171,8 +175,8 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \vspace{.1in}
 目的関数は
 \begin{align}
-& L(\bm{\theta},\mu_1,\ldots,\mu_K,\sigma_1,\ldots,\sigma_K)
-= \ln p(\mathcal{D};\bm{\theta},\mu_1,\ldots,\mu_K,\sigma_1,\ldots,\sigma_K) 
+& L(\bm{\theta},\{ \mu_k \}, \{ \sigma_k \})
+= \ln p(\mathcal{D};\bm{\theta},\{ \mu_k \}, \{ \sigma_k \}) 
 + \lambda \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
 \notag \\ &
 = \sum_{k=1}^K c_k \ln \theta_k - \sum_{k=1}^K c_k \ln \sigma_k
@@ -226,13 +230,13 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 \item 教師なしの設定の場合、各データ$x_i$について、それがどのコンポーネントから生成されたかは、分からない！
 \item $z_i$は、値が観測されない確率変数、すなわち潜在変数
 \begin{itemize}
-\item つまり、$\mathcal{D} = \{ x_1, \ldots, x_N \}$
+\item つまり、$\mathcal{X} = \{ x_1, \ldots, x_N \}$だけが観測変数
 \item 一方、潜在変数latent variablesの集合を$\mathcal{Z} = \{ z_1, \ldots, z_N \}$とする
 \end{itemize}
-\item このとき、下の$p(\mathcal{D}, \mathcal{Z})$は、観測データの尤度$p(\mathcal{D})$ではない
+\item 観測変数と潜在変数の同時分布$p(\mathcal{X}, \mathcal{Z})$は
 \vspace{-.13in}
 \begin{align}
-& p(\mathcal{D}, \mathcal{Z};\bm{\theta},\mu_1,\ldots,\mu_K,\sigma_1,\ldots,\sigma_K)
+& p(\mathcal{X}, \mathcal{Z};\bm{\theta},\{ \mu_k \}, \{ \sigma_k \})
 = \prod_{i=1}^N p(x_i, z_i ; \theta_{z_i}, \sigma_{z_i})
 \notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
@@ -243,28 +247,54 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 \begin{frame}{観測データの尤度}
 \vspace{-.05in}
 \begin{itemize}
-\item 潜在変数を含むモデリングの場合、観測データの尤度$p(\mathcal{D})$は、
-潜在変数を周辺化して得られる
+\item 潜在変数を含むモデリングの場合、観測データの尤度$p(\mathcal{X})$は、
+潜在変数$\mathcal{Z}$を周辺化して得られる
 \begin{itemize}
-\item $\mathcal{D}$を不完全データincomplete dataと呼ぶことがある
+\item $\mathcal{X}$を不完全データincomplete dataと呼ぶことがある
+\begin{itemize}
+\item 潜在変数を周辺化する＝潜在変数がとりうる値の全てを考慮する
 \end{itemize}
+\end{itemize}
+\vspace{-.1in}
 \begin{align}
-p(\mathcal{D}) & = \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
-= \sum_{z_1=1}^K \sum_{z_2=1}^K \cdots \sum_{z_{N-1}=1}^K \sum_{z_N=1}^K p(\mathcal{D}, \mathcal{Z})
+p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
+= \sum_{z_1=1}^K \sum_{z_2=1}^K \cdots \sum_{z_{N-1}=1}^K \sum_{z_N=1}^K p(\mathcal{X}, \mathcal{Z})
 \notag \\ &
 = \sum_{z_1=1}^K \sum_{z_2=1}^K \cdots \sum_{z_{N-1}=1}^K \sum_{z_N=1}^K \prod_{i=1}^N p(x_i, z_i)
 \notag \\ &
-= \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(x_i, z_i) \bigg)
+= \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(x_i , z_i) \bigg)
 \end{align}
 \end{itemize}
 \end{frame}
+
+\begin{frame}
+\FontMath
+$N=5, K=3$とすると
+\begin{align}
+& \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(x_i , z_i) \bigg)
+\notag \\ &
+= \big( p(x_1, z_1=1) + p(x_1,z_1=2) + p(x_1,z_1=3) \big)
+\notag \\ & \mbox{ \  }
+\times \big( p(x_2, z_1=1) + p(x_2,z_1=2) + p(x_2,z_1=3) \big)
+\notag \\ & \mbox{ \  }
+\times \big( p(x_3, z_1=1) + p(x_3,z_1=2) + p(x_3,z_1=3) \big)
+\notag \\ & \mbox{ \  }
+\times \big( p(x_4, z_1=1) + p(x_4,z_1=2) + p(x_4,z_1=3) \big)
+\notag \\ & \mbox{ \  }
+\times \big( p(x_5, z_1=1) + p(x_5,z_1=2) + p(x_5,z_1=3) \big)
+\end{align}
+括弧を外して展開すると、足し合わされる項の数は$K^N$個。
+
+$K$がそれほど大きな値でないとしても、データのサイズ$N$は、通常、大きな値なので…
+\end{frame}
+
 
 \begin{frame}{観測データの対数尤度}
 \begin{itemize}
 \item 混合正規分布の場合の観測データの対数尤度は、式\eqref{eq:joint_MN}より
 \vspace{-.1in}
 \begin{align}
-& \ln p(\mathcal{D}) = \ln \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
+& \ln p(\mathcal{X}) = \ln \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 \notag \\ &
 = \ln \sum_{z_1=1}^K \cdots \sum_{z_N=1}^K \bigg( \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg] \bigg)
 \notag \\ &
@@ -277,11 +307,7 @@ p(\mathcal{D}) & = \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
 
 \begin{frame}{観測データの対数尤度の最大化}
 \begin{itemize}
-\item あとは、$\ln p(\mathcal{D})$を最大にする$\bm{\theta}=(\theta_1,\ldots,\theta_K)$や$\mu_1,\ldots,\mu_K$や$\sigma_1,\ldots,\sigma_K$を求めれば良い・・・？？？
-\vspace{.3in}
-\begin{itemize}
-\item （偏微分の計算をしようとしてみると、問題がそう簡単ではなさそうであることに気づかれると思います。）
-\end{itemize}
+\item あとは、対数尤度$\ln p(\mathcal{X}) = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)$を最大にする$\bm{\theta}=(\theta_1,\ldots,\theta_K)$や$\mu_1,\ldots,\mu_K$や$\sigma_1,\ldots,\sigma_K$を求めれば良い・・・？？？
 \end{itemize}
 \end{frame}
 
@@ -314,6 +340,21 @@ p(\mathcal{D}) & = \sum_{\mathcal{Z}} p(\mathcal{D}, \mathcal{Z})
 \end{itemize}
 \end{frame}
 
+\begin{frame}{観測データの尤度の下界}
+\vspace{-.05in}
+\begin{itemize}
+\item 混合正規分布の場合、$\sum_{z_i=1}^K p(z_i ; \bm{\theta}) = 1$が成り立つ
+\item イェンセンの不等式で観測データ尤度$p(\mathcal{X})$の下界を求める
+\begin{align}
+& \ln p(\mathcal{X})
+= \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K p(z_i) ; \bm{\theta} p(x_i | z_i ; \mu_{z_i} , \sigma_{z_i}) \bigg)
+\notag \\ &
+\geq \sum_{i=1}^N \sum_{z_i=1}^K p(z_i) \ln p(x_i | z_i)
+\end{align}
+\item この下界を$\ell(\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \})$と書くことにする
+\item $\ln p(\mathcal{X})$の代わりに$\ell$を最大化してパラメータを推定する
+\end{itemize}
+\end{frame}
 
 
 \end{document}
