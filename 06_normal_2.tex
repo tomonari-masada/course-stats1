@@ -10,11 +10,7 @@
 
 \begin{frame}
 \titlepage
-\end{frame}\begin{itemize}
-\item begin{example}
-end{example}
-\end{itemize}
-
+\end{frame}
 
 \section{正規分布の復習}
 
@@ -60,10 +56,7 @@ p(\bm{x};\bm{\mu},\bm{\Sigma}) = \frac{1}{\sqrt{(2\pi)^d|\bm{\Sigma}|}}\exp\bigg
 \begin{itemize}
 \item 実際には共分散行列を対角行列と仮定することも多い
 \begin{itemize}
-\item $\bm{\Sigma}$の逆行列の計算が、しばしば数値計算的に難しい
-\begin{itemize}
-\item 例えば、変分オートエンコーダvariational autoencoderや拡散確率モデルdiffusion probabilistic modelでも共分散行列が対角行列だと仮定する
-\end{itemize}
+\item $\bm{\Sigma}$の扱いがしばしば数値計算的に難しい
 \end{itemize}
 \item このとき密度関数は単変量正規分布の密度関数の積となる：
 \begin{align}
@@ -185,7 +178,7 @@ p(\mathcal{D};\bm{\mu},\bm{\Sigma})
 \FontMath
 \vspace{-.2in}
 \begin{align}
-& p(\mathcal{D}|\mu,\sigma)p(\mu;\mu_0,\sigma_0)
+& p(\mathcal{D}|\mu;\sigma)p(\mu;\mu_0,\sigma_0)
 = \prod_{i=1}^N \frac{1}{\sqrt{2\pi}\sigma}\exp\bigg[ - \frac{  (x_i - \mu)^2 }{2\sigma^2} \bigg]
 \times \frac{1}{\sqrt{2\pi}\sigma_0} \exp \bigg[ - \frac{  (\mu - \mu_0)^2  }{2\sigma_0^2} \bigg]
 \notag \\ & =
@@ -203,7 +196,7 @@ p(\mathcal{D};\bm{\mu},\bm{\Sigma})
 \end{align}
 よって
 \begin{align}
-p(\mu | \mathcal{D}; \mu_0, \sigma_0)
+p(\mu | \mathcal{D}; \sigma, \mu_0, \sigma_0)
 \propto
 \exp\bigg[ 
 - \Big( \frac{N}{2\sigma^2} + \frac{1}{2\sigma_0^2} \Big) \mu^2 
@@ -228,13 +221,13 @@ p(\mu | \mathcal{D}; \mu_0, \sigma_0)
 \end{align}
 以上より、
 \begin{align}
-p(\mu | \mathcal{D}; \mu_0, \sigma_0)
+p(\mu | \mathcal{D}; \sigma, \mu_0, \sigma_0)
 \propto \exp\bigg[
 - \frac{N\sigma_0^2 + \sigma^2}{2\sigma^2\sigma_0^2}
 \bigg( \mu - \frac{ N \sigma_0^2 \bar{x}  + \sigma^2 \mu_0 }{ N\sigma_0^2 + \sigma^2 } \bigg)^2
 \bigg]
 \end{align}
-よって、事後分布$p(\mu | \mathcal{D}; \mu_0, \sigma_0)$は、
+よって、事後分布$p(\mu | \mathcal{D}; \sigma, \mu_0, \sigma_0)$は、
 平均が$\frac{ N \sigma_0^2 \bar{x}  + \sigma^2 \mu_0 }{ N\sigma_0^2 + \sigma^2 }$、
 分散が$\frac{\sigma^2\sigma_0^2}{N\sigma_0^2 + \sigma^2}$の正規分布であることが分かる。
 \begin{itemize}
