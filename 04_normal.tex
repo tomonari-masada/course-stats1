@@ -102,7 +102,7 @@ p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\
 \end{itemize}
 \end{frame}
 
-\begin{frame}{正規分布にしたがう確率変数の和\\\vspace{-.3in}\href{https://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables}{\footnotesize \url{https://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables}}}
+\begin{frame}{正規分布に独立にしたがう確率変数の和}
 \begin{itemize}
 \item 確率変数$x$と$y$が、それぞれ独立に正規分布
 $\mathcal{N}(\mu_x,\sigma_x^2)$と$\mathcal{N}(\mu_y,\sigma_y^2)$にしたがうとする
@@ -112,7 +112,11 @@ $\mathcal{N}(\mu_x,\sigma_x^2)$と$\mathcal{N}(\mu_y,\sigma_y^2)$にしたがう
 $p(x;\mu_x,\sigma_x)$と$p(y;\mu_y,\sigma_y)$と書く
 \item $x$と$y$は独立なので、同時分布の確率密度関数$p(x,y)$は$p(x;\mu_x,\sigma_x)p(y;\mu_y,\sigma_y)$と積で書ける
 \item $z=x+y$とおくと、$y=z-x$
-\item $y$を$z-x$で置き換えて、$x$を積分消去integrate outする
+\item $y$を$z-x$で置き換えて、$x$について積分する
+\begin{itemize}
+\item[cf.] {\tiny \href{https://faculty.math.illinois.edu/\~r-ash/Stat/StatLec1-5.pdf}{\url{https://faculty.math.illinois.edu/~r-ash/Stat/StatLec1-5.pdf}}のSec.~3.11}
+\item[cf.] {\tiny \href{http://nlp.dse.ibaraki.ac.jp/\~shinnou/siryou/toukei-kentei/1-stat-var-trans.pdf}{\url{http://nlp.dse.ibaraki.ac.jp/~shinnou/siryou/toukei-kentei/1-stat-var-trans.pdf}}}
+\end{itemize}
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -214,6 +218,32 @@ $\int_{-\infty}^\infty e^{-a(x+b)^2} = \sqrt{\frac{\pi}{a}}$を使った。
 
 以上より、$z\sim\mathcal{N}(\mu_x + \mu_y, \sigma_x^2+\sigma_y^2)$となることを示せた。
 \end{frame}
+
+\begin{frame}
+\frametitle{参考：変数変換 \\ \vspace{-.3in} {\footnotesize \href{http://nlp.dse.ibaraki.ac.jp/\~shinnou/siryou/toukei-kentei/1-stat-var-trans.pdf}{\url{http://nlp.dse.ibaraki.ac.jp/~shinnou/siryou/toukei-kentei/1-stat-var-trans.pdf}}}}
+\begin{itemize}
+\item 1次元の場合
+\begin{itemize}
+\item 確率変数$X$の確率密度関数を$f_X(x)$とする
+\item $X$を$Y=g(X)$と変数変換
+\item すると、確率変数$Y$の密度関数$f_Y(y)$は$f_Y(y) = f_X(x) \frac{dx}{dy}$となる
+\end{itemize}
+\item 2次元の場合
+\begin{itemize}
+\item 確率変数$X$と$Y$の同時密度関数を$f_{X,Y}(x,y)$とする
+\item $X$と$Y$を$(U,V)=(g_1(X,Y), g_2(X,Y))$と変数変換
+\item すると、$U$と$V$の同時密度関数は$f_{U,V}(u,v)=f_{X,Y}(x,y)\| J \|$
+\begin{itemize}
+\item ただし、$J$はヤコビアン$J=\begin{bmatrix} \frac{\partial g_1^{-1}}{\partial u} & \frac{\partial g_1^{-1}}{\partial v} 
+\\ \frac{\partial g_2^{-1}}{\partial u} & \frac{\partial g_2^{-1}}{\partial v} \end{bmatrix}$
+\item $\| J \|$はヤコビアン$J$の行列式の絶対値
+\item[] （$U=X, V=X+Y$の場合が、先ほどの議論に相当する）
+\end{itemize}
+\end{itemize}
+
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}{確率変数の値の和がしたがう確率分布}
 \begin{itemize}
