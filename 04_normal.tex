@@ -32,7 +32,7 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}{単変量正規分布}
+\begin{frame}{単変量正規分布 univariate normal distribution}
 \begin{itemize}
 \item 単変量正規分布は、$\mathbb{R}=(-\infty,\infty)$上に定義される
 \item 単変量正規分布のパラメータは、平均$\mu$と標準偏差$\sigma$
@@ -45,7 +45,7 @@
 p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\sigma^2} \Big)
 \end{align}
 \begin{itemize}
-\item 「;」は、その右側にある$\mu$と$\sigma$が自由パラメータ（我々が値を指定する必要があるパラメータ）であることを意味する
+\item 「;」は、その右側にある$\mu$と$\sigma$が自由パラメータ（我々がその値を指定してはじめて分布が定まるパラメータ）であることを意味する
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -57,21 +57,23 @@ p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\
 \item $-\infty$から$\infty$までの範囲で積分すると1になるようにするには、この値を掛け算しておかないといけない、という意味
 \item ひとことで言えば、規格化定数
 \end{itemize}
+\vspace{.1in}
 \item 逆に言えば、$\int_{-\infty}^\infty \exp\Big( - \frac{(x - \mu)^2}{2\sigma^2} \Big) dx = \sqrt{2\pi\sigma^2}$が成り立つ、ということ
 \begin{itemize}
 \item こういう積分を、ガウス積分と呼ぶ
-\item ガウス積分の公式：$\int_{-\infty}^\infty e^{-a(x+b)^2}dx = \sqrt{\frac{\pi}{a}}$
+\item ガウス積分の公式 $\int_{-\infty}^\infty e^{-a(x+b)^2}dx = \sqrt{\frac{\pi}{a}}$
 \end{itemize}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{密度関数についての注意事項}
+\begin{frame}{密度関数についての注意事項（再）}
 \begin{align}
 p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\sigma^2} \Big)
+\label{eq:un-density}
 \end{align}
 \begin{itemize}
-\item 密度関数の$x$に特定の値を代入して得られる値は、確率としての意味を持たない
+\item 式\eqref{eq:un-density}の$x$に特定の値を代入して得られる$p(x;\mu,\sigma)$の値は、確率としての意味を持たない
 \begin{itemize}
 \item そもそも、密度関数の値は1を超えることがいくらでもある
 \end{itemize}
@@ -90,11 +92,11 @@ p(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big( - \frac{(x - \mu)^2}{2\
 \end{figure}
 \end{frame}
 
-\begin{frame}{標準正規分布}
+\begin{frame}{標準正規分布 standard normal distribution}
 \begin{itemize}
-\item 平均が0、標準偏差が1の単変数正規分布$\mathcal{N}(0,1)$のことを、標準正規分布と呼ぶ
+\item 平均が0で標準偏差が1の単変数正規分布$\mathcal{N}(0,1)$のことを、標準正規分布と呼ぶ
 \item 標準正規分布に従う確率変数を$x$とする
-\item このとき、$y=\sigma x+\mu$は平均$\mu$、標準偏差$\sigma$の正規分布$\mathcal{N}(\mu,\sigma)$にしたがう
+\item このとき、$y=\sigma x+\mu$は、平均が$\mu$で標準偏差$\sigma$の正規分布$\mathcal{N}(\mu,\sigma)$にしたがう
 \begin{itemize}
 \item つまり、 $x\sim\mathcal{N}(0,1)$ならば$\sigma x + \mu\sim\mathcal{N}(\mu,\sigma)$
 \item 一般に、正規分布にしたがう確率変数のアフィン変換はまた、正規分布にしたがう
@@ -114,8 +116,7 @@ $p(x;\mu_x,\sigma_x)$と$p(y;\mu_y,\sigma_y)$と書く
 \item $z=x+y$とおくと、$y=z-x$
 \item $y$を$z-x$で置き換えて、$x$について積分する
 \begin{itemize}
-\item[cf.] {\tiny \href{https://faculty.math.illinois.edu/\~r-ash/Stat/StatLec1-5.pdf}{\url{https://faculty.math.illinois.edu/~r-ash/Stat/StatLec1-5.pdf}}のSec.~3.11}
-\item[cf.] {\tiny \href{http://nlp.dse.ibaraki.ac.jp/\~shinnou/siryou/toukei-kentei/1-stat-var-trans.pdf}{\url{http://nlp.dse.ibaraki.ac.jp/~shinnou/siryou/toukei-kentei/1-stat-var-trans.pdf}}}
+\item[cf.] {\scriptsize \href{https://faculty.math.illinois.edu/\~r-ash/Stat/StatLec1-5.pdf}{\url{https://faculty.math.illinois.edu/~r-ash/Stat/StatLec1-5.pdf}}のSec.~3.11}
 \end{itemize}
 \end{itemize}
 \end{itemize}
@@ -168,7 +169,7 @@ x - \frac{\sigma_y^2\mu_x+\sigma_x^2(z-\mu_y)}{\sigma_x^2+\sigma_y^2}\bigg\}^2
 + \frac{ \{ \sigma_y^2\mu_x+\sigma_x^2(z-\mu_y) \}^2 }{2\sigma_x^2\sigma_y^2(\sigma_x^2+\sigma_y^2)}
 -\frac{\sigma_y^2\mu_x^2+\sigma_x^2(z-\mu_y)^2}{2\sigma_x^2\sigma_y^2}
 \end{align}
-後半のxを含まない2つの項に注目して$z$について平方完成すると
+$x$を含まない後半の2つの項に注目して$z$について平方完成すると
 \begin{align}
 &\frac{ \{ \sigma_y^2\mu_x+\sigma_x^2(z-\mu_y) \}^2 }{2\sigma_x^2\sigma_y^2(\sigma_x^2+\sigma_y^2)}
 -\frac{\sigma_y^2\mu_x^2+\sigma_x^2(z-\mu_y)^2}{2\sigma_x^2\sigma_y^2}
@@ -225,19 +226,19 @@ $\int_{-\infty}^\infty e^{-a(x+b)^2} = \sqrt{\frac{\pi}{a}}$を使った。
 \item 1次元の場合
 \begin{itemize}
 \item 確率変数$X$の確率密度関数を$f_X(x)$とする
-\item $X$を$Y=g(X)$と変数変換
-\item すると、確率変数$Y$の密度関数$f_Y(y)$は$f_Y(y) = f_X(x) \frac{dx}{dy}$となる
+\item $X$を$Y=g(X)$と変数変換するとする
+\item 確率変数$Y$の密度関数$f_Y(y)$は$f_Y(y) = f_X(x) \frac{dx}{dy}$となる
 \end{itemize}
 \item 2次元の場合
 \begin{itemize}
 \item 確率変数$X$と$Y$の同時密度関数を$f_{X,Y}(x,y)$とする
-\item $X$と$Y$を$(U,V)=(g_1(X,Y), g_2(X,Y))$と変数変換
-\item すると、$U$と$V$の同時密度関数は$f_{U,V}(u,v)=f_{X,Y}(x,y)\| J \|$
+\item $X$と$Y$を$(U,V)=(g_1(X,Y), g_2(X,Y))$と変数変換するとする
+\item $U$と$V$の同時密度関数は$f_{U,V}(u,v)=f_{X,Y}(x,y)\| J \|$となる
 \begin{itemize}
-\item ただし、$J$はヤコビアン$J=\begin{bmatrix} \frac{\partial g_1^{-1}}{\partial u} & \frac{\partial g_1^{-1}}{\partial v} 
+\item $J$はヤコビアン$J=\begin{bmatrix} \frac{\partial g_1^{-1}}{\partial u} & \frac{\partial g_1^{-1}}{\partial v} 
 \\ \frac{\partial g_2^{-1}}{\partial u} & \frac{\partial g_2^{-1}}{\partial v} \end{bmatrix}$
 \item $\| J \|$はヤコビアン$J$の行列式の絶対値
-\item[] （$U=X, V=X+Y$の場合が、先ほどの議論に相当する）
+\item[] （$U=X, V=X+Y$の場合が、確率変数の和の場合に相当する）
 \end{itemize}
 \end{itemize}
 
@@ -245,10 +246,10 @@ $\int_{-\infty}^\infty e^{-a(x+b)^2} = \sqrt{\frac{\pi}{a}}$を使った。
 \end{frame}
 
 
-\begin{frame}{確率変数の値の和がしたがう確率分布}
+\begin{frame}{確率変数の和がしたがう確率分布}
 \begin{itemize}
 \item 正規分布の密度関数は、ラクダのコブのような形をしている
-\item ところで、たった今、異なる正規分布にしたがう独立な2つの確率変数の値の和が正規分布にしたがうことを示した
+\item ところで、たった今、異なる正規分布にしたがう独立な2つの確率変数の和が正規分布にしたがうことを示した
 \item しかし、独立な2つの確率変数が、いずれもコブ状の密度関数をもつ分布にしたがうなら、それら確率変数の和がしたがう確率分布の密度関数には、2つのコブがあるのでは？
 \item …これはよくある勘違い。確率変数の足し算を考えることと、密度関数の足し算を考えることとは、全く別のこと
 \item では、2つのコブがある分布はどのような場合に作られる？
@@ -264,9 +265,9 @@ $\int_{-\infty}^\infty e^{-a(x+b)^2} = \sqrt{\frac{\pi}{a}}$を使った。
 \item 裏が出たら$\mathcal{N}(\mu_y,\sigma_y^2)$から値を生成
 \end{itemize}
 \item このようにして生成される実数値がしたがう分布の密度関数には、コブが2つある
-\item このような分布を混合分布というが、詳細はまたいずれ。
+\item このような分布を混合分布というが、詳細はまたいずれ
 \end{itemize}
-\begin{textblock*}{0.4\linewidth}(260pt, 80pt)
+\begin{textblock*}{0.4\linewidth}(270pt, 78pt)
     \centering
     \includegraphics[width=0.7\linewidth]{./gaussian_mixture_1.png}
 \end{textblock*}
@@ -276,15 +277,15 @@ $\int_{-\infty}^\infty e^{-a(x+b)^2} = \sqrt{\frac{\pi}{a}}$を使った。
 
 \begin{frame}{正規分布の再生性}
 \begin{itemize}
-\item 再生性
+\item 再生性 reproductive property
 \begin{itemize}
 \item 同じ分布だけどパラメータが違うだけの分布に従う確率変数の和もまた、それら2つの分布とパラメータが違うだけの同じ分布に従うとき、この分布族は再生性を持つ、という。
 \end{itemize}
 \item $M$個の確率変数$x_1,\ldots,x_M$が、それぞれ独立に正規分布$\mathcal{N}(\mu_1,\sigma_1^2), 
-\ldots, \mathcal{N}(\mu_M,\sigma_M^2)$にしたがうとする。
+\ldots, \mathcal{N}(\mu_M,\sigma_M^2)$にしたがうとする
 \item このとき、$\sum_{m=1}^M a_m x_m$は、以下の正規分布にしたがう
 \begin{align}
-\mathcal{N}(\sum_m a_m \mu_m, \sum_m a_m^2 \sigma_m^2)
+\mathcal{N} \Big(\sum_{m=1}^M a_m \mu_m, \sum_{m=1}^M a_m^2 \sigma_m^2 \Big)
 \end{align}
 \end{itemize}
 \end{frame}
@@ -313,7 +314,7 @@ p(\mathcal{D};\mu,\sigma)=\prod_{i=1}^N p(x_i;\mu,\sigma)
 
 \begin{frame}{単変量正規分布の最尤推定}
 \begin{itemize}
-\item よって、観測データ$\mathcal{D}$の対数尤度は以下のようになる
+\item 観測データ$\mathcal{D}$の対数尤度は以下のようになる
 \begin{align}
 \ln p(\mathcal{D};\mu,\sigma)
 = -\frac{N}{2}\ln(2\pi\sigma^2) - \sum_{i=1}^N \frac{(x_i - \mu)^2}{2\sigma^2}
@@ -356,13 +357,13 @@ $\sigma^2 = \frac{\sum_i (x_i - \mu)^2}{N} = \frac{\sum_i (x_i - \bar{x})^2}{N}$
 \Large \tableofcontents[currentsection]
 \end{frame}
 
-\begin{frame}{二変量正規分布}
+\begin{frame}{二変量正規分布 bivariate normal distribution}
 \begin{itemize}
 \item パラメータ
 \begin{itemize}
 \item 平均ベクトル
 $\bm{\mu} = \begin{bmatrix} \mu_1 \\ \mu_2 \end{bmatrix}$
-\item 分散共分散行列
+\item 共分散行列
 $\bm{\Sigma} = \begin{bmatrix} \sigma_{11} & \sigma_{12} \\ \sigma_{12} & \sigma_{22} \end{bmatrix}$
 （ただし$\Sigma$は正定値行列）
 \end{itemize}
@@ -379,7 +380,7 @@ p(\bm{x};\bm{\mu},\bm{\Sigma}) = \frac{1}{\sqrt{(2\pi)^2|\bm{\Sigma}|}}\exp\bigg
 \begin{itemize}
 \item 平均ベクトル
 $\bm{\mu} = \begin{bmatrix} \mu_1 \\ \vdots \\ \mu_d \end{bmatrix}$
-\item 分散共分散行列
+\item 共分散行列
 $\bm{\Sigma} = \begin{bmatrix} \sigma_{11} & \cdots & \sigma_{1d} \\ 
 \vdots & \ddots & \vdots \\
 \sigma_{1d} & \cdots & \sigma_{dd} \end{bmatrix}$
@@ -467,7 +468,7 @@ $\bm{\Sigma} = \begin{bmatrix} 1 & -0.5 \\ -0.5 & 1.5 \end{bmatrix}$
 
 \begin{frame}{二変量正規分布の別のパラメータ化(2/2)}
 \begin{itemize}
-\item このパラメータ化のもとでは$\bm{\Sigma}$の行列式と逆行列は
+\item このパラメータ化のもとでは、$\bm{\Sigma}$の行列式と逆行列は
 \end{itemize}
 \begin{align}
 \mbox{det}\bm{\Sigma} &= \sigma_1^2\sigma_2^2(1-\rho^2) \\
@@ -493,6 +494,9 @@ $\bm{\Sigma} = \begin{bmatrix} 1 & -0.5 \\ -0.5 & 1.5 \end{bmatrix}$
 \exp\bigg( - \frac{1}{2} (\bm{x}_i - \bm{\mu})^\intercal \bm{\Sigma}^{-1} (\bm{x}_i - \bm{\mu}) \bigg)
 \end{align}
 \item 最尤推定によって各パラメータを推定（次スライドから）
+\begin{itemize}
+\item[cf.] \href{https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf}{The Matrix Cookbook} 
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -532,7 +536,7 @@ $\bm{\Sigma} = \begin{bmatrix} 1 & -0.5 \\ -0.5 & 1.5 \end{bmatrix}$
 \begin{frame}
 \FontMath
 $\frac{\partial \ln p(\mathcal{D};\bm{\mu},\bm{\Sigma})}{\partial \bm{\Sigma}}$の計算は、
-\href{https://www.ics.uci.edu/~welling/teaching/KernelsICS273B/MatrixCookBook.pdf}{The Matrix Cookbook}を見ながらおこなう。
+\href{https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf}{The Matrix Cookbook}を見ながらおこなう。
 \begin{align}
 \frac{\partial}{\partial \bm{\Sigma}}\ln(|\bm{\Sigma}|) & = \bm{\Sigma}^{-1} \\
 \frac{\partial}{\partial \bm{\Sigma}}
@@ -563,7 +567,8 @@ N - \bigg( \sum_i
 \begin{frame}
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[scale=.45]{book_anomaly.png}
+\includegraphics[scale=.44]{book_anomaly.png}
+{\footnotesize \\ \href{https://www.amazon.co.jp/dp/4061529080}{https://www.amazon.co.jp/dp/4061529080}}
 \end{center}
 \end{figure}
 \end{frame}
@@ -603,7 +608,7 @@ $\bm{x}$の$\hat{\bm{\mu}}$からのマハラノビス距離という
 \alpha(\bm{x}) = (\bm{x} - \hat{\bm{\mu}})^\intercal \hat{\bm{\Sigma}}^{-1}
 (\bm{x} - \hat{\bm{\mu}})
 \end{align}
-\item $\alpha(\bm{x})$が大きいほど$\bm{x}$はより一層異常とみなす
+\item $\alpha(\bm{x})$が大きいほど、$\bm{x}$はより一層異常だとみなす
 \begin{itemize}
 \item $\hat{\bm{\Sigma}}$を使っているので、観測データのベクトルの成分間の関連も考慮した距離になっている
 \end{itemize}

@@ -36,24 +36,24 @@
 \end{frame}
 
 \begin{frame}{混合分布}
+\vspace{-.1in}
 \begin{itemize}
-\item これまでは、全てのデータ$\bm{x}_i$ for $i=1,\ldots,N$を、
-同じ一つの分布からdrawしていた
-\begin{itemize}
-\item 全ての確率変数$\bm{x}_i$ for $i=1,\ldots,N$が同じ分布に従うと考えていた
-\end{itemize}
-\item 一方、混合分布によるモデリングでは、同じ種類の分布だがパラメータの値が違うだけの分布を、$K$個用意する
+\item これまでは、全てのデータ$\bm{x}_1, \ldots, \bm{x}_N$が同じ分布から生成されると仮定していた
+\item 一方、混合分布によるモデリングでは、同じ種類の分布だがパラメータの値が違う分布を$K$個用意する
 \begin{itemize}
 \item これらの分布をコンポーネントと呼ぶことがある
 \end{itemize}
-\item そして、各データ$\bm{x}_i$について、まず、カテゴリカル分布$\mbox{Cat}(\bm{\theta})$に従って
+\item そして、各データ$\bm{x}_i$について…
+\end{itemize}
+\begin{enumerate}
+\item カテゴリカル分布$\mbox{Cat}(\bm{\theta})$に従って
 $K$個のコンポーネントから一つ選ぶ
 \begin{itemize}
 \item $\bm{\theta}=(\theta_1,\ldots,\theta_K)$はパラメータで、$\theta_k$は$k$番目の分布が選ばれる確率。
 もちろん$\sum_k \theta_k = 1$が成り立つ
 \end{itemize}
 \item そして、$\bm{x}_i$がその選ばれた分布に従うと考える。
-\end{itemize}
+\end{enumerate}
 \end{frame}
 
 
@@ -105,15 +105,14 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \begin{itemize}
 \item 単変量正規分布の混合分布を使うと、
 観測されたデータを表す確率変数$\mathcal{X} = \{x_1, \ldots, x_N\}$とコンポーネントへの所属を表す確率変数$\mathcal{Z} = \{z_1,\ldots,z_N\}$との同時分布は
-\vspace{-.15in}
+\vspace{-.1in}
 \begin{align}
-& p( \mathcal{X}, \mathcal{Z} ;\bm{\theta},\bm{\mu},\bm{\sigma})
-= \prod_{i=1}^N p(x_i, z_i ; \theta_{z_i}, \sigma_{z_i}) \notag \\ &
+& p( \mathcal{X}, \mathcal{Z} ;\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \})
+= \prod_{i=1}^N p(z_i ; \theta_{z_i}) p(x_i | z_i ; \mu_{z_i}, \sigma_{z_i})
+\notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
-= \prod_{i=1}^N p(z_i) p(x_i | z_i)
 \label{eq:joint_MN}
 \end{align}
-\vspace{-.4in}
 \begin{itemize}
 \item $p(z_i)$はカテゴリカル分布$\mbox{Cat}(\bm{\theta})$のpmf
 \item $p(x_i | z_i)$は$z_i$が表すコンポーネントの正規分布$\mathcal{N}(\bm{\mu}_{z_i}, \bm{\Sigma}_{z_i})$のpdf
@@ -237,7 +236,7 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 \vspace{-.13in}
 \begin{align}
 & p(\mathcal{X}, \mathcal{Z};\bm{\theta},\{ \mu_k \}, \{ \sigma_k \})
-= \prod_{i=1}^N p(x_i, z_i ; \theta_{z_i}, \sigma_{z_i})
+= \prod_{i=1}^N p(x_i, z_i ; \theta_{z_i}, \mu_{z_i}, \sigma_{z_i})
 \notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
 \end{align}
@@ -343,7 +342,11 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \begin{frame}{観測データの対数尤度の下界}
 \begin{itemize}
 \item イェンセンの不等式を利用して$\ln p(\mathcal{X})$の下界を得たい
-\item そこで各$x_i$について$q_{i,k} \mbox{ for } k=1,\ldots,K$という$\sum_k q_{i,k}=1$を満たす変数を用意する
+\item そこで、各$x_i$について、$q_{i,1}, \ldots, q_{i,K}$という$\sum_k q_{i,k}=1$を満たす変数を用意する
+\begin{itemize}
+\item $q_{i,k}$はデータ$x_i$が$k$番目のコンポーネントに属する確率を意味する
+\end{itemize}
+\vspace{-.05in}
 \begin{align}
 & \ln p(\mathcal{X}) = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
 \notag \\ & = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K q_{i,k} \frac{p(z_i) p(x_i | z_i)}{q_{i,k}} \Big)
@@ -359,7 +362,7 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \begin{itemize}
 \item そして、$\ln p(\mathcal{X})$の代わりに$\ell(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})$を最大化することで、
 パラメータを推定する
-\item 混合正規分布の場合
+\item 単変量正規分布の混合分布の場合
 \begin{align}
 p(z_i=k) & = \theta_k \\
 p(x_i | z_i=k) & = \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp \bigg( - \frac{ ( x_i - \mu_k)^2 }{ 2\sigma_k^2 } \bigg)
@@ -372,6 +375,7 @@ p(x_i | z_i=k) & = \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp \bigg( - \frac{ ( x_i - 
 \FontMath
 \begin{align}
 & L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\}) 
+\notag \\ &
 = \ell(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})
 + \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
 + \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
@@ -387,21 +391,49 @@ p(x_i | z_i=k) & = \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp \bigg( - \frac{ ( x_i - 
 + \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
 \end{align}
 \begin{align}
-\frac{\partial L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})}{\partial q_{i,k}}
+\frac{\partial L}{\partial q_{i,k}}
 = \ln \big( \theta_k p(x_i | z_i = k) \big) - \ln q_{i,k} - 1 - \lambda_i
 \end{align}
-$\frac{\partial L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})}{\partial q_{i,k}}$ = 0と$\sum_k q_{i,k}=1$より
+$\frac{\partial L}{\partial q_{i,k}}$ = 0と$\sum_k q_{i,k}=1$より
 $q_{i,k} = \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z_i = k) }$を得る。
 \end{frame}
 
 \begin{frame}
 \FontMath
+$q_{i,k} \ln \big( \theta_k p(x_i | z_i = k) \big)
+= q_{i,k} \ln \theta_k + q_{i,k} \ln p(x_i | z_i = k)$より、
 \begin{align}
-\frac{\partial L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})}{\partial \theta_k}
-= \sum_{i=1}^N \frac{ q_{i,k} }{ \theta_k } - \lambda_0
+\frac{\partial L}{\partial \theta_k}
+= \frac{ \sum_{i=1}^N  q_{i,k} }{ \theta_k } - \lambda_0
 \end{align}
-$\frac{\partial L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})}{\partial \theta_k} = 0$と$\sum_k \theta_k = 1$より
+$\frac{\partial L}{\partial \theta_k} = 0$と$\sum_k \theta_k = 1$より
 $\theta_k = \frac{ \sum_{i=1}^N q_{i,k} }{ \sum_{k=1}^K \sum_{i=1}^N q_{i,k} } = \frac{ \sum_{i=1}^N q_{i,k} }{ N }$を得る。
+
+\
+
+$\frac{\partial }{\partial \mu_k} \ln p(x_i | z_i = k) = \frac{ x_i - \mu_k }{\sigma_k^2}$と
+$\frac{\partial }{\partial \sigma_k} \ln p(x_i | z_i = k) = - \frac{1}{\sigma_k} + \frac{ (x_i - \mu_k)^2 }{\sigma_k^3}$より
+\begin{align}
+\frac{\partial L}{\partial \mu_k}
+& = \frac{ \sum_{i=1}^N q_{i,k} (x_i - \mu_k) }{\sigma_k^2} \\
+\frac{\partial L}{\partial \sigma_k}
+& = \frac{ \sum_{i=1}^N q_{i,k} ( - \sigma_k^2 + (x_i - \mu_k)^2 ) }{\sigma_k^3}
+\end{align}
+$\frac{\partial L}{\partial \mu_k} = 0$より
+$\mu_k = \frac{ \sum_{i=1}^N q_{i,k} x_i }{ \sum_{i=1}^N q_{i,k} }$を得る。
+また、$\frac{\partial L}{\partial \sigma_k} = 0$より
+$\sigma_k^2 = \frac{ \sum_{i=1}^N q_{i,k} (x_i - \mu_k) }{ \sum_{i=1}^N q_{i,k} }$を得る。
+\end{frame}
+
+\begin{frame}{$q_{i,k}$とは何なのか}
+\begin{itemize}
+\item イェンセンの不等式を使って、次の下界を得たのだった
+\begin{align}
+\sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
+\geq 
+\sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+\end{align}
+\end{itemize}
 \end{frame}
 
 
