@@ -3,6 +3,7 @@
 \usepackage{bm}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage[absolute,overlay]{textpos}
 \usepackage{hyperref}
@@ -14,6 +15,12 @@
 \usefonttheme[onlymath]{serif}
 
 \DeclareMathOperator*{\argmax}{argmax}
+
+\DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+\newcommand{\infdiv}{D_{\scriptsize \mbox{KL}}\infdivx}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 
 \hypersetup{
 	setpagesize=false,

@@ -36,7 +36,6 @@
 \end{frame}
 
 \begin{frame}{混合分布}
-\vspace{-.1in}
 \begin{itemize}
 \item これまでは、全てのデータ$\bm{x}_1, \ldots, \bm{x}_N$が同じ分布から生成されると仮定していた
 \item 一方、混合分布によるモデリングでは、同じ種類の分布だがパラメータの値が違う分布を$K$個用意する
@@ -47,7 +46,7 @@
 \end{itemize}
 \begin{enumerate}
 \item カテゴリカル分布$\mbox{Cat}(\bm{\theta})$に従って
-$K$個のコンポーネントから一つ選ぶ
+$K$個の分布から一つ選ぶ
 \begin{itemize}
 \item $\bm{\theta}=(\theta_1,\ldots,\theta_K)$はパラメータで、$\theta_k$は$k$番目の分布が選ばれる確率。
 もちろん$\sum_k \theta_k = 1$が成り立つ
@@ -426,13 +425,31 @@ $\sigma_k^2 = \frac{ \sum_{i=1}^N q_{i,k} (x_i - \mu_k) }{ \sum_{i=1}^N q_{i,k} 
 \end{frame}
 
 \begin{frame}{$q_{i,k}$とは何なのか}
+\FontMath
+\vspace{-.05in}
 \begin{itemize}
 \item イェンセンの不等式を使って、次の下界を得たのだった
+\vspace{-.05in}
 \begin{align}
 \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
 \geq 
 \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
 \end{align}
+\item 左辺から右辺を引いた差をとる
+\vspace{-.05in}
+\begin{align}
+& \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
+- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+\notag \\ &
+= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
+- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+\notag \\ &
+= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \frac{p(x_i) q_{i,k}}{p(x_i , z_i)}
+= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \frac{q_{i,k}}{p(z_i | x_i)}
+= \infdiv{q_{i,k}}{p(z_i | x_i)}
+\end{align}
+\item 差$\infdiv{q_{i,k}}{p(z_i | x_i)}$は、$p(z_i | x_i)$から$q_{i,k}$へのKLダイバージェンス
+\item $q_{i,k}=p(z_i | x_i)$のとき等号成立（$q_{i,k}$は$p(z_i | x_i)$を近似しているとも言える）
 \end{itemize}
 \end{frame}
 
