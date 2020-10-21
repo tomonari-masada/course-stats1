@@ -330,13 +330,13 @@ p(\mathcal{D};\mu,\sigma)=\prod_{i=1}^N p(x_i;\mu,\sigma)
 = \sum_{i=1}^N \frac{x_i - \mu}{\sigma^2}
 \end{align}
 $\frac{\partial \ln p(\mathcal{D};\mu,\sigma)}{\partial \mu}=0$より
-$\mu = \frac{\sum_i x_i}{N} = \bar{x}$（標本平均）
+$\mu = \frac{\sum_i x_i}{N} = \bar{x}$
 \begin{align}
 \frac{\partial \ln p(\mathcal{D};\mu,\sigma)}{\partial \sigma}
 = - \frac{N}{\sigma} + \sum_{i=1}^N \frac{(x_i - \mu)^2}{\sigma^3}
 \end{align}
 $\frac{\partial \ln p(\mathcal{D};\mu,\sigma)}{\partial \sigma} = 0$より
-$\sigma^2 = \frac{\sum_i (x_i - \mu)^2}{N} = \frac{\sum_i (x_i - \bar{x})^2}{N}$（標本分散）
+$\sigma^2 = \frac{\sum_i (x_i - \mu)^2}{N} = \frac{\sum_i (x_i - \bar{x})^2}{N}$
 \end{frame}
 
 %\begin{frame}{分散の推定値}
