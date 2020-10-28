@@ -177,7 +177,7 @@ p(\bm{x};\bm{\phi},n)=\frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W\phi_w^{c_w}
 \begin{itemize}
 \item $x_i$は$i$番目に出現するアイテムを表す確率変数
 \item 事前分布を使わないときは$p(\bm{x};\bm{\phi})$と書いていた
-\item ベイズ的モデリングでは、$p(\bm{x}|\bm{\phi})$と、条件確率として書く
+\item ベイズ的モデリングでは、$p(\bm{x}|\bm{\phi})$と、条件付き確率として書く
 \item これは、観測変数$x_i$だけでなく、$\bm{\phi}$も確率変数となるからである
 \end{itemize}
 \item $p(\bm{\phi};\bm{\beta})$：多項分布のパラメータ$\bm{\phi}$が従う事前分布
@@ -204,7 +204,7 @@ p(\bm{x};\bm{\phi},n)=\frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W\phi_w^{c_w}
 
 \begin{frame}{ディリクレ分布 Dirichlet distribution}
 \begin{itemize}
-\item 非負で和が1になる実数の組は無数にある
+\item 非負で和が1になる$W$個の実数の組は無数にある
 \item ディリクレ分布は、それら無数の組の上に定義される確率分布のひとつ
 \begin{itemize}
 \item つまり、ディリクレ分布の台supportは$W-1$次元単体simplex
@@ -341,7 +341,7 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \begin{itemize}
 \item $x_i$は$i$番目に出現するアイテムを表す確率変数
 \item 事前分布を使わないときは$p(\bm{x};\bm{\phi})$と書いていた
-\item ベイズ的モデリングでは、$p(\bm{x}|\bm{\phi})$と、条件確率として書く
+\item ベイズ的モデリングでは、$p(\bm{x}|\bm{\phi})$と、条件付き確率として書く
 \item これは、観測変数$x_i$だけでなく、$\bm{\phi}$も確率変数となるからである
 \end{itemize}
 \item $p(\bm{\phi};\bm{\beta})$：多項分布のパラメータ$\bm{\phi}$が従う事前分布
