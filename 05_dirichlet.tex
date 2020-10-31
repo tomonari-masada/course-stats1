@@ -173,14 +173,14 @@ p(\bm{x};\bm{\phi},n)=\frac{n!}{\prod_{w=1}^W c_w!}\prod_{w=1}^W\phi_w^{c_w}
 
 \begin{frame}{多項分布を使うベイズ的モデルの``部品''}
 \begin{itemize}
-\item $p(\bm{x}|\bm{\phi})$：観測データ$\bm{x}=\{x_1,\ldots,x_n\}$の尤度
+\item $p(\bm{x}|\bm{\phi})$ 観測データ$\bm{x}=\{x_1,\ldots,x_n\}$の尤度
 \begin{itemize}
 \item $x_i$は$i$番目に出現するアイテムを表す確率変数
 \item 事前分布を使わないときは$p(\bm{x};\bm{\phi})$と書いていた
 \item ベイズ的モデリングでは、$p(\bm{x}|\bm{\phi})$と、条件付き確率として書く
 \item これは、観測変数$x_i$だけでなく、$\bm{\phi}$も確率変数となるからである
 \end{itemize}
-\item $p(\bm{\phi};\bm{\beta})$：多項分布のパラメータ$\bm{\phi}$が従う事前分布
+\item $p(\bm{\phi};\bm{\beta})$ 多項分布のパラメータ$\bm{\phi}$が従う事前分布
 \begin{itemize}
 \item $\bm{\beta}$は事前分布のパラメータ
 \item 事前分布のパラメータを一般にハイパーパラメータと呼ぶ
@@ -231,6 +231,12 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \end{figure}
 \end{frame}
 
+\begin{frame}
+\begin{center}
+\animategraphics[loop,controls,width=.5\linewidth]{5}{dirichlet-}{0}{15}
+\href{https://medium.com/@lettier/how-does-lda-work-ill-explain-using-emoji-108abf40fa7d}{{\scriptsize https://medium.com/@lettier/how-does-lda-work-ill-explain-using-emoji-108abf40fa7d}}
+\end{center}
+\end{frame}
 
 \begin{frame}{ガンマ関数}
 \begin{itemize}
@@ -312,7 +318,7 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \end{itemize}
 \item ということは、ベータ分布は二項分布の集合上に定義された分布とみなせる
 \begin{itemize}
-\item つまり、ベータ分布は分布の分布とみなせる
+\item つまり、ベータ分布は、分布の分布とみなせる
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -330,21 +336,21 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \end{itemize}
 \item ということは、ディリクレ分布は多項分布の集合上に定義された分布とみなせる
 \begin{itemize}
-\item つまり、多項分布は分布の分布とみなせる
+\item つまり、ディリクレ分布は、分布の分布とみなせる
 \end{itemize}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{多項分布を使うベイズ的モデルの``部品''}
 \begin{itemize}
-\item $p(\bm{x}|\bm{\phi})$：観測データ$\bm{x}=\{x_1,\ldots,x_n\}$の尤度
+\item $p(\bm{x}|\bm{\phi})$ 観測データ$\bm{x}=\{x_1,\ldots,x_n\}$の尤度
 \begin{itemize}
 \item $x_i$は$i$番目に出現するアイテムを表す確率変数
 \item 事前分布を使わないときは$p(\bm{x};\bm{\phi})$と書いていた
 \item ベイズ的モデリングでは、$p(\bm{x}|\bm{\phi})$と、条件付き確率として書く
 \item これは、観測変数$x_i$だけでなく、$\bm{\phi}$も確率変数となるからである
 \end{itemize}
-\item $p(\bm{\phi};\bm{\beta})$：多項分布のパラメータ$\bm{\phi}$が従う事前分布
+\item $p(\bm{\phi};\bm{\beta})$ 多項分布のパラメータ$\bm{\phi}$が従う事前分布
 \begin{itemize}
 \item $\bm{\beta}$は事前分布のパラメータ
 \item 事前分布のパラメータを一般にハイパーパラメータと呼ぶ
@@ -542,6 +548,9 @@ $\hat{\phi}_{d,w} = \frac{c_{d,w} + \lambda p_w}{c_d + \lambda}$とする
 \item $c_d \equiv \sum_w c_{d,w}$は$d$番目の文書の長さ
 \end{itemize}
 \item $\lambda$は検証用クエリの検索性能を見ながらチューニングする
+\begin{itemize}
+\item[cf.] \href{https://nlp.stanford.edu/IR-book/html/htmledition/estimating-the-query-generation-probability-1.html}{{\scriptsize https://nlp.stanford.edu/IR-book/html/htmledition/estimating-the-query-generation-probability-1.html}} 
+\end{itemize}
 \end{itemize}
 \end{frame}
 
