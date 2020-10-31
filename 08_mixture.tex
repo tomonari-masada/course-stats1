@@ -20,15 +20,15 @@
 
 \begin{frame}{これまでのモデリングの問題点}
 \begin{itemize}
-\item これまでは、データ集合$\mathcal{D}=\{\bm{x}_1, \ldots, \bm{x}_N\}$全体に対して、
-一つの確率分布を使うモデリングだけ議論していた
-\item しかし、多くのデータ集合は、たった一つの分布ではモデリングし切れない多様性を含んでいる
-\item 例えば、数値データの集合であれば、それに近い数値が頻繁に出現するという数値が、複数あったりする
+\item これまでは、データ集合$\{\bm{x}_1, \ldots, \bm{x}_N\}$全体に対して、
+一つの確率分布を使うモデリングだけについて議論していた
+\item しかし、データ集合は、たった一つの分布ではモデリングし切れない多様性を含んでいることが多い
 \begin{itemize}
-\item 例：多峰性をもつデータ集合
+\item 例えば、数値データの集合であれば、それに近い数値が頻繁に出現するという数値が、複数あったりする
+\item[例.] 多峰性をもつmultimodalデータ集合
 \end{itemize}
 \end{itemize}
-\begin{textblock*}{0.4\linewidth}(320pt, 175pt)
+\begin{textblock*}{0.4\linewidth}(300pt, 173pt)
     \centering
     \includegraphics[width=0.7\linewidth]{Bimodal-bivariate-small.png}
 \end{textblock*}
@@ -48,8 +48,8 @@
 \item カテゴリカル分布$\mbox{Cat}(\bm{\theta})$に従って
 $K$個の分布から一つ選ぶ
 \begin{itemize}
-\item $\bm{\theta}=(\theta_1,\ldots,\theta_K)$はパラメータで、$\theta_k$は$k$番目の分布が選ばれる確率。
-もちろん$\sum_k \theta_k = 1$が成り立つ
+\item $\bm{\theta}=(\theta_1,\ldots,\theta_K)$は混合分布のパラメータ。
+\item $\theta_k$は$k$番目の分布が選ばれる確率。$\sum_{k=1}^K \theta_k = 1$が成り立つ
 \end{itemize}
 \item そして、$\bm{x}_i$がその選ばれた分布に従うと考える。
 \end{enumerate}
@@ -65,13 +65,13 @@ $K$個の分布から一つ選ぶ
 \begin{frame}{混合正規分布}
 \begin{itemize}
 \item 混合正規分布を使ったモデリングでは、
-データの集合$\{\bm{x}_1, \ldots, \bm{x}_N\}$が以下のように生成されると仮定する
+データ集合$\{\bm{x}_1, \ldots, \bm{x}_N\}$が以下のように生成されると仮定する
 \end{itemize}
 \begin{enumerate}
 \item $i$番目のデータ$\bm{x}_i$を生成するため、まず、カテゴリカル分布$\mbox{Cat}(\bm{\theta})$から、
 確率変数$z_i$の値をdrawする
 \begin{itemize}
-\item 「$z_i = k$」は、$i$番目のデータについては$k$番目のコンポーネントが選ばれたことを意味する
+\item 「$z_i = k$」は、$i$番目のデータについては$k$番目のコンポーネントが選ばれた、ということを意味する
 \end{itemize}
 \item その$z_i$の値に対応する確率分布から、$\bm{x}_i$をdrawする
 \begin{align}
@@ -92,7 +92,7 @@ $\bm{\theta} = (\theta_1,\ldots,\theta_K)$
 \item $K$個の単変量正規分布をコンポーネントとして用意する
 \item $k$番目の分布のパラメータは、平均$\mu_k$と標準偏差$\sigma_k$
 \begin{itemize}
-\item $k$番目のコンポーネントの確率密度関数は
+\item つまり、$k$番目のコンポーネントの確率密度関数は
 \end{itemize}
 \begin{align}
 p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_k)^2}{2\sigma_k^2} \Big)
@@ -101,6 +101,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \end{frame}
 
 \begin{frame}{単変量正規分布の混合分布における同時分布}
+\vspace{-.1in}
 \begin{itemize}
 \item 単変量正規分布の混合分布を使うと、
 観測されたデータを表す確率変数$\mathcal{X} = \{x_1, \ldots, x_N\}$とコンポーネントへの所属を表す確率変数$\mathcal{Z} = \{z_1,\ldots,z_N\}$との同時分布は
@@ -112,9 +113,11 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
 \label{eq:joint_MN}
 \end{align}
+\vspace{-.15in}
 \begin{itemize}
-\item $p(z_i)$はカテゴリカル分布$\mbox{Cat}(\bm{\theta})$のpmf
-\item $p(x_i | z_i)$は$z_i$が表すコンポーネントの正規分布$\mathcal{N}(\bm{\mu}_{z_i}, \bm{\Sigma}_{z_i})$のpdf
+\item $z_i$は$x_i$が属するコンポーネントを表す
+\item $p(z_i)$はカテゴリカル分布$\mbox{Cat}(\bm{\theta})$のpmfから計算される$z_i$の尤度
+\item $p(x_i | z_i)$は正規分布$\mathcal{N}(\mu_{z_i}, \sigma_{z_i})$のpdfから計算される$x_i$の尤度
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -129,6 +132,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 
 \begin{frame}{教師ありの設定の場合 (1/2)}
 \begin{itemize}
+\item 教師ありの設定で、混合分布のパラメータを最尤推定する
 \item 教師ありの設定の場合、各データ$x_i$について、それがどのコンポーネントから生成されたかは、すでに分かっている
 \item 言い換えれば、$z_i$の値も観測データに含まれる
 \begin{itemize}
@@ -144,8 +148,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \item そして、観測データ$\mathcal{D} = \{ (x_1,z_1), \ldots, (x_N,z_N) \}$の尤度は、下のように書き直すことができる
 \vspace{-.15in}
 \begin{align}
-& p(\mathcal{D};\bm{\theta},\mu_1,\ldots,\mu_K,\sigma_1,\ldots,\sigma_K)
-= p(\mathcal{D};\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \} )
+& p(\mathcal{D};\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \} )
 \notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
 \notag \\ &
