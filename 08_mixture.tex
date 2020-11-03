@@ -146,9 +146,10 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \begin{frame}{教師ありの設定の場合 (2/2)}
 \begin{itemize}
 \item そして、観測データ$\mathcal{D} = \{ (x_1,z_1), \ldots, (x_N,z_N) \}$の尤度は、下のように書き直すことができる
-\vspace{-.15in}
+\vspace{-.1in}
 \begin{align}
 & p(\mathcal{D};\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \} )
+= \prod_{i=1}^N p(z_i ; \theta_{z_i}) p(x_i | z_i ; \mu_{z_i}, \sigma_{z_i})
 \notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
 \notag \\ &
@@ -158,7 +159,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \end{align}
 \vspace{-.15in}
 \begin{itemize}
-\item $c_k$は、$k$番目のコンポーネントから生成されたデータの個数
+\item $c_k$は、$k$番目のコンポーネントに属するデータの個数
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -174,7 +175,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \begin{frame}
 \FontMath
 \vspace{.1in}
-目的関数は
+目的関数を$L(\bm{\theta},\{ \mu_k \}, \{ \sigma_k \})$とおくと、
 \begin{align}
 & L(\bm{\theta},\{ \mu_k \}, \{ \sigma_k \})
 = \ln p(\mathcal{D};\bm{\theta},\{ \mu_k \}, \{ \sigma_k \}) 
@@ -193,7 +194,7 @@ $\frac{\partial L}{\partial \mu_k} = 0$より、$\mu_k = \frac{ \sum_{ \{ i : z_
 \frac{\partial L}{\partial \sigma_k} = - \frac{c_k}{\sigma_k} + \frac{\sum_{ \{ i : z_i = k \} } (x_i - \mu_k)^2}{ \sigma_k^3}
 \end{align}
 $\frac{\partial L}{\partial \sigma_k} = 0$より、
-$\sigma_k^2 = \frac{\sum_{ \{ i : z_i = k \} } (x_i - \bar{x}_k)^2}{ \sigma_k^2}$を得る。
+$\sigma_k^2 = \frac{\sum_{ \{ i : z_i = k \} } (x_i - \bar{x}_k)^2}{ c_k}$を得る。
 \end{frame}
 
 \begin{frame}
@@ -229,16 +230,16 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 \vspace{-.05in}
 \begin{itemize}
 \item 教師なしの設定の場合、各データ$x_i$について、それがどのコンポーネントから生成されたかは、分からない！
-\item $z_i$は、値が観測されない確率変数、すなわち潜在変数
+\item すなわち、$z_i$は潜在変数latent variables
 \begin{itemize}
 \item つまり、$\mathcal{X} = \{ x_1, \ldots, x_N \}$だけが観測変数
-\item 一方、潜在変数latent variablesの集合を$\mathcal{Z} = \{ z_1, \ldots, z_N \}$とする
+\item 一方、潜在変数の集合を$\mathcal{Z} = \{ z_1, \ldots, z_N \}$とする
 \end{itemize}
 \item 観測変数と潜在変数の同時分布$p(\mathcal{X}, \mathcal{Z})$は
 \vspace{-.13in}
 \begin{align}
 & p(\mathcal{X}, \mathcal{Z};\bm{\theta},\{ \mu_k \}, \{ \sigma_k \})
-= \prod_{i=1}^N p(x_i, z_i ; \theta_{z_i}, \mu_{z_i}, \sigma_{z_i})
+= \prod_{i=1}^N p(z_i ; \theta_{z_i}) p(x_i | z_i ; \mu_{z_i}, \sigma_{z_i})
 \notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
 \end{align}
@@ -264,6 +265,8 @@ p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 = \sum_{z_1=1}^K \sum_{z_2=1}^K \cdots \sum_{z_{N-1}=1}^K \sum_{z_N=1}^K \prod_{i=1}^N p(x_i, z_i)
 \notag \\ &
 = \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(x_i , z_i) \bigg)
+= \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
+\label{eq:LH_mixture}
 \end{align}
 \end{itemize}
 \end{frame}
@@ -290,18 +293,17 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \end{frame}
 
 
-\begin{frame}{観測データの対数尤度}
+\begin{frame}{混合正規分布の場合の観測データの対数尤度}
 \begin{itemize}
-\item 混合正規分布の場合の観測データの対数尤度は、式\eqref{eq:joint_MN}より
+\item 混合正規分布の場合の対数尤度は、式\eqref{eq:joint_MN}と式\eqref{eq:LH_mixture}より
 \vspace{-.1in}
 \begin{align}
 & \ln p(\mathcal{X}) = \ln \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
+= \ln \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
 \notag \\ &
-= \ln \sum_{z_1=1}^K \cdots \sum_{z_N=1}^K \bigg( \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg] \bigg)
+= \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
 \notag \\ &
-= \ln \prod_{i=1}^N \bigg( \sum_{z_i=1}^K \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg] \bigg)
-\notag \\ &
-= \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg] \bigg)
+= \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\Big( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \Big) \bigg] \bigg)
 \end{align}
 \end{itemize}
 \end{frame}
@@ -327,7 +329,7 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 
 \begin{frame}{イェンセンの不等式（対数関数の場合）}
 \begin{itemize}
-\item $p_1,\ldots,p_K$を、$\sum_k p_k=1$を満たす正の実数とする
+\item $p_1,\ldots,p_K$を、$\sum_{k=1}^K p_k=1$を満たす正の実数とする
 \item また、$x_1,\ldots, x_K$を正の実数とする
 \item このとき、以下の不等式が成り立つ
 \begin{align}
@@ -344,7 +346,7 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \begin{frame}{観測データの対数尤度の下界}
 \begin{itemize}
 \item イェンセンの不等式を利用して$\ln p(\mathcal{X})$の下界を得たい
-\item そこで、各$x_i$について、$q_{i,1}, \ldots, q_{i,K}$という$\sum_k q_{i,k}=1$を満たす変数を用意する
+\item そこで、各$x_i$について、$q_{i,1}, \ldots, q_{i,K}$という、$\sum_k q_{i,k}=1$を満たす変数を用意する
 \begin{itemize}
 \item $q_{i,k}$はデータ$x_i$が$k$番目のコンポーネントに属する確率を意味する
 \end{itemize}
@@ -424,7 +426,30 @@ $\frac{\partial }{\partial \sigma_k} \ln p(x_i | z_i = k) = - \frac{1}{\sigma_k}
 $\frac{\partial L}{\partial \mu_k} = 0$より
 $\mu_k = \frac{ \sum_{i=1}^N q_{i,k} x_i }{ \sum_{i=1}^N q_{i,k} }$を得る。
 また、$\frac{\partial L}{\partial \sigma_k} = 0$より
-$\sigma_k^2 = \frac{ \sum_{i=1}^N q_{i,k} (x_i - \mu_k) }{ \sum_{i=1}^N q_{i,k} }$を得る。
+$\sigma_k^2 = \frac{ \sum_{i=1}^N q_{i,k} (x_i - \mu_k)^2 }{ \sum_{i=1}^N q_{i,k} }$を得る。
+\end{frame}
+
+\begin{frame}{混合正規分布のためのEMアルゴリズム}
+\vspace{-.1in}
+\begin{itemize}
+\item E step
+\vspace{-.1in}
+\begin{align}
+q_{i,k} \leftarrow \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z_i = k) }
+\end{align}
+\vspace{-.1in}
+\begin{itemize}
+\item[] ただし$p(x_i | z_i = k) = \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp\big( - \frac{ (x_i - \mu_k)^2 }{2\sigma_k^2} \big)$
+\end{itemize}
+\vspace{-.1in}
+\item M step
+\vspace{-.1in}
+\begin{align}
+\theta_k & \leftarrow \frac{ \sum_{i=1}^N q_{i,k} }{ N } \\
+\mu_k & \leftarrow \frac{ \sum_{i=1}^N q_{i,k} x_i }{ \sum_{i=1}^N q_{i,k} } \\
+\sigma_k^2 & \leftarrow \frac{ \sum_{i=1}^N q_{i,k} (x_i - \mu_k)^2 }{ \sum_{i=1}^N q_{i,k} }
+\end{align}
+\end{itemize}
 \end{frame}
 
 \begin{frame}{$q_{i,k}$とは何なのか}
@@ -456,5 +481,106 @@ $\sigma_k^2 = \frac{ \sum_{i=1}^N q_{i,k} (x_i - \mu_k) }{ \sum_{i=1}^N q_{i,k} 
 \end{itemize}
 \end{frame}
 
+\section{混合多項分布：教師なしの場合}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+
+\begin{frame}{多項分布の混合分布}
+\begin{itemize}
+\item 第$k$コンポーネントのパラメータを$\bm{\phi}_k$とする
+\begin{itemize}
+\item $\bm{\phi}_k = (\phi_{k,1},\ldots,\phi_{k,W})$
+\item $\phi_{k,w}$は第$k$コンポーネントに属する文書での単語$\mbox{v}_w$の出現確率
+\end{itemize}
+\item $\ln p(\mathcal{X})$の代わりに$\ell(\{q_{i,k}\},\bm{\theta}, \{ \bm{\phi}_k \})$を最大化
+\item 多項分布の混合分布の場合
+\begin{align}
+p(z_i=k) & = \theta_k \\
+p(\mathcal{D}_i | z_i=k) & = \frac{n_i!}{\prod_w c_{i,w}!} \prod_{w=1}^W \phi_{k,w}^{c_{i,w}}
+\end{align}
+\item 以下、推定計算を行う
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\FontMath
+\begin{align}
+& L(\{q_{i,k}\},\bm{\theta}, \{ \bm{\phi}_k \} ) 
+\notag \\ &
+= \ell(\{q_{i,k}\},\bm{\theta},\{ \bm{\phi}_k \})
++ \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
++ \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
++ \sum_{k=1}^K \nu_k \bigg( 1 - \sum_{w=1}^W \phi_{k,w} \bigg)
+\notag \\ &
+= \sum_{i=1}^N \sum_{k=1}^K q_{i,k} \ln\frac{\theta_k p(\mathcal{D}_i | z_i = k)}{q_{i,k}}
++ \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
++ \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
++ \sum_{k=1}^K \nu_k \bigg( 1 - \sum_{w=1}^W \phi_{k,w} \bigg)
+\notag \\ &
+= 
+\sum_{i=1}^N \sum_{k=1}^K q_{i,k} \ln \big( \theta_k p(\mathcal{D}_i | z_i = k) \big)
+- \sum_{i=1}^N \sum_{k=1}^K q_{i,k} \ln q_{i,k}
+\notag \\ & \mbox{ \ \ }
++ \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
++ \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
++ \sum_{k=1}^K \nu_k \bigg( 1 - \sum_{w=1}^W \phi_{k,w} \bigg)
+\end{align}
+\begin{align}
+\frac{\partial L}{\partial q_{i,k}}
+= \ln \big( \theta_k p(\mathcal{D}_i | z_i = k) \big) - \ln q_{i,k} - 1 - \lambda_i
+\end{align}
+$\frac{\partial L}{\partial q_{i,k}}$ = 0と$\sum_k q_{i,k}=1$より
+$q_{i,k} = \frac{ \theta_k p(\mathcal{D}_i | z_i = k) }{ \sum_k \theta_k p(\mathcal{D}_i | z_i = k) }$を得る。
+\end{frame}
+
+\begin{frame}
+\FontMath
+$q_{i,k} \ln \big( \theta_k p(\mathcal{D}_i | z_i = k) \big)
+= q_{i,k} \ln \theta_k + q_{i,k} \ln p(\mathcal{D}_i | z_i = k)$より、
+\begin{align}
+\frac{\partial L}{\partial \theta_k}
+= \frac{ \sum_{i=1}^N  q_{i,k} }{ \theta_k } - \lambda_0
+\end{align}
+$\frac{\partial L}{\partial \theta_k} = 0$と$\sum_k \theta_k = 1$より
+$\theta_k = \frac{ \sum_{i=1}^N q_{i,k} }{ \sum_{k=1}^K \sum_{i=1}^N q_{i,k} } = \frac{ \sum_{i=1}^N q_{i,k} }{ N }$を得る。
+
+\
+
+$\frac{\partial }{\partial \phi_{k,w}} \ln p(\mathcal{D}_i | z_i = k) = \frac{ c_{i,w} }{ \phi_{k,w} }$より
+\begin{align}
+\frac{\partial L}{\partial \phi_{k,w}}
+& = \frac{ \sum_{i=1}^N q_{i,k} c_{i,w} }{ \phi_{k,w} } - \nu_k
+\end{align}
+$\frac{\partial L}{\partial \phi_{k,w}} = 0$より
+$\phi_{k,w} = \frac{ \sum_{i=1}^N q_{i,k} c_{i,w} }{ \sum_{w=1}^W \sum_{i=1}^N q_{i,k} c_{i,w} }$を得る。
+\end{frame}
+
+\begin{frame}{混合多項分布のためのEMアルゴリズム}
+\vspace{-.1in}
+\begin{itemize}
+\item E step
+\vspace{-.1in}
+\begin{align}
+q_{i,k} \leftarrow \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z_i = k) }
+\end{align}
+\vspace{-.1in}
+\begin{itemize}
+\item[] ただし$p(x_i | z_i = k) = \frac{n_i!}{\prod_w c_{i,w}!} \prod_{w=1}^W \phi_{k,w}^{c_{i,w}}$、つまり
+\begin{align}
+q_{i,k} \leftarrow \frac{ \theta_k \prod_w \phi_{k,w}^{c_{i,w}} }{ \sum_k \theta_k \prod_w \phi_{k,w}^{c_{i,w}} } \notag
+\end{align}
+\end{itemize}
+\vspace{-.1in}
+\item M step
+\vspace{-.1in}
+\begin{align}
+\theta_k & \leftarrow \frac{ \sum_{i=1}^N q_{i,k} }{ N } \\
+\phi_{k,w} & \leftarrow \frac{ \sum_{i=1}^N q_{i,k} c_{i,w} }{ \sum_{w=1}^W \sum_{i=1}^N q_{i,k} c_{i,w} }
+\end{align}
+\end{itemize}
+\end{frame}
 
 \end{document}

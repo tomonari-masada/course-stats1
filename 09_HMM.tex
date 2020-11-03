@@ -1,0 +1,362 @@
+\documentclass[aspectratio=169,unicode,dvipdfmx,14pt]{beamer}
+
+\input{mycmds.tex}
+
+\title{ \\隠れマルコフモデル}
+\author{\texorpdfstring{正田 備也\newline\href{mailto:masada@rikkyo.ac.jp}{masada@rikkyo.ac.jp}}{正田 備也}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{マルコフモデル}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{マルコフモデル}
+\vspace{-.1in}
+\begin{itemize}
+\item $\bm{z} = (z_1,\ldots,z_T)$という確率変数の列がある
+\item $z_t$は、状態の集合$\mathcal{S} = \{ s_1, \ldots, s_K \}$の要素を値としてとる
+\begin{itemize}
+\item 例えば、$\mathcal{S}$は天候の集合だとする
+\end{itemize}
+\item 以下の（単純）マルコフ性の仮定をおく
+\vspace{-.1in}
+\begin{align}
+p(z_i =s | z_1,\ldots, z_{i-1}) = p(z_i =s | z_{i-1}) \mbox{ for all $s \in \mathcal{S}$}
+\end{align}
+\item また、$s_k$から$s_l$に遷移する確率$p(z_t=s_l|z_{t-1}=s_k)$は全ての$t$で等しいと仮定（斉時性）し、この確率を$A_{s_k,s_l}$と書く
+\item $\sum_{l=1}^K A_{s_k, s_l} = 1$が、すべての$k$で成り立つ
+\item 便宜的に初期状態を確率変数$z_0$で表し、その値を$s_0$とする
+\begin{itemize}
+\item $A_{s_k,s_0} = 0$が、すべての$k$について成り立つ
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{遷移行列}
+\begin{itemize}
+\item 遷移確率をまとめて遷移行列$A$として書くと
+\item[例.] 天候の状態の集合$\mathcal{S} = \{ s_0, s_{\mbox{\scriptsize sun}},
+s_{\mbox{\scriptsize cloud}}, s_{\mbox{\scriptsize rain}} \}$
+\begin{align}
+A = \left[
+    \begin{array}{ccccc}
+ & s_0 & s_{\mbox{\scriptsize sun}} & s_{\mbox{\scriptsize cloud}} & s_{\mbox{\scriptsize rain}} \\
+s_0 & 0 & 0.33 & 0.33 & 0.33 \\
+s_{\mbox{\scriptsize sun}} & 0 & 0.8 & 0.1 & 0.1 \\
+s_{\mbox{\scriptsize cloud}} & 0 & 0.2 & 0.6 & 0.2 \\
+s_{\mbox{\scriptsize rain}} & 0 & 0.1 & 0.2 & 0.7
+    \end{array}
+  \right]
+\end{align}
+\vspace{-.1in}
+\begin{itemize}
+\item[cf.] \href{http://cs229.stanford.edu/section/cs229-hmm.pdf}{http://cs229.stanford.edu/section/cs229-hmm.pdf}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{状態列の尤度}
+\begin{itemize}
+\item 状態の列$\bm{z}_{1:T}\equiv(z_1,\ldots,z_T)$の尤度$p(\bm{z}_{1:T})$は
+\begin{align}
+p(\bm{z}_{1:T};A) & = p(z_1,\ldots,z_T;A) \notag \\
+& = p(z_0, z_1,\ldots,z_T;A) \notag \\
+& = p(z_T | z_{T-1},\ldots,z_1;A) \cdots p(z_2|z_1;A) p(z_1|z_0;A) \notag \\
+& = p(z_T | z_{T-1};A) \cdots p(z_2|z_1;A) p(z_1|z_0;A) \notag \\
+& = \prod_{t=1}^T p(z_t | z_{t-1};A) = \prod_{t=1}^T A_{z_{t-1}, z_t}
+\label{eq:seq_LH}
+\end{align}
+\vspace{-.1in}
+\begin{itemize}
+\item[問.] どこで単純マルコフ性の仮定を使っているか？
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{マルコフモデルの最尤推定}
+\FontMath
+$\ln p(\bm{z}_{1:T};A)$を最大化することで$A$を推定する。
+\begin{align}
+\ln p(\bm{z}_{1:T};A) 
+= \sum_{t=1}^T \ln A_{z_{t-1}, z_t}
+= \sum_{t=1}^T \sum_{l=1}^K \sum_{k=1}^K \mathbbm{1}(z_{t-1}=s_l \wedge z_t=s_k) \ln A_{s_l,s_k}
+\end{align}
+$\mathbbm{1}(\cdot)$は、括弧内の命題が真のとき$1$、偽のとき$0$、という意味だとする。
+\vspace{-0.05in}
+\begin{align}
+\mathcal{L}(A,\{ \lambda_k \}) = 
+\sum_{t=1}^T \sum_{l=1}^K \sum_{k=1}^K \mathbbm{1}(z_{t-1}=s_l \wedge z_t=s_k) \ln A_{s_l,s_k}
++ \sum_{l=1}^K \lambda_l \bigg( 1 - \sum_{k=1}^K A_{s_l,s_k} \bigg) 
+\end{align}
+\vspace{-0.1in}
+\begin{align}
+\frac{\partial \mathcal{L}(A,\{ \lambda_k \})}{\partial A_{s_l,s_k}}
+= \frac{ \sum_{t=1}^T \mathbbm{1}(z_{t-1}=s_l \wedge z_t=s_k) }{ A_{s_l,s_k} } - \lambda_l
+\end{align}
+$\frac{\partial \mathcal{L}(A,\{ \lambda_k \})}{\partial A_{s_l,s_k}} = 0$より
+$A_{s_l,s_k} \propto \sum_{t=1}^T \mathbbm{1}(z_{t-1}=s_l \wedge z_t=s_k)$で、
+$\sum_{k=1}^K A_{s_l,s_k}=1$だから
+\begin{align}
+\therefore A_{s_l,s_k} = \frac{ \sum_{t=1}^T \mathbbm{1}(z_{t-1}=s_l \wedge z_t=s_k) }
+{ \sum_{k=1}^K \sum_{t=1}^T \mathbbm{1}(z_{t-1}=s_l \wedge z_t=s_k) }
+= \frac{ \sum_{t=1}^T \mathbbm{1}(z_{t-1}=s_l \wedge z_t=s_k) }
+{ \sum_{t=1}^T \mathbbm{1}(z_{t-1}=s_l) }
+\end{align}
+\end{frame}
+
+\section{隠れマルコフモデル}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{隠れマルコフモデルHMM; hidden Markov model}
+\begin{itemize}
+\item 状態$z_t$は観測できず、各状態が生成する結果$x_t$だけが観測できるとする
+\begin{itemize}
+\item このとき、状態を表す確率変数$z_t$は潜在変数latent variableとなる
+\end{itemize}
+\item 隠れ状態の列$\bm{z}_{1:T}=(z_1,\ldots,z_T)$は、上述のとおり、単純マルコフ性と斉時性を持つとする
+\item 時点$t$での観測結果を、確率変数$x_t$で表す
+\item 観測データ$x_t$について、以下のような独立性の仮定をおく
+\begin{align}
+p(x_t=v_w| \bm{x}_{1:T},\bm{z}_{1:T}) = p(x_t=v_w|z_t=s_k)
+\end{align}
+\vspace{-.2in}
+\begin{itemize}
+\item つまり、時点$t$の観測値は、同じ時点の隠れ状態だけに依存する
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{観測データがカテゴリカルデータの場合}
+\begin{itemize}
+\item ここでは、観測データはカテゴリカルデータだとする
+\begin{itemize}
+\item 観測データが連続値で、$p(x_t|z_t)$が、例えば正規分布の場合、以下の議論がどうなるか、考えてみよう
+\end{itemize}
+\item 隠れ状態$s_k$がであるときの、アイテム$v_w$の出現確率$p(x_t=v_w|z_t=s_k)$を、$B_{s_k,v_w}$と書くことにする
+\begin{itemize}
+\item $(B_{s_k,v_1}, \ldots, B_{s_k,v_W})$は、状態$s_k$に対応するカテゴリカル分布の、パラメータである
+\item $\sum_{w=1}^W B_{s_k,v_w} = 1$が成り立つ
+\end{itemize}
+\item 隠れマルコフモデルにおけるパラメータ推定では、$A$と$B$を推定することになる
+\end{itemize}
+\end{frame}
+
+\begin{frame}{混合分布モデルと隠れマルコフモデル}
+\begin{itemize}
+\item 混合分布モデル
+\begin{textblock*}{0.4\linewidth}(260pt, 40pt)
+    \centering
+    \includegraphics[width=\linewidth]{HMM1.jpg}
+\end{textblock*}
+\begin{itemize}
+\item 隠れ変数$z_i$は独立
+\end{itemize}
+\vspace{1in}
+\item 隠れマルコフモデル
+\begin{textblock*}{0.4\linewidth}(225pt, 140pt)
+    \centering
+    \includegraphics[width=1.25\linewidth]{HMM2.jpg}
+\end{textblock*}
+\begin{itemize}
+\item 隠れ変数$z_t$の間に依存関係
+\item 線形で一方向的な依存関係
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{同時分布}
+\begin{itemize}
+\item 隠れマルコフモデルでの観測変数と隠れ変数の同時分布は
+\begin{align}
+p(\bm{x}_{1:T}, \bm{z}_{1:T};A,B)
+& = p(\bm{x}_{1:T} | \bm{z}_{1:T};B) p(\bm{z}_{1:T};A)
+\notag \\ &
+= \prod_{t=1}^T p(x_t|z_t;B) \times \prod_{t=1}^T p(z_t|z_{t-1};A)
+\notag \\ &
+= \prod_{t=1}^T B_{z_t,x_t} \times \prod_{t=1}^T A_{z_{t-1},z_t}
+\end{align}
+\begin{itemize}
+\item 状態列の確率$p(\bm{z}_{1:T})$の部分は、式\eqref{eq:seq_LH}と同じ
+\item ただし、隠れマルコフモデルでは$z_t$は潜在変数
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{観測データの尤度}
+\begin{itemize}
+\item 観測データの尤度$p(\bm{x}; A,B)$は
+\begin{align}
+p(\bm{x}; A,B) &
+= \sum_{\bm{z}} p(\bm{x},\bm{z}; A,B)
+\notag \\
+& = \sum_{z_1 \in \mathcal{S}} \cdots \sum_{z_T \in \mathcal{S}}
+\bigg( \prod_{t=1}^T p(x_t|z_t;B) \bigg) \bigg( \prod_{t=1}^T p(z_t|z_{t-1};A) \bigg)
+\notag \\ & 
+= \sum_{z_1 \in \mathcal{S}} \cdots \sum_{z_T \in \mathcal{S}} \bigg( \prod_{t=1}^T B_{z_t,x_t} \bigg)
+\bigg( \prod_{t=1}^T A_{z_{t-1},z_t} \bigg)
+\end{align}
+\vspace{-.1in}
+\begin{itemize}
+\item だが、この式をそのまま使って計算すると、計算量が$O(|\mathcal{S}|^T) = O(K^T)$であるため、
+非現実的な計算時間になる
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\section{Forward-backwardアルゴリズム}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Forward procedure}
+\begin{itemize}
+\item HMMのデータ尤度$p(\bm{x}; A,B)$は、動的計画法の一種である
+forward procedureによって、効率的に計算できる
+\begin{itemize}
+\item[cf.] \href{https://web.stanford.edu/~jurafsky/slp3/A.pdf}{https://web.stanford.edu/~jurafsky/slp3/A.pdf}
+\end{itemize}
+\item 時点$t$までのデータ列$(x_1,\ldots,x_t)$の確率と、
+時点$t$での隠れ状態$z_t$が$s_k$である確率の同時確率を、$\alpha_t(k)$とおく。つまり
+\begin{align}
+\alpha_t(k) \equiv p(x_1,\ldots, x_t, z_t=s_k; A, B)
+\end{align}
+\item すると、データ尤度を以下のように表すことができる
+\begin{align}
+p(\bm{x}; A,B) = \sum_{k=1}^K p(\bm{x}_{1:T}, z_T=s_k; A,B) = \sum_{k=1}^K \alpha_T(k)
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\FontMath
+\vspace{-.25in}
+\begin{align}
+\alpha_1(k) & = p(x_1,z_1=s_k) = p(z_0=s_0)p(z_1=s_k|z_0=s_0)p(x_1|z_1=s_k) = A_{0,k} B_{k,x_1}
+\\ 
+\alpha_2(k) & = p(x_1, x_2, z_2=s_k) = \sum_{z_1 \in \mathcal{S}} p(x_1,x_2, z_1, z_2=s_k)
+\notag \\ &
+= \sum_{z_1 \in \mathcal{S}} p(x_1,z_1) p(z_2=s_k|x_1, z_1) p(x_2|z_2=s_k, x_1, z_1)
+\label{eq:alpha_2_1} \\ &
+= \sum_{z_1 \in \mathcal{S}} p(x_1,z_1) p(z_2=s_k|z_1) p(x_2|z_2=s_k)
+= \sum_{l=1}^l \alpha_1(l) A_{s_l,s_k} B_{s_k,x_2}
+\label{eq:alpha_2_2} \\
+\alpha_3(k) & = p(x_1,x_2,x_3,z_3=s_k) = \sum_{z_2 \in \mathcal{S}} p(x_1,x_2, x_3, z_2, z_3=s_k)
+\notag \\ &
+= \sum_{z_2 \in \mathcal{S}} p(x_1,x_2, z_2) p(z_3=s_k|x_1,x_2,z_2) p(x_3|z_3=s_k,x_1,x_2,z_2)
+\label{eq:alpha_3_1} \\ &
+= \sum_{z_2 \in \mathcal{S}} p(x_1,x_2,z_2) p(z_3=s_k|z_2) p(x_3|z_3=s_k)
+= \sum_{l=1}^K \alpha_2(l) A_{s_l,s_k} B_{s_k, x_3}
+\label{eq:alpha_3_2} 
+\end{align}
+式\eqref{eq:alpha_2_1}から\eqref{eq:alpha_2_2}、式\eqref{eq:alpha_3_1}から\eqref{eq:alpha_3_2}は、自明でない。→ 条件付き独立性
+\end{frame}
+
+\begin{frame}{}
+\FontMath
+\begin{align}
+\alpha_t(k) & = p(\bm{x}_{1:t},z_t=s_k) 
+\notag \\ &
+= \sum_{z_{t-1} \in \mathcal{S}} p(\bm{x}_{1:t-1}, x_t, z_{t-1}, z_t=s_k)
+\notag \\ &
+= \sum_{z_{t-1} \in \mathcal{S}} p(\bm{x}_{1:t-1}, z_{t-1}) p(z_t=s_k|\bm{x}_{1:t-1}, z_{t-1}) p(x_t|z_t=s_k,\bm{x}_{1:t-1}, z_{t-1})
+\label{eq:alpha_t_1} \\ &
+= \sum_{z_{t-1} \in \mathcal{S}} p(\bm{x}_{1:t}, z_{t-1}) p(z_t=s_k|z_{t-1}) p(x_t|z_t=s_k)
+= \sum_{l=1}^K \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k, x_t}
+\label{eq:alpha_t_2} 
+\end{align}
+式\eqref{eq:alpha_t_1}から\eqref{eq:alpha_t_2}は、自明でない。下記の条件付き独立性を示す必要あり。
+
+\
+
+$z_{t-1}$が所与のもとで$z_t$と$\bm{x}_{1:t-1}$は条件付き独立。
+
+\
+
+$z_t$が所与のもとで$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立。
+\end{frame}
+
+\begin{frame}{条件付き独立性 conditional independence}
+\begin{itemize}
+\item $C$が与えられたときに$A$と$B$が独立である、つまり、$p(A,B|C) = p(A|C)p(B|C)$
+が成り立つとき、$A$と$B$は$C$が所与のもとで条件付き独立である、という
+\item 条件付き確率の定義より$p(A,B|C)=p(A|B,C)p(B|C)$はいつでも成り立つので
+\begin{align}
+& \mbox{ $A$と$B$は$C$が所与のもとで条件付き独立である }
+\notag \\ &
+\Leftrightarrow p(A|B,C) = p(A|C)
+\end{align}
+\vspace{-.2in}
+\begin{itemize}
+\item[注.] $p(A,B|C) = p(A|C)p(B|C)$と$P(A,B)=P(A)P(B)$は別物
+\begin{itemize}
+\item[cf.] \href{https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php}{\scriptsize https://www.probabilitycourse.com/chapter1/1\_4\_4\_conditional\_independence.php}
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\FontMath
+$p(z_t|z_{t-1},\bm{x}_{1:t-1}) = p(z_t|z_{t-1})$を示す。
+\begin{align}
+p(z_t|z_{t-1},\bm{x}_{1:t-1}) = \frac{p(z_t,z_{t-1},\bm{x}_{1:t-1})}{p(z_{t-1},\bm{x}_{1:t-1})}
+\end{align}
+\begin{align}
+p(z_{t-1},\bm{x}_{1:t-1}) & = \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+\\
+p(z_t,z_{t-1},\bm{x}_{1:t-1}) & = \sum_{\bm{z}_{1:t-2}} p(z_t|z_{t-1}) \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+\notag \\ &
+= p(z_t|z_{t-1}) \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+\end{align}
+\begin{align}
+\therefore
+p(z_t|z_{t-1},\bm{x}_{1:t-1}) & = \frac{p(z_t|z_{t-1})  \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+}{\sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+}
+ = p(z_t|z_{t-1}) 
+\end{align}
+\end{frame}
+
+\begin{frame}{}
+\FontMath
+$p(x_t|z_t,z_{t-1},\bm{x}_{1:t-1}) = p(x_t|z_t)$を示す。
+\begin{align}
+p(x_t|z_t,z_{t-1},\bm{x}_{1:t-1})
+= \frac{p(x_t,z_t,z_{t-1},\bm{x}_{1:t-1})}{p(z_t,z_{t-1},\bm{x}_{1:t-1})}
+\end{align}
+\vspace{-.1in}
+\begin{align}
+p(z_t,z_{t-1},\bm{x}_{1:t-1}) 
+& = \sum_{\bm{z}_{1:t-2}} p(z_t|z_{t-1}) \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+\notag \\ & = p(z_t|z_{t-1}) \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+\\
+p(x_t, z_t,z_{t-1},\bm{x}_{1:t-1}) 
+& = \sum_{\bm{z}_{1:t-2}}  p(x_t|z_t) p(z_t|z_{t-1}) \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+\notag \\ & = p(x_t|z_t) p(z_t|z_{t-1}) \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+\end{align}
+\vspace{-.1in}
+\begin{align}
+\therefore
+p(x_t|z_t,z_{t-1},\bm{x}_{1:t-1})
+& = \frac{p(x_t|z_t) p(z_t|z_{t-1}) \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+}{p(z_t|z_{t-1}) \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+}
+=p(x_t|z_t)
+\end{align}
+\end{frame}
+
+
+\end{document}
