@@ -51,7 +51,7 @@ $K$個の分布から一つ選ぶ
 \item $\bm{\theta}=(\theta_1,\ldots,\theta_K)$は混合分布のパラメータ。
 \item $\theta_k$は$k$番目の分布が選ばれる確率。$\sum_{k=1}^K \theta_k = 1$が成り立つ
 \end{itemize}
-\item そして、$\bm{x}_i$がその選ばれた分布に従うと考える。
+\item そして、$\bm{x}_i$の値がその選ばれた分布に従うと考える。
 \end{enumerate}
 \end{frame}
 
@@ -65,15 +65,19 @@ $K$個の分布から一つ選ぶ
 \begin{frame}{混合正規分布}
 \begin{itemize}
 \item 混合正規分布を使ったモデリングでは、
-データ集合$\{\bm{x}_1, \ldots, \bm{x}_N\}$が以下のように生成されると仮定する
+各$\bm{x}_i$が独立に以下のように生成されると仮定する
 \end{itemize}
+\vspace{.1in}
 \begin{enumerate}
-\item $i$番目のデータ$\bm{x}_i$を生成するため、まず、カテゴリカル分布$\mbox{Cat}(\bm{\theta})$から、
+\item カテゴリカル分布$\mbox{Cat}(\bm{\theta})$から、
 確率変数$z_i$の値をdrawする
 \begin{itemize}
-\item 「$z_i = k$」は、$i$番目のデータについては$k$番目のコンポーネントが選ばれた、ということを意味する
+\item 「$z_i = k$」は、$\bm{x}_i$については$k$番目のコンポーネントが選ばれた、ということを意味する
 \end{itemize}
 \item その$z_i$の値に対応する確率分布から、$\bm{x}_i$をdrawする
+\begin{itemize}
+\item $\bm{\mu}_k, \bm{\Sigma}_k$は$k$番目のコンポーネントである正規分布のパラメータ
+\end{itemize}
 \begin{align}
 z_i & \sim \mbox{Cat}(\bm{\theta}) \notag \\
 \bm{x}_i & \sim \mathcal{N}(\bm{\mu}_{z_i}, \bm{\Sigma}_{z_i})
@@ -103,8 +107,8 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \begin{frame}{単変量正規分布の混合分布における同時分布}
 \vspace{-.1in}
 \begin{itemize}
-\item 単変量正規分布の混合分布を使うと、
-観測されたデータを表す確率変数$\mathcal{X} = \{x_1, \ldots, x_N\}$とコンポーネントへの所属を表す確率変数$\mathcal{Z} = \{z_1,\ldots,z_N\}$との同時分布は
+\item 観測されたデータを表す確率変数$\mathcal{X} = \{x_1, \ldots, x_N\}$と、
+\item[] コンポーネントへの所属を表す確率変数$\mathcal{Z} = \{z_1,\ldots,z_N\}$との同時分布は
 \vspace{-.1in}
 \begin{align}
 & p( \mathcal{X}, \mathcal{Z} ;\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \})
@@ -137,7 +141,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 \item 言い換えれば、$z_i$の値も観測データに含まれる
 \begin{itemize}
 \item つまり、観測データを$\mathcal{D}$で表すとすると、$\mathcal{D} = \{ (x_1,z_1), \ldots, (x_N,z_N) \}$
-（$x_i$も$z_i$も、両方見えている）
+\item $x_i$も$z_i$も、すでに観測されており、よって、固定されている
 \end{itemize}
 \item このとき、式\eqref{eq:joint_MN}の同時分布が、そのまま、観測データ$\mathcal{D}$の尤度を表すことになる
 \end{itemize}
@@ -235,29 +239,25 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 \item つまり、$\mathcal{X} = \{ x_1, \ldots, x_N \}$だけが観測変数
 \item 一方、潜在変数の集合を$\mathcal{Z} = \{ z_1, \ldots, z_N \}$とする
 \end{itemize}
-\item 観測変数と潜在変数の同時分布$p(\mathcal{X}, \mathcal{Z})$は
+\item 観測変数と潜在変数の同時分布$p(\mathcal{X}, \mathcal{Z})$は、式\eqref{eq:joint_MN}と同じで
 \vspace{-.13in}
 \begin{align}
 & p(\mathcal{X}, \mathcal{Z};\bm{\theta},\{ \mu_k \}, \{ \sigma_k \})
 = \prod_{i=1}^N p(z_i ; \theta_{z_i}) p(x_i | z_i ; \mu_{z_i}, \sigma_{z_i})
 \notag \\ &
 = \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
+\notag
 \end{align}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{観測データの尤度}
-\vspace{-.05in}
+\begin{frame}{教師なしの場合の観測データの尤度}
 \begin{itemize}
 \item 潜在変数を含むモデリングの場合、観測データの尤度$p(\mathcal{X})$は、
-潜在変数$\mathcal{Z}$を周辺化して得られる
-\begin{itemize}
-\item $\mathcal{X}$を不完全データincomplete dataと呼ぶことがある
+潜在変数$\mathcal{Z}$を周辺化してはじめて得られる
 \begin{itemize}
 \item 潜在変数を周辺化する＝潜在変数がとりうる値の全てを考慮する
 \end{itemize}
-\end{itemize}
-\vspace{-.1in}
 \begin{align}
 p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 = \sum_{z_1=1}^K \sum_{z_2=1}^K \cdots \sum_{z_{N-1}=1}^K \sum_{z_N=1}^K p(\mathcal{X}, \mathcal{Z})
@@ -271,31 +271,31 @@ p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\FontMath
-$N=5, K=3$とすると
-\begin{align}
-& \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(x_i , z_i) \bigg)
-\notag \\ &
-= \big( p(x_1, z_1=1) + p(x_1,z_1=2) + p(x_1,z_1=3) \big)
-\notag \\ & \mbox{ \  }
-\times \big( p(x_2, z_1=1) + p(x_2,z_1=2) + p(x_2,z_1=3) \big)
-\notag \\ & \mbox{ \  }
-\times \big( p(x_3, z_1=1) + p(x_3,z_1=2) + p(x_3,z_1=3) \big)
-\notag \\ & \mbox{ \  }
-\times \big( p(x_4, z_1=1) + p(x_4,z_1=2) + p(x_4,z_1=3) \big)
-\notag \\ & \mbox{ \  }
-\times \big( p(x_5, z_1=1) + p(x_5,z_1=2) + p(x_5,z_1=3) \big)
-\end{align}
-括弧を外して展開すると、足し合わされる項の数は$K^N$個。
+%\begin{frame}
+%\FontMath
+%$N=5, K=3$とすると
+%\begin{align}
+%& \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(x_i , z_i) \bigg)
+%\notag \\ &
+%= \big( p(x_1, z_1=1) + p(x_1,z_1=2) + p(x_1,z_1=3) \big)
+%\notag \\ & \mbox{ \  }
+%\times \big( p(x_2, z_1=1) + p(x_2,z_1=2) + p(x_2,z_1=3) \big)
+%\notag \\ & \mbox{ \  }
+%\times \big( p(x_3, z_1=1) + p(x_3,z_1=2) + p(x_3,z_1=3) \big)
+%\notag \\ & \mbox{ \  }
+%\times \big( p(x_4, z_1=1) + p(x_4,z_1=2) + p(x_4,z_1=3) \big)
+%\notag \\ & \mbox{ \  }
+%\times \big( p(x_5, z_1=1) + p(x_5,z_1=2) + p(x_5,z_1=3) \big)
+%\end{align}
+%括弧を外して展開すると、足し合わされる項の数は$K^N$個。
+%
+%$K$がそれほど大きな値でないとしても、データのサイズ$N$は、通常、大きな値なので…
+%\end{frame}
 
-$K$がそれほど大きな値でないとしても、データのサイズ$N$は、通常、大きな値なので…
-\end{frame}
 
-
-\begin{frame}{混合正規分布の場合の観測データの対数尤度}
+\begin{frame}{教師なしの場合の観測データの対数尤度}
 \begin{itemize}
-\item 混合正規分布の場合の対数尤度は、式\eqref{eq:joint_MN}と式\eqref{eq:LH_mixture}より
+\item よって、対数尤度は、式\eqref{eq:joint_MN}と式\eqref{eq:LH_mixture}より
 \vspace{-.1in}
 \begin{align}
 & \ln p(\mathcal{X}) = \ln \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
@@ -304,6 +304,7 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 = \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
 \notag \\ &
 = \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\Big( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \Big) \bigg] \bigg)
+\label{eq:logLH_MN}
 \end{align}
 \end{itemize}
 \end{frame}
@@ -311,6 +312,9 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \begin{frame}{観測データの対数尤度の最大化？}
 \begin{itemize}
 \item あとは、対数尤度$\ln p(\mathcal{X}) = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)$を最大にする$\bm{\theta}=(\theta_1,\ldots,\theta_K)$や$\mu_1,\ldots,\mu_K$や$\sigma_1,\ldots,\sigma_K$を求めれば良い・・・？？？
+\begin{itemize}
+\item 式\eqref{eq:logLH_MN}をそのまま最大化することはしない
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -347,10 +351,6 @@ $K$がそれほど大きな値でないとしても、データのサイズ$N$�
 \begin{itemize}
 \item イェンセンの不等式を利用して$\ln p(\mathcal{X})$の下界を得たい
 \item そこで、各$x_i$について、$q_{i,1}, \ldots, q_{i,K}$という、$\sum_k q_{i,k}=1$を満たす変数を用意する
-\begin{itemize}
-\item $q_{i,k}$はデータ$x_i$が$k$番目のコンポーネントに属する確率を意味する
-\end{itemize}
-\vspace{-.05in}
 \begin{align}
 & \ln p(\mathcal{X}) = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
 \notag \\ & = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K q_{i,k} \frac{p(z_i) p(x_i | z_i)}{q_{i,k}} \Big)
@@ -436,6 +436,7 @@ $\sigma_k^2 = \frac{ \sum_{i=1}^N q_{i,k} (x_i - \mu_k)^2 }{ \sum_{i=1}^N q_{i,k
 \vspace{-.1in}
 \begin{align}
 q_{i,k} \leftarrow \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z_i = k) }
+\label{eq:EM_q}
 \end{align}
 \vspace{-.1in}
 \begin{itemize}
@@ -452,34 +453,96 @@ q_{i,k} \leftarrow \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z
 \end{itemize}
 \end{frame}
 
-\begin{frame}{$q_{i,k}$とは何なのか}
-\FontMath
-\vspace{-.05in}
+\begin{frame}{$q_{i,k}$とは何なのか(1/4)}
 \begin{itemize}
 \item イェンセンの不等式を使って、次の下界を得たのだった
-\vspace{-.05in}
 \begin{align}
 \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
 \geq 
 \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
 \end{align}
-\item 左辺から右辺を引いた差をとる
-\vspace{-.05in}
+\item 左辺から右辺を引くと
+\end{itemize}
 \begin{align}
 & \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
 - \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
 \notag \\ &
 = \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
 - \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
-\notag \\ &
+\notag
+\end{align}
+\end{frame}
+
+\begin{frame}{$q_{i,k}$とは何なのか(2/4)}
+（続き）
+\begin{align}
+&
+= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \Big( \sum_{z_i=1}^K p(x_i, z_i) \Big)
+- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+\notag \\
+& = \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln p(x_i)
+- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(x_i, z_i)}{q_{i,k}}
+\notag \\& 
 = \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \frac{p(x_i) q_{i,k}}{p(x_i , z_i)}
 = \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \frac{q_{i,k}}{p(z_i | x_i)}
-= \infdiv{q_{i,k}}{p(z_i | x_i)}
+\label{eq:diff}
 \end{align}
-\item 差$\infdiv{q_{i,k}}{p(z_i | x_i)}$は、$p(z_i | x_i)$から$q_{i,k}$へのKLダイバージェンス
-\item $q_{i,k}=p(z_i | x_i)$のとき等号成立（$q_{i,k}$は$p(z_i | x_i)$を近似しているとも言える）
+\begin{itemize}
+\item $q_{i,k}=p(z_i | x_i)$のとき、等号が成立する
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{カルバック・ライブラー情報量}
+\begin{itemize}
+\item $p,q$を離散確率分布とすると、
+$q$から$p$への{\small（$p$の$q$に対する）}
+カルバック・ライブラー情報量 {\small Kullback–Leibler divergence}とは
+\begin{align}
+\infdiv{p}{q} = \sum_{x} p(x) \ln \frac{p(x)}{q(x)}
+\end{align}
+\item $p,q$が連続確率分布の場合は
+\begin{align}
+\infdiv{p}{q} = \int p(x) \ln \bigg( \frac{p(x)}{q(x)} \bigg) dx
+\end{align}
+\item $p=q$ならば、またそのときに限り$\infdiv{p}{q} = 0$
+\item[注.] $q(x) = 0$なのに$p(x) \neq 0$となる$x$があってはいけない！
+\end{itemize}
+\end{frame}
+
+\begin{frame}{$q_{i,k}$とは何なのか(3/4)}
+\vspace{-.05in}
+\begin{itemize}
+\item $q_i(z_i)$を、$K$個のアイテム$\{1,\ldots,K\}$上に定義されたカテゴリカル分布とし、
+$q_i(z_i=k) \equiv q_{i,k}$と設定する
+\item 式\eqref{eq:diff}は、このカテゴリカル分布$q_i(z_i)$の、同じ$K$個のアイテム$\{1,\ldots,K\}$上に定義されたカテゴリカル分布$p(z_i|x_i)$に対する、カルバック・ライブラー情報量になっている
+\item ところで、式\eqref{eq:EM_q}より、
+\begin{align}
+q_{i,k} & = \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z_i = k) }
+= \frac{p(z_i=k)p(x_i|z_i=k)}{\sum_k p(z_i=k)p(x_i|z_i=k)}
+\notag \\ &
+= \frac{p(x_i,z_i=k)}{\sum_k p(x_i,z_i=k)} = \frac{p(x_i,z_i=k)}{p(x_i)} = p(z_i=k|x_i)
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{$q_{i,k}$とは何なのか(4/4)}
+\begin{itemize}
+\item つまり、式\eqref{eq:EM_q}は$q_{i,k} = p(z_i=k|x_i)$を意味している
+\item このとき、式\eqref{eq:diff}のカルバック・ライブラー情報量はゼロ！
+\item ただし、$q_{i,k}$は、モデルパラメータ$\bm{\theta},\{\mu_k\},\{\sigma_k\}$の値を固定し、
+$\ln p(x_i)$の下界を最大化することで求めたものである
+\item つまり、モデルパラメータの特定の値について式\eqref{eq:diff}をゼロにできるだけで、
+$\ln p(x_i)$が最大化できているわけではない
+\item Mステップでは、固定された$q_{i,k}$について、$\ln p(x_i)$の下界をできるだけ大きくすべく、
+パラメータの値を求めている
+\begin{itemize}
+\item Eステップでは、そのときのパラメータ値に対しては、$q_{i,k}$について最善の答えを得ていることは確か
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
 
 \section{混合多項分布：教師なしの場合}
 

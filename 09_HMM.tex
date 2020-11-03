@@ -291,11 +291,12 @@ $z_t$が所与のもとで$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立�
 \begin{frame}{条件付き独立性 conditional independence}
 \begin{itemize}
 \item $C$が与えられたときに$A$と$B$が独立である、つまり、$p(A,B|C) = p(A|C)p(B|C)$
-が成り立つとき、$A$と$B$は$C$が所与のもとで条件付き独立である、という
-\item 条件付き確率の定義より$p(A,B|C)=p(A|B,C)p(B|C)$はいつでも成り立つので
+が成り立つとき、
+\item[] $A$と$B$は$C$が所与のもとで条件付き独立である、と言う
+\item 条件付き確率の定義より、$p(A,B|C)=p(A|B,C)p(B|C)$はいつでも成り立つ。よって
 \begin{align}
 & \mbox{ $A$と$B$は$C$が所与のもとで条件付き独立である }
-\notag \\ &
+\notag \\ & \mbox{ \ }
 \Leftrightarrow p(A|B,C) = p(A|C)
 \end{align}
 \vspace{-.2in}
@@ -307,6 +308,19 @@ $z_t$が所与のもとで$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立�
 \end{itemize}
 \end{itemize}
 \end{frame}
+
+\begin{frame}{問9.1}
+\begin{itemize}
+\item $P(A,B,C|D)=P(A|D)P(B,C|D)$、つまり、
+\item[] $D$が所与のもとで$A$と$B,C$が条件付き独立ならば、
+$P(A,B|D)=P(A|D)P(B|D)$、つまり、
+\item[] $D$が所与のもとで$A$と$B$が条件付き独立になることを、示せ。
+\item[答え] $P(A,B,C|D)=P(A|D)P(B,C|D)$の両辺を$C$について周辺化すると、
+左辺は$\sum_C P(A,B,C|D)=P(A,B|D)$となり、右辺は$\sum_C  P(A|D)P(B,C|D)=P(A|D)P(B|D)$となる。
+\item[] よって、$P(A,B|D) = P(A|D)P(B|D)$が言える。
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}{}
 \FontMath
@@ -320,6 +334,7 @@ p(z_{t-1},\bm{x}_{1:t-1}) & = \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u
 p(z_t,z_{t-1},\bm{x}_{1:t-1}) & = \sum_{\bm{z}_{1:t-2}} p(z_t|z_{t-1}) \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
 \notag \\ &
 = p(z_t|z_{t-1}) \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+\label{eq:eq01}
 \end{align}
 \begin{align}
 \therefore
@@ -328,6 +343,7 @@ p(z_t|z_{t-1},\bm{x}_{1:t-1}) & = \frac{p(z_t|z_{t-1})  \sum_{\bm{z}_{1:t-2}} \p
 }
  = p(z_t|z_{t-1}) 
 \end{align}
+$z_{t-1}$が所与のもとで$z_t$と$\bm{x}_{1:t-1}$は条件付き独立であることが言えた。
 \end{frame}
 
 \begin{frame}{}
@@ -338,10 +354,10 @@ p(x_t|z_t,z_{t-1},\bm{x}_{1:t-1})
 = \frac{p(x_t,z_t,z_{t-1},\bm{x}_{1:t-1})}{p(z_t,z_{t-1},\bm{x}_{1:t-1})}
 \end{align}
 \vspace{-.1in}
+式\eqref{eq:eq01}より
 \begin{align}
 p(z_t,z_{t-1},\bm{x}_{1:t-1}) 
-& = \sum_{\bm{z}_{1:t-2}} p(z_t|z_{t-1}) \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
-\notag \\ & = p(z_t|z_{t-1}) \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
+& = p(z_t|z_{t-1}) \sum_{\bm{z}_{1:t-2}} \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u) \notag
 \\
 p(x_t, z_t,z_{t-1},\bm{x}_{1:t-1}) 
 & = \sum_{\bm{z}_{1:t-2}}  p(x_t|z_t) p(z_t|z_{t-1}) \prod_{u=1}^{t-1} p(z_u|z_{u-1})p(x_u|z_u)
@@ -356,6 +372,27 @@ p(x_t|z_t,z_{t-1},\bm{x}_{1:t-1})
 }
 =p(x_t|z_t)
 \end{align}
+$z_t$が所与のもとで$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立であることが言えた。
+\end{frame}
+
+\begin{frame}{隠れマルコフモデルのEMアルゴリズム}
+\begin{itemize}
+\item EMアルゴリズムの導出には、やはりJensenの不等式を使う
+\vspace{-.1in}
+\begin{align}
+& \ln p(\bm{x}_{1:T}) = \ln \sum_{\bm{z}_{1:T}} p(\bm{x}_{1:T}, \bm{z}_{1:T})
+\notag \\ &
+= \ln \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \frac{ p(\bm{x}_{1:T}, \bm{z}_{1:T}) }{ q(\bm{z}_{1:T}) }
+\geq \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1:T}, \bm{z}_{1:T}) }{ q(\bm{z}_{1:T}) }
+\end{align}
+\vspace{-.5in}
+\item EMアルゴリズムでは、この下界を最大化する
+\begin{align}
+A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1:T}, \bm{z}_{1:T}) }{ q(\bm{z}_{1:T}) }
+\notag \\ &
+= \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln p(\bm{x}_{1:T}, \bm{z}_{1:T})
+\end{align}
+\end{itemize}
 \end{frame}
 
 
