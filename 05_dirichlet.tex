@@ -232,6 +232,17 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \end{frame}
 
 \begin{frame}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=0.08]{2-simplex.jpg}
+\vspace{-.15in}
+\caption{\href{https://en.wikipedia.org/wiki/Simplex}{https://en.wikipedia.org/wiki/Simplex}よりstandard 2-simplexの図}
+\label{}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}
 \begin{center}
 \animategraphics[loop,controls,width=.5\linewidth]{5}{dirichlet-}{0}{15}
 \href{https://medium.com/@lettier/how-does-lda-work-ill-explain-using-emoji-108abf40fa7d}{{\scriptsize https://medium.com/@lettier/how-does-lda-work-ill-explain-using-emoji-108abf40fa7d}}
@@ -307,6 +318,17 @@ p(\bm{\phi};\bm{\beta})=\frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W\Gamma(
 \end{figure}
 \end{frame}
 
+\begin{frame}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=0.09]{beta-distribution.jpg}
+\vspace{-.2in}
+\caption{\href{https://en.wikipedia.org/wiki/Beta_distribution}{https://en.wikipedia.org/wiki/Beta\_distribution}}
+\label{}
+\end{center}
+\end{figure}
+\end{frame}
+
 \begin{frame}{分布の分布としてのベータ分布}
 \begin{itemize}
 \item ベータ分布は$[0,1]$（$1$次元単体）の上に定義される
@@ -376,7 +398,7 @@ p(\bm{\phi}|\bm{x};\bm{\beta}) \propto p(\bm{x}|\bm{\phi})p(\bm{\phi};\bm{\beta}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{事後分布を求めることと最尤推定との違い}
+\begin{frame}{事後分布を求めることと最尤推定との一つの違い}
 \begin{itemize}
 \item 最尤推定は、データ尤度$p(\bm{x}|\bm{\phi})$をパラメータ$\bm{\phi}$の関数とみなして最大化することで、$\bm{\phi}$の値をひとつに決める
 \begin{align}
@@ -541,7 +563,9 @@ p(\bm{x}_q | \hat{\phi}_d) = \frac{n_q!}{\prod_w c_{q,w}!}
 $\hat{\phi}_{d,w} = \frac{c_{d,w} + \beta_w - 1}{\sum_w (c_{d,w} + \beta_w - 1)}$である
 \item 実際には、コーパス全体における単語$\mbox{v}_w$の出現確率$p_w$を使って、
 $\beta_w - 1$の部分を$\lambda p_w$で置き換えることが多い
+\begin{itemize}
 \item $p_w$のことを背景確率background probabilityと呼んだりする
+\end{itemize}
 \item つまり、
 $\hat{\phi}_{d,w} = \frac{c_{d,w} + \lambda p_w}{c_d + \lambda}$とする
 \begin{itemize}
@@ -549,7 +573,7 @@ $\hat{\phi}_{d,w} = \frac{c_{d,w} + \lambda p_w}{c_d + \lambda}$とする
 \end{itemize}
 \item $\lambda$は検証用クエリの検索性能を見ながらチューニングする
 \begin{itemize}
-\item[cf.] \href{https://nlp.stanford.edu/IR-book/html/htmledition/estimating-the-query-generation-probability-1.html}{{\scriptsize https://nlp.stanford.edu/IR-book/html/htmledition/estimating-the-query-generation-probability-1.html}} 
+\item[cf.] \href{https://nlp.stanford.edu/IR-book/html/htmledition/estimating-the-query-generation-probability-1.html}{{\tiny https://nlp.stanford.edu/IR-book/html/htmledition/estimating-the-query-generation-probability-1.html}} 
 \end{itemize}
 \end{itemize}
 \end{frame}
