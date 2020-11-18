@@ -19,20 +19,21 @@
 \end{frame}
 
 \begin{frame}{マルコフモデル}
-\vspace{-.1in}
 \begin{itemize}
 \item $\bm{z} = (z_1,\ldots,z_T)$という確率変数の列がある
-\item $z_t$は、状態の集合$\mathcal{S} = \{ s_1, \ldots, s_K \}$の要素を値としてとる
+\item $z_t$は、状態の集合$\mathcal{S} = \{ s_1, \ldots, s_K \}$の要素を値として取る
 \begin{itemize}
-\item 例えば、$\mathcal{S}$は天候の集合だとする
+\item[例.] 天候の集合$\mathcal{S} = \{ s_{\mbox{\scriptsize sun}}, s_{\mbox{\scriptsize cloud}}, s_{\mbox{\scriptsize rain}} \}$
 \end{itemize}
-\item 以下の（単純）マルコフ性の仮定をおく
+\item 以下の単純マルコフ性の仮定をおく
 \vspace{-.1in}
 \begin{align}
 p(z_i =s | z_1,\ldots, z_{i-1}) = p(z_i =s | z_{i-1}) \mbox{ for all $s \in \mathcal{S}$}
 \end{align}
-\item また、$s_k$から$s_l$に遷移する確率$p(z_t=s_l|z_{t-1}=s_k)$は全ての$t$で等しいと仮定（斉時性）し、この確率を$A_{s_k,s_l}$と書く
+\item $s_k$から$s_l$に遷移する確率$p(z_t=s_l|z_{t-1}=s_k)$は、全ての$t$で等しいと仮定（斉時性の仮定）し、この確率を$A_{s_k,s_l}$と書く
+\begin{itemize}
 \item $\sum_{l=1}^K A_{s_k, s_l} = 1$が、すべての$k$で成り立つ
+\end{itemize}
 \item 便宜的に初期状態を確率変数$z_0$で表し、その値を$s_0$とする
 \begin{itemize}
 \item $A_{s_k,s_0} = 0$が、すべての$k$について成り立つ
@@ -42,7 +43,7 @@ p(z_i =s | z_1,\ldots, z_{i-1}) = p(z_i =s | z_{i-1}) \mbox{ for all $s \in \mat
 
 \begin{frame}{遷移行列}
 \begin{itemize}
-\item 遷移確率をまとめて遷移行列$A$として書くと
+\item 遷移確率をまとめて、遷移行列$A$として書く
 \item[例.] 天候の状態の集合$\mathcal{S} = \{ s_0, s_{\mbox{\scriptsize sun}},
 s_{\mbox{\scriptsize cloud}}, s_{\mbox{\scriptsize rain}} \}$
 \begin{align}
@@ -124,7 +125,7 @@ $\sum_{k=1}^K A_{s_l,s_k}=1$だから
 \begin{itemize}
 \item このとき、状態を表す確率変数$z_t$は潜在変数latent variableとなる
 \end{itemize}
-\item 隠れ状態の列$\bm{z}_{1:T}=(z_1,\ldots,z_T)$は、上述のとおり、単純マルコフ性と斉時性を持つとする
+\item 隠れ状態の列$\bm{z}_{1:T}=(z_1,\ldots,z_T)$は、上述のとおり、単純マルコフ性と斉時性を持つと仮定する
 \item 時点$t$での観測結果を、確率変数$x_t$で表す
 \item 観測データ$x_t$について、以下のような独立性の仮定をおく
 \begin{align}
@@ -164,7 +165,7 @@ p(x_t=v_w| \bm{x}_{1:T},\bm{z}_{1:T}) = p(x_t=v_w|z_t=s_k)
 \end{itemize}
 \vspace{1in}
 \item 隠れマルコフモデル
-\begin{textblock*}{0.4\linewidth}(225pt, 140pt)
+\begin{textblock*}{0.4\linewidth}(225pt, 145pt)
     \centering
     \includegraphics[width=1.25\linewidth]{HMM2.jpg}
 \end{textblock*}
@@ -391,6 +392,27 @@ $z_t$が所与のもとで$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立�
 A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1:T}, \bm{z}_{1:T}) }{ q(\bm{z}_{1:T}) }
 \notag \\ &
 = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln p(\bm{x}_{1:T}, \bm{z}_{1:T})
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\FontMath
+\begin{itemize}
+\item[cf.] \href{http://cs229.stanford.edu/section/cs229-hmm.pdf}{http://cs229.stanford.edu/section/cs229-hmm.pdf}
+\begin{align}
+& \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln p(\bm{x}_{1:T}, \bm{z}_{1:T})
+\notag \\ &
+= \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \bigg[
+\bigg( \prod_{t=1}^T p(x_t|z_t;B) \bigg) \bigg( \prod_{t=1}^T p(z_t|z_{t-1};A) \bigg)\bigg]
+\notag \\ &
+= \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \bigg[
+\bigg( \prod_{t=1}^T B_{z_t,x_t} \bigg)
+\bigg( \prod_{t=1}^T A_{z_{t-1},z_t} \bigg)
+\bigg]
+\notag \\ &
+= \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T})
+\sum_{t=1}^T \big( \ln B_{z_t,x_t} + \ln A_{z_{t-1},z_t} \big)
 \end{align}
 \end{itemize}
 \end{frame}
