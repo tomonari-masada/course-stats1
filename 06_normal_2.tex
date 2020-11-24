@@ -558,10 +558,10 @@ p(\eta; \chi,\nu) & \propto (1 - \phi)^\nu \exp \bigg(\nu \ln \Big( \frac{\phi}{
 \begin{itemize}
 \item 式\eqref{eq:expfam}の密度関数を持つ確率分布に対して・・・
 \item 式\eqref{eq:conjugate}の事前分布を使うと・・・
-\item 観測データ$\mathcal{D} = \{ \bm{x}_1, \ldots, \bm{x}_n \}$が所与のときの事後分布は、以下のようになる
+\item 観測データ$\mathcal{D} = \{ \bm{x}_1, \ldots, \bm{x}_N \}$が所与のときの事後分布は、以下のようになる
 \begin{align}
-p(\bm{\eta}|\mathcal{D},\bm{\chi},\nu) \propto g(\bm{\eta})^{\nu+n}
-\exp\bigg( \bm{\eta}^\intercal \bigg( \sum_{i=1}^n \bm{u}(\bm{x}_i) + \nu\bm{\chi} \bigg) \bigg)
+p(\bm{\eta}|\mathcal{D},\bm{\chi},\nu) \propto g(\bm{\eta})^{\nu + N}
+\exp\bigg( \bm{\eta}^\intercal \bigg( \sum_{i=1}^N \bm{u}(\bm{x}_i) + \nu\bm{\chi} \bigg) \bigg)
 \end{align}
 \item[問.] このことを示せ（cf. PRML, Sec. 2.4.2）
 \end{itemize}
