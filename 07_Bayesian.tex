@@ -20,14 +20,14 @@
 
 \begin{frame}{統計的推測 statistical inference}
 \begin{itemize}
-\item 観測データとして、$d$次元ユークリッド空間$\mathbb{R}^d$上の$n$個の点の集合$\bm{x}_1,\ldots,\bm{x}_n$が与えられているとする
+\item 観測データとして、$d$次元ユークリッド空間$\mathbb{R}^d$上の$n$個の点の集合$\bm{x}_1,\ldots,\bm{x}_N$が与えられているとする
 \item 観測データをひとつの記号で$\mathcal{D}$と書くことにする
 \begin{itemize}
-\item つまり、$\mathcal{D}=\{ \bm{x}_1,\ldots,\bm{x}_n \}$
+\item つまり、$\mathcal{D}=\{ \bm{x}_1,\ldots,\bm{x}_N \}$
 \end{itemize}
 \item $\bm{x}_i$は、独立に同じ分布$q(\bm{x})$にしたがうと考えることにする
 \begin{itemize}
-\item つまり、$q(\mathcal{D}) = \prod_{i=1}^n q(\bm{x}_i)$
+\item つまり、$q(\mathcal{D}) = \prod_{i=1}^N q(\bm{x}_i)$
 \end{itemize}
 \item しかし、この分布$q(\bm{x})$を直接知る方法はない
 \item そこで、$\mathcal{D}$から$q(\bm{x})$を推測することを、統計的推測ないし統計的学習という
@@ -46,8 +46,8 @@
 \end{itemize}
 \item このとき事後分布は以下のように書ける
 \begin{align}
-p(\bm{\eta} | \mathcal{D}) = \frac{1}{Z_n} p(\bm{\eta}) p(\mathcal{D}|\bm{\eta})
-= \frac{1}{Z_n} p(\bm{\eta}) \prod_{i=1}^n p(\bm{x}_i | \bm{\eta})
+p(\bm{\eta} | \mathcal{D}) = \frac{1}{Z_N} p(\bm{\eta}) p(\mathcal{D}|\bm{\eta})
+= \frac{1}{Z_N} p(\bm{\eta}) \prod_{i=1}^N p(\bm{x}_i | \bm{\eta})
 \label{eq:posterior}
 \end{align}
 \item $Z_n$については次のスライドで
@@ -56,12 +56,12 @@ p(\bm{\eta} | \mathcal{D}) = \frac{1}{Z_n} p(\bm{\eta}) p(\mathcal{D}|\bm{\eta})
 
 \begin{frame}{周辺尤度}
 \begin{itemize}
-\item 式\eqref{eq:posterior}の事後分布の規格化定数$Z_n$を分配関数とも呼ぶ
+\item 式\eqref{eq:posterior}の事後分布の規格化定数$Z_N$を分配関数とも呼ぶ
 \begin{itemize}
 \item 分配関数partition functionは物理方面から来ている用語
 \end{itemize}
-\item $Z_n$は規格化定数なので、$Z_n = \int p(\bm{\eta}) p(\mathcal{D}|\bm{\eta}) d\bm{\eta}$を満たす
-\item つまり、$Z_n = p(\mathcal{D})$
+\item $Z_N$は規格化定数なので、$Z_N = \int p(\bm{\eta}) p(\mathcal{D}|\bm{\eta}) d\bm{\eta}$を満たす
+\item つまり、$Z_N = p(\mathcal{D})$
 \item $p(\mathcal{D})$を、周辺尤度、もしくは、エビデンスevidenceと呼ぶ
 \begin{itemize}
 \item 論文ではmarginal likelihoodよりevidenceのほうをよく見かける
@@ -75,10 +75,10 @@ p(\bm{\eta} | \mathcal{D}) = \frac{ p(\bm{\eta}) p(\mathcal{D}|\bm{\eta}) }{ p(\
 
 \begin{frame}{観測データを生成する分布の推定(1/2)}
 \begin{itemize}
-\item 観測データ$\mathcal{D}$から、それを生成する分布$\hat{p}(\bm{x})$を推定する方法はいろいろある
+\item 観測データ$\mathcal{D}$から、それを生成する分布$\hat{p}(\bm{x})$を推定する方法は、いろいろある
 \item 観測データ$\mathcal{D}=\{\bm{x}_1,\ldots,\bm{x}_N\}$が与えられているとき、パラメータ$\bm{\eta}$の関数$\prod_{i=1}^N p(\bm{x}_i|\bm{\eta})$を尤度関数と呼ぶ
-\item[1.] 尤度関数を最大にするパラメータ$\bm{\eta}_{\mbox{\scriptsize ML}}$を最尤推定量といい、$p(\bm{x}_i | \bm{\eta}_{\mbox{\scriptsize ML}})$を推測の結果$\hat{p}(\bm{x})$とする方法を、最尤推定という
-\item[2.] 事後分布の最大値を与えるパラメータ$\bm{\eta}_{\mbox{\scriptsize MAP}}$を事後確率最大化推定量といい、$p(\bm{x}_i | \bm{\eta}_{\mbox{\scriptsize MAP}})$を推測の結果$\hat{p}(\bm{x})$とする方法を、事後確率最大化推定（もしくはMAP推定）という
+\item[1.] 尤度関数を最大にするパラメータ$\bm{\eta}_{\mbox{\scriptsize ML}}$を最尤推定量といい、$p(\bm{x} | \bm{\eta}_{\mbox{\scriptsize ML}})$を推測の結果$\hat{p}(\bm{x})$とする方法を、最尤推定という
+\item[2.] 事後分布の最大値を与えるパラメータ$\bm{\eta}_{\mbox{\scriptsize MAP}}$を事後確率最大化推定量といい、$p(\bm{x} | \bm{\eta}_{\mbox{\scriptsize MAP}})$を推測の結果$\hat{p}(\bm{x})$とする方法を、事後確率最大化推定（もしくはMAP推定）という
 \end{itemize}
 \end{frame}
 
@@ -99,7 +99,7 @@ p(\bm{x}|\mathcal{D}) = \int p(\bm{x}|\bm{\eta}) p(\bm{\eta} | \mathcal{D}) d\bm
 \begin{itemize}
 \item ベイズ推測Bayesian inferenceとは、「真の分布は、おおよそ予測分布だろう」と推測することである
 \begin{itemize}
-\item[cf.] 渡辺澄夫『ベイズ統計の理論と方法』コロナ社、5頁
+\item[cf.] 渡辺澄夫『ベイズ統計の理論と方法』コロナ社、p.5
 \end{itemize}
 \item[] \ 
 \item 以下、正規分布と多項分布の場合について、共役事前分布を使ったときに予測分布がどのような分布になるかを説明する
@@ -166,30 +166,30 @@ p(x|\mathcal{D}) = \int p(x|\mu,\tau)p(\mu|\tau,\mathcal{D})p(\tau|\mathcal{D}) 
 \end{itemize}
 \end{frame}
 
-\begin{frame}{t-分布 Student's t-distribution}
+\begin{frame}{\textit{t}-分布 Student's \textit{t}-distribution}
 \begin{itemize}
-\item $X_1,\ldots,X_n$を平均$\mu$、標準偏差$\sigma$の正規分布に独立にしたがう確率変数とする
-\item 標本平均を$\bar{X}=\frac{\sum_i X_i}{n}$、不偏分散を$S^2=\frac{\sum_i (X_i - \bar{X})^2}{n-1}$とする
-\item このとき、$t = \frac{\bar{X} - \mu}{S / \sqrt{n}}$と定義される値は、自由度$\nu=n-1$のt-分布にしたがう
-\item t-分布の確率密度関数は、以下のようになる
+\item $x_1,\ldots,x_N$を平均$\mu$、標準偏差$\sigma$の正規分布に独立にしたがう確率変数とする
+\item 標本平均を$\bar{x}=\frac{\sum_i x_i}{N}$、不偏分散を$s^2=\frac{\sum_i (x_i - \bar{x})^2}{N-1}$とする
+\item このとき、$t = \frac{\bar{x} - \mu}{s / \sqrt{N}}$と定義される値は、自由度$\nu=N-1$の\textit{t}-分布にしたがう
+\item \textit{t}-分布の確率密度関数は、以下のようになる
 \begin{align}
 p(t;\nu) = \frac{\Gamma((\nu+1)/2)}{\sqrt{\nu\pi}\Gamma(\nu/2)}(1 + t^2/\nu)^{-(\nu+1)/2}
 \end{align}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{t location-scale distribution}
+\begin{frame}{\textit{t} location-scale distribution}
 \begin{itemize}
-\item 平均が$\mu$、スケールが$\sigma^2$、自由度が$\nu$のt location-scale distributionの確率密度関数は、以下のとおり
+\item 平均が$\mu$、スケールが$\sigma^2$、自由度が$\nu$の\textit{t} location-scale distributionの確率密度関数は、以下のとおり
 \begin{align}
 p(x;\mu,\sigma^2) =\frac{\Gamma((\nu+1)/2)}{\sigma\sqrt{\nu\pi}\Gamma(\nu/2)} \bigg( 1 + \frac{(x - \mu)^2}{\nu\sigma^2} \bigg)^{ - (\nu+1) / 2 }
 \end{align}
-\item $\mu=0$、$\sigma=1$のとき、t-分布に一致する
+\item $\mu=0$、$\sigma=1$のとき、\textit{t}-分布に一致する
 \begin{itemize}
-\item 英語版Wikipedia「\href{https://en.wikipedia.org/wiki/Student's_t-distribution}{t-分布}」の「\href{https://en.wikipedia.org/wiki/Student's_t-distribution\#Bayesian_inference}{4.2 Bayesian Inference}」を参照
+\item 英語版Wikipedia「\href{https://en.wikipedia.org/wiki/Student's_t-distribution}{\textit{t}-分布}」の「\href{https://en.wikipedia.org/wiki/Student's_t-distribution\#Bayesian_inference}{4.2 Bayesian Inference}」を参照
 \item MATLABの\href{https://www.mathworks.com/help/stats/prob.tlocationscaledistribution.html}{tLocationScaleDistributionの項}も参照
 \end{itemize}
-\item 以下では、予測分布がこのt location-scale distributionになることを示す
+\item 以下では、予測分布がこの\textit{t} location-scale distributionになることを示す
 \end{itemize}
 \end{frame}
 
@@ -203,7 +203,7 @@ $\alpha=\beta=\frac{\nu}{2}$である場合、以下が成立することを確�
 t_\nu (\mu|\mu_0,\lambda_0^{-1}) = \int_0^\infty \mbox{NG}(\mu,\tau|\mu_0, \lambda_0, \frac{\nu}{2}, \frac{\nu}{2}) d\tau
 = \int_0^\infty \mathcal{N}(\mu|\mu_0,(\lambda_0\tau)^{-1})\mbox{Ga}(\tau|\frac{\nu}{2},\frac{\nu}{2}) d\tau
 \end{align}
-ただし、$t_\nu (x|\mu,\sigma^2)$は、平均$\mu$、スケール$\sigma^2$、自由度$\nu$のt location-scale distributionである。
+ただし、$t_\nu (x|\mu,\sigma^2)$は、平均$\mu$、スケール$\sigma^2$、自由度$\nu$の\textit{t} location-scale distributionである。
 
 $x \sim \mbox{Ga}(\alpha,\beta)$のとき、$cx \sim \mbox{Ga}(\alpha,\frac{\beta}{c})$となる。よって
 \begin{align}
@@ -284,7 +284,7 @@ e^{ - \tau \beta_N } \exp\bigg[ - \frac{ \tau \lambda_N }{2(\lambda_N + 1)} (x -
 p(x|\mathcal{D}) = \int p(x, \tau|\mathcal{D}) d\tau
 = t_{2\alpha_N} ( x | \mu_N, \frac{\beta_N(\lambda_N + 1)}{\alpha_N\lambda_N} ) 
 \end{align}
-したがって、予測分布は、平均$\mu_N$、スケール$\frac{\beta_N(\lambda_N + 1)}{\alpha_N\lambda_N}$、自由度$2\alpha_N$のt location-scale distributionである。
+したがって、予測分布は、平均$\mu_N$、スケール$\frac{\beta_N(\lambda_N + 1)}{\alpha_N\lambda_N}$、自由度$2\alpha_N$の\textit{t} location-scale distributionである。
 \end{frame}
 
 \section{多項分布の場合}
@@ -295,7 +295,7 @@ p(x|\mathcal{D}) = \int p(x, \tau|\mathcal{D}) d\tau
 
 \begin{frame}{多項分布を使ったベイズ的モデリング}
 \begin{itemize}
-\item 観測データ$\mathcal{D}=\{x_1,\ldots,x_N\}$が独立に同じカテゴリカル分布$\mbox{Cat}(\bm{\phi})$にしたがうと仮定
+\item 観測データ$\bm{x}=\{x_1,\ldots,x_n\}$が独立に同じカテゴリカル分布$\mbox{Cat}(\bm{\phi})$にしたがうと仮定
 \begin{itemize}
 \item 例えば、$x_{62} = \mbox{``apple''}$は、62番目に出現した単語が``apple''だ、という意味
 \end{itemize}
@@ -312,9 +312,9 @@ p(\bm{\phi}; \bm{\beta}) = \frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W \Ga
 \begin{itemize}
 \item 正規ガンマ分布は共役事前分布
 \item よって事後分布も正規ガンマ分布となる
-\item 事後分布$p(\bm{\phi}|\mathcal{D}; \bm{\beta})$は以下のように書ける
+\item 事後分布$p(\bm{\phi}|\bm{x}; \bm{\beta})$は以下のように書ける
 \begin{align}
-p(\bm{\phi}|\mathcal{D}; \bm{\beta}) = 
+p(\bm{\phi}|\bm{x}; \bm{\beta}) = 
 \frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
 \prod_{w=1}^W \phi_W^{c_w + \beta_w - 1}
 \end{align}
@@ -326,8 +326,8 @@ p(\bm{\phi}|\mathcal{D}; \bm{\beta}) =
 \item 多項分布の場合、予測分布についても、多数の単語出現からなる観測データの予測分布を考えることが多い
 \item その予測分布を求めたい単語列（つまり文書）を$\bm{x}_0$とする
 \item $\bm{x}_0 = \{x_{0,1}, \ldots, x_{0,n_0}\}$とする。
-\item 上記の設定のもとでの予測分布$p(\bm{x}_0 | \mathcal{D};\bm{\beta})$は
-$p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mathcal{D};\bm{\beta}) d\bm{\phi}$によって求められる
+\item 上記の設定のもとでの予測分布$p(\bm{x}_0 | \bm{x};\bm{\beta})$は
+$p(\bm{x}_0|\bm{x};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\bm{x};\bm{\beta}) d\bm{\phi}$によって求められる
 \item この予測分布がどういう分布になるかを、以下で示す
 \end{itemize}
 \end{frame}
@@ -335,7 +335,7 @@ $p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mat
 \begin{frame}
 \FontMath
 \begin{align}
-& p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mathcal{D};\bm{\beta}) d\bm{\phi}
+& p(\bm{x}_0|\bm{x};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\bm{x};\bm{\beta}) d\bm{\phi}
 \notag \\ & =
 \int \bigg(
 \frac{n_0!}{\prod_{w=1}^W c_{0,w}!} \prod_{w=1}^W \phi_w^{c_{0,w}} \times
@@ -365,15 +365,17 @@ $p(\bm{x}_0|\mathcal{D};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\mat
 
 \begin{frame}{ディリクレ多項分布（Polya分布）}
 \begin{itemize}
-\item パラメータ
-\begin{itemize}
-\item $\alpha_1, \ldots, \alpha_K)$ s.t. $\alpha_k > 0$ for $1 \leq k \leq K$
-\end{itemize}
-\item 確率密度関数
+\item パラメータは
+$\bm{\alpha} = (\alpha_1, \ldots, \alpha_K)$ s.t. $\alpha_k > 0$ for $1 \leq k \leq K$
+\item 確率密度関数は
 \begin{align}
 p(\bm{x} | \bm{\alpha}) = \frac{\Gamma(\sum_k \alpha_k)}{\prod_k \Gamma(\alpha_k)}
 \frac{\prod_k \Gamma(\alpha_k + n_k)}{\Gamma(\sum_k \alpha_k + n_k)}
 \end{align}
+\vspace{-.1in}
+\begin{itemize}
+\item $n_k$は$\bm{x}$において第$k$番目のアイテムが出現する回数
+\end{itemize}
 \item 導出
 \begin{align}
 p(\bm{x} | \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} | \bm{\alpha}) d\bm{\theta}
@@ -397,30 +399,30 @@ p(\bm{x} | \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} | \bm{\alpha}
 \item 事前分布$p(\bm{\eta})$と尤度$p(\mathcal{D}|\bm{\eta})$から、
 事後分布$p(\bm{\eta} | \mathcal{D})$を求める
 \begin{align}
-p(\bm{\eta} | \mathcal{D}) = \frac{1}{Z_n} p(\bm{\eta}) p(\mathcal{D}|\bm{\eta})
-= \frac{1}{Z_n} p(\bm{\eta}) \prod_{i=1}^n p(\bm{x}_i | \bm{\eta})
+p(\bm{\eta} | \mathcal{D}) = \frac{1}{Z_N} p(\bm{\eta}) p(\mathcal{D}|\bm{\eta})
+= \frac{1}{Z_N} p(\bm{\eta}) \prod_{i=1}^N p(\bm{x}_i | \bm{\eta})
 \end{align}
 \vspace{-.2in}
 \begin{itemize}
 \item 事後分布$p(\bm{\eta} | \mathcal{D})$は、モデルパラメータが取りうるあらゆる値に重み付けをしている、
 と見なせる
 \end{itemize}
-\item 下記の予測分布$p(\bm{x}_0|\mathcal{D})$を使うと、
+\item 下記の予測分布$p(\bm{x}|\mathcal{D})$を使うと、
 事後分布$p(\bm{\eta} | \mathcal{D})$によるパラメータへの重み付けを反映するかたちで、
-未知データ$\bm{x}_0$の確率を計算できる
+未知データ$\bm{x}$の確率を計算できる
 \begin{align}
-p(\bm{x}_0|\mathcal{D}) = \int p(\bm{x}_0|\bm{\eta}) p(\bm{\eta} | \mathcal{D}) d\bm{\eta}
+p(\bm{x}|\mathcal{D}) = \int p(\bm{x}|\bm{\eta}) p(\bm{\eta} | \mathcal{D}) d\bm{\eta}
 \end{align}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{予測分布の別の見方}
 \begin{itemize}
-\item 予測分布を求めることは、観測データがしたがう新しい分布を作り出すこと、とも言える
-\item 正規分布と正規ガンマ分布から、t location-scale 分布
-\item 多項分布とディリクレ分布から、ディリクレ多項分布 
+\item 予測分布を求めることは、観測データがしたがう新しい分布をベイズ的な枠組みを使って作り出すこと、とも言える
+\item[1.] 正規分布と正規ガンマ分布から、\textit{t} location-scale 分布
+\item[2.] 多項分布とディリクレ分布から、ディリクレ多項分布 
 \begin{itemize}
-\item ただし、今回の２つの例のように、予測分布の確率密度関数（or 確率質量関数）を式の計算で求めることができてしまうケースは、少ない。
+\item ただし、今回の2つの例のように、予測分布の確率密度関数を式の計算で求めることができてしまうケースは、多くない
 \end{itemize}
 \end{itemize}
 \end{frame}
