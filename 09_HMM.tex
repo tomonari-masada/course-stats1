@@ -119,6 +119,19 @@ $\sum_{k=1}^K A_{s_l,s_k}=1$だから
 \Large \tableofcontents[currentsection]
 \end{frame}
 
+\begin{frame}{例. アイスクリームの売上で温暖化を研究}
+\begin{itemize}
+\item あなたは西暦2799年の世界に生きており、地球温暖化の研究をしている
+\item 歴史的な資料の中から、2020年夏の毎日のアイスクリームの売上の記録が見つかった
+\item この記録を元に、2020年夏の毎日の天候を推定したい
+\item ただし、アイスクリームの売上は天候だけに依存すると仮定
+\begin{itemize}
+\item \href{https://web.stanford.edu/~jurafsky/slp3/A.pdf}{https://web.stanford.edu/\~{}jurafsky/slp3/A.pdf}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
 \begin{frame}{隠れマルコフモデルHMM; hidden Markov model}
 \begin{itemize}
 \item 状態$z_t$は観測できず、各状態が生成する結果$x_t$だけが観測できるとする
@@ -216,18 +229,19 @@ p(\bm{x}; A,B) &
 \end{itemize}
 \end{frame}
 
-\section{Forward-backwardアルゴリズム}
+\section{隠れマルコフモデルの尤度計算}
 
 \begin{frame}\frametitle{Contents}
 \Large \tableofcontents[currentsection]
 \end{frame}
+
 
 \begin{frame}{Forward procedure}
 \begin{itemize}
 \item HMMのデータ尤度$p(\bm{x}; A,B)$は、動的計画法の一種である
 forward procedureによって、効率的に計算できる
 \begin{itemize}
-\item[cf.] \href{https://web.stanford.edu/~jurafsky/slp3/A.pdf}{https://web.stanford.edu/~jurafsky/slp3/A.pdf}
+\item[cf.] \href{https://web.stanford.edu/~jurafsky/slp3/A.pdf}{https://web.stanford.edu/\~{}jurafsky/slp3/A.pdf}
 \end{itemize}
 \item 時点$t$までのデータ列$(x_1,\ldots,x_t)$の確率と、
 時点$t$での隠れ状態$z_t$が$s_k$である確率の同時確率を、$\alpha_t(k)$とおく。つまり
@@ -245,14 +259,14 @@ p(\bm{x}; A,B) = \sum_{k=1}^K p(\bm{x}_{1:T}, z_T=s_k; A,B) = \sum_{k=1}^K \alph
 \FontMath
 \vspace{-.25in}
 \begin{align}
-\alpha_1(k) & = p(x_1,z_1=s_k) = p(z_0=s_0)p(z_1=s_k|z_0=s_0)p(x_1|z_1=s_k) = A_{0,k} B_{k,x_1}
-\\ 
+\alpha_1(k) & = p(x_1,z_1=s_k) = p(z_0=s_0)p(z_1=s_k|z_0=s_0)p(x_1|z_1=s_k) = A_{s_0,s_k} B_{s_k,x_1}
+\label{eq:alpha_1} \\ 
 \alpha_2(k) & = p(x_1, x_2, z_2=s_k) = \sum_{z_1 \in \mathcal{S}} p(x_1,x_2, z_1, z_2=s_k)
 \notag \\ &
 = \sum_{z_1 \in \mathcal{S}} p(x_1,z_1) p(z_2=s_k|x_1, z_1) p(x_2|z_2=s_k, x_1, z_1)
 \label{eq:alpha_2_1} \\ &
 = \sum_{z_1 \in \mathcal{S}} p(x_1,z_1) p(z_2=s_k|z_1) p(x_2|z_2=s_k)
-= \sum_{l=1}^l \alpha_1(l) A_{s_l,s_k} B_{s_k,x_2}
+= \sum_{l=1}^K \alpha_1(l) A_{s_l,s_k} B_{s_k,x_2}
 \label{eq:alpha_2_2} \\
 \alpha_3(k) & = p(x_1,x_2,x_3,z_3=s_k) = \sum_{z_2 \in \mathcal{S}} p(x_1,x_2, x_3, z_2, z_3=s_k)
 \notag \\ &
@@ -373,8 +387,113 @@ p(x_t|z_t,z_{t-1},\bm{x}_{1:t-1})
 }
 =p(x_t|z_t)
 \end{align}
-$z_t$が所与のもとで$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立であることが言えた。
+$z_t$が所与のとき$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立であることが言えた。
 \end{frame}
+
+
+\section{隠れマルコフモデルのdecoding}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{観測データから隠れ状態を求める(decoding)}
+\begin{itemize}
+\item 特定の観測データ$\bm{x}_{1:T}$に対して、一番あり得そうmost likelyな隠れ状態の列$\bm{z}_{1:T}$を見つけたい
+\begin{itemize}
+\item 潜在変数を含む確率モデルにおいて、与えられた観測データに対して一番あり得そうな潜在変数の値を求めることをdecodingと呼ぶ
+\end{itemize}
+\item そこで、$p(\bm{z}_{1:T}|\bm{x}_{1:T}; A,B)$を最大にする各$z_t$の値を求める
+\begin{itemize}
+\item パラメータ$A, B$の値は与えられていると仮定する
+\end{itemize}
+\item $\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}|\bm{x}_{1:T}; A,B) = 
+\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}, \bm{x}_{1:T}; A,B)$が成り立つことに注意
+\item 以下、Viterbiアルゴリズムで$\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}, \bm{x}_{1:T}; A,B)$を求める
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Viterbiアルゴリズム}
+\begin{itemize}
+\item 実は、forward procedureとほとんど同じ計算をする
+\item 式~\eqref{eq:alpha_1}以降に現れる隠れ状態に関する和$\sum_{z_{t-1} \in \mathcal{S}}$を、
+$\max_{z_{t-1} \in \mathcal{S}}$で置き換えて、計算を進めればいいだけ
+\item ただし、そのとき、同時に$\argmax_{z_{t-1} \in \mathcal{S}}$も記録しておく
+\item $t=T$まで計算が終わったら、途中で記録しておいた$\argmax_{z_{t-1} \in \mathcal{S}}$を逆にたどることで、隠れ状態の列が得られる
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\FontMath
+\vspace{-.2in}
+\begin{align}
+v_1(k) & = p(x_1,z_1=s_k) = p(z_0=s_0)p(z_1=s_k|z_0=s_0)p(x_1|z_1=s_k) = A_{s_0,s_k} B_{s_k,x_1}
+\notag \\ 
+v_2(k) & = \max_{z_1 \in \mathcal{S}} p(x_1,x_2, z_1, z_2=s_k)
+\notag \\ &
+= \max_{z_1 \in \mathcal{S}} p(x_1,z_1) p(z_2=s_k|z_1) p(x_2|z_2=s_k)
+= \max_{l=1}^K v_1(l) A_{s_l,s_k} B_{s_k, x_2}
+\label{eq:v_2_2} \\
+c_2(k) & = \argmax_{l=1}^K v_1(l) A_{s_l,s_k} B_{s_k, x_2}
+\\
+v_3(k) & = \max_{z_2 \in \mathcal{S}} 
+\Big( \max_{z_1 \in \mathcal{S}} p(x_1,x_2, z_1, z_2=s_k) \Big)
+p(z_3=s_k|z_2) p(x_3|z_3=s_k)
+\notag \\ &
+= \max_{l=1}^K v_2(l) A_{s_l,s_k} B_{s_k, x_3}
+\\
+c_3(k) & = \argmax_{l=1}^K v_2(l) A_{s_l,s_k} B_{s_k, x_3}
+\\
+\mbox{cf. } 
+\alpha_3(k) & = \sum_{z_2 \in \mathcal{S}} 
+\Big( \sum_{z_1 \in \mathcal{S}} p(x_1, x_2, z_1,z_2) \Big)
+p(z_3=s_k|z_2) p(x_3|z_3=s_k)
+\label{eq:v_3_2} 
+\end{align}
+周辺化して$z_{t-1}$を消去するための確率の和の計算を、和をとられている確率のうちの最大値を選びとる計算に置き換える
+
+$c_t(k)$は、$z_t=s_k$とするとき、一時点前の状態として何を選べばよいかを、表す
+\end{frame}
+
+\begin{frame}{Viterbiアルゴリズム}
+\FontMath
+\begin{itemize}
+\item initialization
+\begin{itemize}
+\item $v_1(k) = A_{s_0,s_k} B_{s_k,x_1}$
+\item $c_1(k) = s_0$
+\end{itemize}
+\item recursion
+\begin{itemize}
+\item $v_t(k) = \max_l v_{t-1}(l) A_{s_l,s_k} B_{s_k, x_t}$
+\item $c_t(k) = \argmax_l v_{t-1}(l) A_{s_l,s_k} B_{s_k, x_t}$
+\end{itemize}
+\item termination
+\begin{itemize}
+\item $v_{\bot} = \max_k v_T(k)$
+\item $c_{\bot} = \argmax_k v_T(k)$
+\end{itemize}
+\item $c_{\bot}$からスタートしてさかのぼれば、隠れ状態の列が得られる
+\end{itemize}
+\end{frame}
+
+
+\section{隠れマルコフモデルのEMアルゴリズム}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{観測データからパラメータの値を得る（推定）}
+\begin{itemize}
+\item 観測データの尤度を計算するにしても、与えられた観測データに対して最良の隠れ状態列を得るにしても、
+いずれにしても、まずパラメータ$A, B$の値を求めておかないといけない
+\item そこで、混合分布の場合と同様、EMアルゴリズムにより、$A$と$B$の値を推定することにする
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}{隠れマルコフモデルのEMアルゴリズム}
 \begin{itemize}
@@ -416,6 +535,49 @@ A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1
 \end{align}
 \end{itemize}
 \end{frame}
+
+\begin{frame}{HMMのEMアルゴリズムのE step}
+\begin{itemize}
+\item E stepでは、モデルパラメータを固定したうえで、観測データを所与とする潜在変数の条件付き確率分布を求めるのだった（cf. 混合分布の講義）
+\item ということは、いま考えているHMMの場合、$A$と$B$を固定したうえで$p(\bm{z}_{1:T} | \bm{x}_{1:T})$を計算して、
+それを$q(\bm{z}_{1:T})$の解とするのが、E stepとなる
+\item 以下、 M stepの説明をするが、そこでは$q(\bm{z}_{1:T})$を$p(\bm{z}_{1:T} | \bm{x}_{1:T})=\frac{p(\bm{z}_{1:T} , \bm{x}_{1:T})}{p(\bm{x}_{1:T})}$で置き換えて計算を進める
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\FontMath
+\begin{align}
+\mathcal{L}(A, B, \lambda, \mu)
+& 
+= \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T \big( \ln B_{z_t,x_t} + \ln A_{z_{t-1},z_t} \big)
+\notag \\ & \mbox{ \ \ }
++ \sum_{k=1}^K \lambda_k \bigg( 1 - \sum_{l=1}^K A_{s_k, s_l} \bigg)
++ \sum_{k=1}^K \mu_k \bigg( 1 - \sum_{w=1}^W B_{s_k, v_w} \bigg)
+\notag \\ &
+= 
+\sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{k=1}^K \sum_{l=1}^K \sum_{t=1}^T 
+\mathbbm{1}( z_{t-1} = s_k \wedge z_t = s_l ) \ln A_{s_k, s_l}
+\notag \\ & \mbox{ \ \ }
++ \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{k=1}^K \sum_{w=1}^W \sum_{t=1}^T 
+\mathbbm{1}( z_t = s_k \wedge x_t = v_w ) \ln B_{z_t,x_t}
+\notag \\ & \mbox{ \ \ }
++ \sum_{k=1}^K \lambda_k \bigg( 1 - \sum_{l=1}^K A_{s_k, s_l} \bigg)
++ \sum_{k=1}^K \mu_k \bigg( 1 - \sum_{w=1}^W B_{s_k, v_w} \bigg)
+\end{align}
+\end{frame}
+
+
+\begin{frame}
+\FontMath
+\begin{align}
+\frac{\partial \mathcal{L}(A, B, \lambda, \mu) }{\partial A_{s_k, s_l}}
+= \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_{t-1} = s_k \wedge z_t = s_l ) A_{s_k, s_l}
+- \lambda_k
+\end{align}
+\end{frame}
+
 
 
 \end{document}

@@ -271,27 +271,6 @@ p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 \end{itemize}
 \end{frame}
 
-%\begin{frame}
-%\FontMath
-%$N=5, K=3$とすると
-%\begin{align}
-%& \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(x_i , z_i) \bigg)
-%\notag \\ &
-%= \big( p(x_1, z_1=1) + p(x_1,z_1=2) + p(x_1,z_1=3) \big)
-%\notag \\ & \mbox{ \  }
-%\times \big( p(x_2, z_1=1) + p(x_2,z_1=2) + p(x_2,z_1=3) \big)
-%\notag \\ & \mbox{ \  }
-%\times \big( p(x_3, z_1=1) + p(x_3,z_1=2) + p(x_3,z_1=3) \big)
-%\notag \\ & \mbox{ \  }
-%\times \big( p(x_4, z_1=1) + p(x_4,z_1=2) + p(x_4,z_1=3) \big)
-%\notag \\ & \mbox{ \  }
-%\times \big( p(x_5, z_1=1) + p(x_5,z_1=2) + p(x_5,z_1=3) \big)
-%\end{align}
-%括弧を外して展開すると、足し合わされる項の数は$K^N$個。
-%
-%$K$がそれほど大きな値でないとしても、データのサイズ$N$は、通常、大きな値なので…
-%\end{frame}
-
 
 \begin{frame}{教師なしの場合の観測データの対数尤度}
 \begin{itemize}
@@ -299,8 +278,9 @@ p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 \vspace{-.1in}
 \begin{align}
 & \ln p(\mathcal{X}) = \ln \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
-= \ln \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
+= \ln \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(x_i , z_i) \bigg)
 \notag \\ &
+= \ln \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
 = \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
 \notag \\ &
 = \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\Big( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \Big) \bigg] \bigg)
@@ -350,7 +330,7 @@ p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 \begin{frame}{観測データの対数尤度の下界}
 \begin{itemize}
 \item イェンセンの不等式を利用して$\ln p(\mathcal{X})$の下界を得たい
-\item そこで、各$x_i$について、$q_{i,1}, \ldots, q_{i,K}$という、$\sum_k q_{i,k}=1$を満たす変数を用意する
+\item そこで、各$x_i$について$\bm{q}_i \equiv (q_{i,1}, \ldots, q_{i,K})$という$\sum_k q_{i,k}=1$を満たす変数を用意すると
 \begin{align}
 & \ln p(\mathcal{X}) = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
 \notag \\ & = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K q_{i,k} \frac{p(z_i) p(x_i | z_i)}{q_{i,k}} \Big)
@@ -358,15 +338,19 @@ p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
 \end{align}
 \vspace{-.4in}
-\item この下界を$\ell(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})$と書くことにする
+\item この下界を$\mathcal{L}$と書くことにする
 \end{itemize}
 \end{frame}
 
 \begin{frame}{観測データの対数尤度の下界の最大化}
 \begin{itemize}
-\item そして、$\ln p(\mathcal{X})$の代わりに$\ell(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})$を最大化することで、
-パラメータを推定する
-\item 単変量正規分布の混合分布の場合
+\item $\ln p(\mathcal{X})$の代わりに$\mathcal{L}$を最大化することで、
+\begin{itemize}
+\item $\{ \bm{q}_i \} \equiv \{ \bm{q}_1, \ldots, \bm{q}_N \}$と、
+\item モデルパラメータ$\bm{\Theta} \equiv \{ \bm{\theta}, \{ \mu_k \}, \{ \sigma_k \} \}$とを、
+\end{itemize}
+\item[] 推定する。
+\item いま考えている単変量正規分布の混合分布の場合
 \begin{align}
 p(z_i=k) & = \theta_k \\
 p(x_i | z_i=k) & = \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp \bigg( - \frac{ ( x_i - \mu_k)^2 }{ 2\sigma_k^2 } \bigg)
@@ -378,9 +362,9 @@ p(x_i | z_i=k) & = \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp \bigg( - \frac{ ( x_i - 
 \begin{frame}
 \FontMath
 \begin{align}
-& L(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\}) 
+& L(\{ \bm{q}_i \},\bm{\theta},\{\mu_k\},\{\sigma_k\}) 
 \notag \\ &
-= \ell(\{q_{i,k}\},\bm{\theta},\{\mu_k\},\{\sigma_k\})
+= \mathcal{L}(\{ \bm{q}_i \},\bm{\theta},\{\mu_k\},\{\sigma_k\})
 + \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
 + \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
 \notag \\ &
@@ -543,6 +527,19 @@ $\ln p(x_i)$が最大化できているわけではない
 \end{frame}
 
 
+\begin{frame}{E stepで何をしているか}
+\begin{itemize}
+\item モデルのパラメータ$\bm{\Theta} \equiv \{ \bm{\theta}, \mu_1, \ldots, \mu_K, \sigma_1, \ldots, \sigma_K \}$の値を固定した状態で、
+対数尤度の下界$\mathcal{L}(\bm{\Theta})$を最大化する$q_i(z_i)$を求めているのが、E step
+\item パラメータ$\bm{\Theta}$の固定された値を$\bm{\Theta}_{\mbox{\scriptsize old}}$と書くことにする
+\item その最大化によって得られる答えは
+\begin{align}
+q_i(z_i) = p(z_i|x_i; \bm{\Theta}_{\mbox{\scriptsize old}})
+\end{align}
+\item つまり、モデルパラメータを固定したうえで、観測データを所与とする潜在変数の条件付き分布を求めている
+\end{itemize}
+\end{frame}
+
 
 \section{混合多項分布：教師なしの場合}
 
@@ -558,7 +555,7 @@ $\ln p(x_i)$が最大化できているわけではない
 \item $\bm{\phi}_k = (\phi_{k,1},\ldots,\phi_{k,W})$
 \item $\phi_{k,w}$は第$k$コンポーネントに属する文書での単語$\mbox{v}_w$の出現確率
 \end{itemize}
-\item $\ln p(\mathcal{X})$の代わりに$\ell(\{q_{i,k}\},\bm{\theta}, \{ \bm{\phi}_k \})$を最大化
+\item $\ln p(\mathcal{X})$の代わりに$\mathcal{L}(\{q_{i,k}\},\bm{\theta}, \{ \bm{\phi}_k \})$を最大化
 \item 多項分布の混合分布の場合
 \begin{align}
 p(z_i=k) & = \theta_k \\
@@ -573,7 +570,7 @@ p(\mathcal{D}_i | z_i=k) & = \frac{n_i!}{\prod_w c_{i,w}!} \prod_{w=1}^W \phi_{k
 \begin{align}
 & L(\{q_{i,k}\},\bm{\theta}, \{ \bm{\phi}_k \} ) 
 \notag \\ &
-= \ell(\{q_{i,k}\},\bm{\theta},\{ \bm{\phi}_k \})
+= \mathcal{L}(\{q_{i,k}\},\bm{\theta},\{ \bm{\phi}_k \})
 + \sum_{i=1}^N \lambda_i \bigg(1 - \sum_{k=1}^K q_{i,k}\bigg)
 + \lambda_0 \bigg( 1 - \sum_{k=1}^K \theta_k \bigg)
 + \sum_{k=1}^K \nu_k \bigg( 1 - \sum_{w=1}^W \phi_{k,w} \bigg)
