@@ -322,6 +322,11 @@ p(x|\mathcal{D}) = \int p(x, \tau|\mathcal{D}) d\tau
 = t_{2\alpha_N} ( x | \mu_N, \frac{\beta_N(\lambda_N + 1)}{\alpha_N\lambda_N} ) 
 \end{align}
 したがって、予測分布は、平均$\mu_N$、スケール$\frac{\beta_N(\lambda_N + 1)}{\alpha_N\lambda_N}$、自由度$2\alpha_N$の\textit{t} location-scale distributionである。
+
+但し、$\mu_N, \lambda_N, \alpha_N,\beta_N$は、元々の事前分布（正規ガンマ分布）の
+パラメータである$\mu_0, \lambda_0, \alpha, \beta$を使った式として書かれていることに注意されたい。
+
+つまり、$\mu_0, \lambda_0, \alpha, \beta$の値が定まってはじめて、予測分布のパラメータ（平均、スケール、自由度）の値も定まることに、注意されたい。
 \end{frame}
 
 \section{多項分布の場合}
@@ -340,20 +345,20 @@ p(x|\mathcal{D}) = \int p(x, \tau|\mathcal{D}) d\tau
 \item ディリクレ分布の確率密度関数は
 \begin{align}
 p(\bm{\phi}; \bm{\beta}) = \frac{\Gamma(\sum_{w=1}^W \beta_w)}{\prod_{w=1}^W \Gamma(\beta_w)}
-\prod_{w=1}^W \phi_W^{\beta_w - 1}
+\prod_{w=1}^W \phi_w^{\beta_w - 1}
 \end{align}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{共役事前分布としてのディリクレ分布}
 \begin{itemize}
-\item 正規ガンマ分布は共役事前分布
-\item つまり、事後分布も正規ガンマ分布となる
+\item ディリクレ分布は共役事前分布
+\item つまり、事後分布もディリクレ分布となる
 \item 事後分布$p(\bm{\phi}|\bm{x}; \bm{\beta})$は以下のように書ける
 \begin{align}
 p(\bm{\phi}|\bm{x}; \bm{\beta}) = 
 \frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
-\prod_{w=1}^W \phi_W^{c_w + \beta_w - 1}
+\prod_{w=1}^W \phi_w^{c_w + \beta_w - 1}
 \end{align}
 \begin{itemize}
 \item $c_w$は$w$番目の語彙が観測データ$\bm{x}$に出現する回数
@@ -382,16 +387,16 @@ p(\bm{x}_0|\bm{x};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\bm{x};\bm
 \begin{frame}
 \FontMath
 \begin{align}
-& p(\bm{x}_0|\bm{x};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\bm{x};\bm{\beta}) d\bm{\phi}
+p(\bm{x}_0|\bm{x};\bm{\beta}) & = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\bm{x};\bm{\beta}) d\bm{\phi}
 \notag \\ & =
 \int \bigg(
 \frac{n_0!}{\prod_{w=1}^W c_{0,w}!} \prod_{w=1}^W \phi_w^{c_{0,w}} \times
 \frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
-\prod_{w=1}^W \phi_W^{c_w + \beta_w - 1} \bigg) d\bm{\phi}
+\prod_{w=1}^W \phi_w^{c_w + \beta_w - 1} \bigg) d\bm{\phi}
 \notag \\ & =
 \frac{n_0!}{\prod_{w=1}^W c_{0,w}!}
 \frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
-\int \prod_{w=1}^W \phi_W^{c_w + c_{0,w} + \beta_w - 1} d\bm{\phi}
+\int \prod_{w=1}^W \phi_w^{c_w + c_{0,w} + \beta_w - 1} d\bm{\phi}
 \notag \\ & =
 \frac{n_0!}{\prod_{w=1}^W c_{0,w}!}
 \frac{\Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\prod_{w=1}^W \Gamma(c_w + \beta_w)}
@@ -401,12 +406,12 @@ p(\bm{x}_0|\bm{x};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\bm{x};\bm
 \frac{n_0! \Gamma(\sum_{w=1}^W (c_w + \beta_w))}{\Gamma( \sum_{w=1}^W (c_w + c_{0,w} + \beta_w) )}
 \prod_{w=1}^W
 \frac{\Gamma(c_w+c_{0,w}+\beta_w)}{c_{0,w}!\Gamma(c_w + \beta_w)}
-\notag \\ & =
-\frac{n_0 (n_0-1) \cdots 2 \cdot 1}{( n+n_0-1+\beta_\Sigma)( n+n_0-2+\beta_\Sigma) \cdots (n+1+\beta_\Sigma)(n + \beta_\Sigma)}
-\notag \\ & \mbox{ \ \ } \times
-\prod_{w=1}^W
-\frac{(c_w+c_{0,w}-1+\beta_w)(c_w+c_{0,w}-2+\beta_w)\cdots(c_w+1+\beta_w)(c_w+\beta_w) }
-{c_{0,w} (c_{0,w} - 1) \cdots 2 \cdot 1}
+%\notag \\ & =
+%\frac{n_0 (n_0-1) \cdots 2 \cdot 1}{( n+n_0-1+\beta_\Sigma)( n+n_0-2+\beta_\Sigma) \cdots (n+1+\beta_\Sigma)(n + \beta_\Sigma)}
+%\notag \\ & \mbox{ \ \ } \times
+%\prod_{w=1}^W
+%\frac{(c_w+c_{0,w}-1+\beta_w)(c_w+c_{0,w}-2+\beta_w)\cdots(c_w+1+\beta_w)(c_w+\beta_w) }
+%{c_{0,w} (c_{0,w} - 1) \cdots 2 \cdot 1}
 \end{align}
 \end{frame}
 
@@ -416,7 +421,7 @@ p(\bm{x}_0|\bm{x};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\bm{x};\bm
 $\bm{\alpha} = (\alpha_1, \ldots, \alpha_K)$ s.t. $\alpha_k > 0$ for $1 \leq k \leq K$
 \item 確率密度関数は
 \begin{align}
-p(\bm{x} | \bm{\alpha}) = \frac{\Gamma(\sum_k \alpha_k)}{\prod_k \Gamma(\alpha_k)}
+p(\bm{x} ; \bm{\alpha}) = \frac{\Gamma(\sum_k \alpha_k)}{\prod_k \Gamma(\alpha_k)}
 \frac{\prod_k \Gamma(\alpha_k + n_k)}{\Gamma(\sum_k \alpha_k + n_k)}
 \end{align}
 \vspace{-.1in}
@@ -425,13 +430,13 @@ p(\bm{x} | \bm{\alpha}) = \frac{\Gamma(\sum_k \alpha_k)}{\prod_k \Gamma(\alpha_k
 \end{itemize}
 \item 導出
 \begin{align}
-p(\bm{x} | \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} | \bm{\alpha}) d\bm{\theta}
+p(\bm{x} ; \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} ; \bm{\alpha}) d\bm{\theta}
 \label{eq:DirMulti}
 \end{align}
 \vspace{-.2in}
 \begin{itemize}
 \item $p(\bm{x}|\bm{\theta})$はパラメータが$\bm{\theta}$の多項分布の確率質量関数
-\item $p(\bm{\theta} | \bm{\alpha})$はパラメータが$\bm{\alpha}$のディリクレ分布の確率密度関数
+\item $p(\bm{\theta} ; \bm{\alpha})$はパラメータが$\bm{\alpha}$のディリクレ分布の確率密度関数
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -440,12 +445,10 @@ p(\bm{x} | \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} | \bm{\alpha}
 \begin{itemize}
 \item ディリクレ多項分布（Polya分布）は式\eqref{eq:DirMulti}で導出される
 \begin{align}
-p(\bm{x} | \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} | \bm{\alpha}) d\bm{\theta}
+p(\bm{x} ; \bm{\alpha}) = \int p(\bm{x}|\bm{\theta}) p(\bm{\theta} ; \bm{\alpha}) d\bm{\theta}
 \notag
 \end{align}
-\item ディリクレ多項分布（Polya分布）のパラメータ$\bm{\alpha}$の値を、
-ディリクレ事後分布のパラメータの値で置き換えたものが、
-そのディリクレ事後分布に対応する予測分布（cf. 式\eqref{eq:DirMulti_pred}）
+\item 式\eqref{eq:DirMulti_pred}も、ディリクレ多項分布を求める積分計算とみなすことができる
 \begin{align}
 p(\bm{x}_0|\bm{x};\bm{\beta}) = \int p(\bm{x}_0|\bm{\phi})p(\bm{\phi}|\bm{x};\bm{\beta}) d\bm{\phi}
 \notag
