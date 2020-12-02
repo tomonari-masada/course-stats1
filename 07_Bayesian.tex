@@ -127,7 +127,7 @@ p(\mu, \tau ; \mu_0, \lambda_0, \alpha, \beta)
 \end{itemize}
 \end{frame}
 
-\begin{frame}{共役事前分布としての正規ガンマ分布}
+\begin{frame}{共役事前分布としての正規ガンマ分布 (1/2)}
 \begin{itemize}
 \item 正規ガンマ分布は共役事前分布
 \item よって事後分布も正規ガンマ分布となる
@@ -146,6 +146,32 @@ p(\mu, \tau ; \mu_0, \lambda_0, \alpha, \beta)
 \end{align}
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{共役事前分布としての正規ガンマ分布 (2/2)}
+\begin{itemize}
+\item $N$を観測データの個数、$\bar{x} = \frac{\sum_{i=1}^N x_i}{N}$、$s=\frac{\sum_{i=1}^N (x_i - \bar{x})^2}{N}$とする。
+\begin{itemize}
+\item[cf.] \href{https://en.wikipedia.org/wiki/Normal-gamma_distribution}{https://en.wikipedia.org/wiki/Normal-gamma\_distribution} 
+\end{itemize}
+\end{itemize}
+\begin{table}[t]
+\caption{事前分布と事後分布とでのパラメータの値の対比}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+事前分布 & 事後分布 \\ \hline
+$\mu_0$ & $\frac{ \lambda_0 \mu_0 + N\bar{x} }{ \lambda_0 + N }$ \\ 
+$\lambda_0$ & $\lambda_0 + N$ \\
+$\alpha$ & $\alpha + \frac{N}{2}$ \\
+$\beta$ & $\beta + \frac{1}{2} \big( Ns + \frac{ \lambda_0 N (\bar{x} - \mu_0)^2 }{ \lambda_0 + N} \big)$ \\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+\end{frame}
+
 
 \begin{frame}{予測分布}
 \begin{itemize}
@@ -177,6 +203,17 @@ p(t;\nu) = \frac{\Gamma((\nu+1)/2)}{\sqrt{\nu\pi}\Gamma(\nu/2)}(1 + t^2/\nu)^{-(
 \end{align}
 \end{itemize}
 \end{frame}
+
+\begin{frame}{}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=.09]{Student_t_pdf.jpg}
+\caption{\href{https://en.wikipedia.org/wiki/Student's_t-distribution}{https://en.wikipedia.org/wiki/Student's\_t-distribution}}
+\label{}
+\end{center}
+\end{figure}
+\end{frame}
+
 
 \begin{frame}{\textit{t} location-scale distribution}
 \begin{itemize}

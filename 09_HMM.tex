@@ -288,7 +288,7 @@ p(\bm{x}; A,B) = \sum_{k=1}^K p(\bm{x}_{1:T}, z_T=s_k; A,B) = \sum_{k=1}^K \alph
 \notag \\ &
 = \sum_{z_{t-1} \in \mathcal{S}} p(\bm{x}_{1:t-1}, z_{t-1}) p(z_t=s_k|\bm{x}_{1:t-1}, z_{t-1}) p(x_t|z_t=s_k,\bm{x}_{1:t-1}, z_{t-1})
 \label{eq:alpha_t_1} \\ &
-= \sum_{z_{t-1} \in \mathcal{S}} p(\bm{x}_{1:t}, z_{t-1}) p(z_t=s_k|z_{t-1}) p(x_t|z_t=s_k)
+= \sum_{z_{t-1} \in \mathcal{S}} p(\bm{x}_{1:t-1}, z_{t-1}) p(z_t=s_k|z_{t-1}) p(x_t|z_t=s_k)
 = \sum_{l=1}^K \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k, x_t}
 \label{eq:alpha_t_2} 
 \end{align}
@@ -399,24 +399,32 @@ $z_t$が所与のとき$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立で�
 
 \begin{frame}{観測データから隠れ状態を求める(decoding)}
 \begin{itemize}
-\item 特定の観測データ$\bm{x}_{1:T}$に対して、一番あり得そうmost likelyな隠れ状態の列$\bm{z}_{1:T}$を見つけたい
+\item 観測データ$\bm{x}_{1:T}$に対して、一番ありえそうmost likelyな隠れ状態の列$\bm{z}_{1:T}$を見つけたい
 \begin{itemize}
 \item 潜在変数を含む確率モデルにおいて、与えられた観測データに対して一番あり得そうな潜在変数の値を求めることをdecodingと呼ぶ
 \end{itemize}
 \item そこで、$p(\bm{z}_{1:T}|\bm{x}_{1:T}; A,B)$を最大にする各$z_t$の値を求める
 \begin{itemize}
-\item パラメータ$A, B$の値は与えられていると仮定する
+\item パラメータ$A, B$の値は分かっていると仮定する
 \end{itemize}
-\item $\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}|\bm{x}_{1:T}; A,B) = 
-\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}, \bm{x}_{1:T}; A,B)$が成り立つことに注意
-\item 以下、Viterbiアルゴリズムで$\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}, \bm{x}_{1:T}; A,B)$を求める
+\item 下記が成り立つことに注意
+\begin{align}
+\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}|\bm{x}_{1:T}; A,B) = 
+\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}, \bm{x}_{1:T}; A,B)
+\notag
+\end{align}
+\item 以下、$\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}, \bm{x}_{1:T}; A,B)$を求める
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}{Viterbiアルゴリズム}
 \begin{itemize}
-\item 実は、forward procedureとほとんど同じ計算をする
+\item $\argmax_{\bm{z}_{1:T}} p(\bm{z}_{1:T}, \bm{x}_{1:T}; A,B)$を求めるためのアルゴリズム
+\begin{itemize}
+\item これも動的計画法
+\end{itemize}
+\item 実はforward procedureとほとんど同じ計算をする
 \item 式~\eqref{eq:alpha_1}以降に現れる隠れ状態に関する和$\sum_{z_{t-1} \in \mathcal{S}}$を、
 $\max_{z_{t-1} \in \mathcal{S}}$で置き換えて、計算を進めればいいだけ
 \item ただし、そのとき、同時に$\argmax_{z_{t-1} \in \mathcal{S}}$も記録しておく
@@ -472,10 +480,10 @@ $c_t(k)$は、$z_t=s_k$とするとき、一時点前の状態として何を選
 \end{itemize}
 \item termination
 \begin{itemize}
-\item $v_{\bot} = \max_k v_T(k)$
-\item $c_{\bot} = \argmax_k v_T(k)$
+\item $v_{\mbox{\scriptsize term}} = \max_k v_T(k)$
+\item $c_{\mbox{\scriptsize term}} = \argmax_k v_T(k)$
 \end{itemize}
-\item $c_{\bot}$からスタートしてさかのぼれば、隠れ状態の列が得られる
+\item $c_{\mbox{\scriptsize term}}$からスタートしてさかのぼれば、隠れ状態の列が得られる
 \end{itemize}
 \end{frame}
 
@@ -488,8 +496,8 @@ $c_t(k)$は、$z_t=s_k$とするとき、一時点前の状態として何を選
 
 \begin{frame}{観測データからパラメータの値を得る（推定）}
 \begin{itemize}
-\item 観測データの尤度を計算するにしても、与えられた観測データに対して最良の隠れ状態列を得るにしても、
-いずれにしても、まずパラメータ$A, B$の値を求めておかないといけない
+\item 観測データの尤度を計算するにしても、観測データ列に対して最良の隠れ状態列を得るにしても、
+パラメータ$A, B$がすでに分かっている必要がある
 \item そこで、混合分布の場合と同様、EMアルゴリズムにより、$A$と$B$の値を推定することにする
 \end{itemize}
 \end{frame}
@@ -538,31 +546,32 @@ A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1
 
 \begin{frame}{HMMのEMアルゴリズムのE step}
 \begin{itemize}
-\item E stepでは、モデルパラメータを固定したうえで、観測データを所与とする潜在変数の条件付き確率分布を求めるのだった（cf. 混合分布の講義）
-\item ということは、いま考えているHMMの場合、$A$と$B$を固定したうえで$p(\bm{z}_{1:T} | \bm{x}_{1:T})$を計算して、
+\item E stepでは、モデルパラメータを固定したうえで、観測データが所与のときの潜在変数の条件付き確率分布を求めるのだった（cf. 混合分布の講義）
+\item ということは、いま考えているHMMの場合、$A$と$B$を固定したうえで$p(\bm{z}_{1:T} | \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})$を計算して、
 それを$q(\bm{z}_{1:T})$の解とするのが、E stepとなる
-\item 以下、 M stepの説明をするが、そこでは$q(\bm{z}_{1:T})$を$p(\bm{z}_{1:T} | \bm{x}_{1:T})=\frac{p(\bm{z}_{1:T} , \bm{x}_{1:T})}{p(\bm{x}_{1:T})}$で置き換えて計算を進める
+\item 以下、 M stepの説明をするが、そこでは$q(\bm{z}_{1:T})$を$p(\bm{z}_{1:T} | \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})=\frac{p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})}{p(\bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})}$で置き換えて計算を進める
 \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{HMMのEMアルゴリズムのM step (1/3)}
 \FontMath
+最大化する関数は
 \begin{align}
 \mathcal{L}(A, B, \lambda, \mu)
 & 
 = \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T \big( \ln B_{z_t,x_t} + \ln A_{z_{t-1},z_t} \big)
 \notag \\ & \mbox{ \ \ }
-+ \sum_{k=1}^K \lambda_k \bigg( 1 - \sum_{l=1}^K A_{s_k, s_l} \bigg)
++ \sum_{l=1}^K \lambda_l \bigg( 1 - \sum_{k=1}^K A_{s_l, s_k} \bigg)
 + \sum_{k=1}^K \mu_k \bigg( 1 - \sum_{w=1}^W B_{s_k, v_w} \bigg)
 \notag \\ &
 = 
-\sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{k=1}^K \sum_{l=1}^K \sum_{t=1}^T 
-\mathbbm{1}( z_{t-1} = s_k \wedge z_t = s_l ) \ln A_{s_k, s_l}
+\sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{l=1}^K \sum_{k=1}^K \sum_{t=1}^T 
+\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) \ln A_{s_l, s_k}
 \notag \\ & \mbox{ \ \ }
 + \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{k=1}^K \sum_{w=1}^W \sum_{t=1}^T 
 \mathbbm{1}( z_t = s_k \wedge x_t = v_w ) \ln B_{z_t,x_t}
 \notag \\ & \mbox{ \ \ }
-+ \sum_{k=1}^K \lambda_k \bigg( 1 - \sum_{l=1}^K A_{s_k, s_l} \bigg)
++ \sum_{l=1}^K \lambda_l \bigg( 1 - \sum_{k=1}^K A_{s_l, s_k} \bigg)
 + \sum_{k=1}^K \mu_k \bigg( 1 - \sum_{w=1}^W B_{s_k, v_w} \bigg)
 \end{align}
 \end{frame}
@@ -571,13 +580,164 @@ A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1
 \begin{frame}
 \FontMath
 \begin{align}
-\frac{\partial \mathcal{L}(A, B, \lambda, \mu) }{\partial A_{s_k, s_l}}
-= \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
-\mathbbm{1}( z_{t-1} = s_k \wedge z_t = s_l ) A_{s_k, s_l}
-- \lambda_k
+\frac{\partial \mathcal{L}(A, B, \lambda, \mu) }{\partial A_{s_l, s_k}}
+& = \frac{ \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) }{A_{s_l, s_k}}
+- \lambda_l
+\\
+\therefore A_{s_l, s_k} & = \frac{ \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) }
+{ \sum_{k=1}^K \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T \mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) }
+\end{align}
+\begin{align}
+& \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k )
+=
+\sum_{t=1}^T \sum_{\bm{z}_{1:T}}  
+\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k )q(\bm{z}_{1:T})
+\notag \\ &
+= 
+\frac{1}{p(\bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})}
+\sum_{t=1}^T \sum_{\bm{z}_{1:T}}  
+\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) 
+p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+\end{align}
+$\sum_{\bm{z}_{1:T}}\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) 
+p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})$
+の部分、
+
+つまり$p(z_{t-1}=s_l, z_t=s_k, \bm{x}_{1:T})$は、
+$\alpha_{t-1}(l) \equiv p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l; A, B)$と、
+
+$A_{s_l,s_k}$と$B_{s_k,x_t}$と、
+$p(x_{t+1},\ldots,x_T|z_t=s_k;A,B)$とが分かれば計算できる（次のスライド）。
+
+この最後の値を$\beta_t(k) \equiv p(x_{t+1},\ldots,x_T|z_t=s_k;A,B)$とおく。
+\end{frame}
+
+\begin{frame}{}
+\FontMath
+下の式変形で、一つ目の等号は、条件付き確率の定義を使っただけ。
+
+二つ目の等号は、隠れマルコフモデルにおいて仮定していることに基づく。
+\begin{align}
+p(z_{t-1}=s_l, z_t=s_k, \bm{x}_{1:T})
+ &
+= p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l) 
+\notag \\ & \mbox{ \ } \times
+p(z_t=s_k | x_1,\ldots, x_{t-1}, z_{t-1}=s_l)
+\notag \\ & \mbox{ \ } \times
+p(x_t| x_1,\ldots, x_{t-1}, z_{t-1}=s_l, z_t=s_k )
+\notag \\ & \mbox{ \ } \times
+p(x_{t+1}, \ldots, x_T | x_1,\ldots, x_{t-1}, x_t, z_{t-1}=s_l, z_t=s_k)
+\notag \\ &
+= p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l) p(z_t=s_k | z_{t-1}=s_l)
+p(x_t| z_t=s_k )
+\notag \\ & \mbox{ \ } \times
+p(x_{t+1}, \ldots, x_T | z_t=s_k)
+\notag \\ &
+= \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \beta_t(k)
+\end{align}
+ただし、$t=1$の場合は別に扱う。
+$l\neq 0$のときは$p(z_0=s_l, z_t=s_k, \bm{x}_{1:T})=0$で、
+$l = 0$のときは$p(z_0=s_l, z_t=s_k, \bm{x}_{1:T})=A_{s_0,s_k} B_{s_k,x_t} \beta_t(k)$となる。
+
+\
+
+$\beta_t(k)$の求め方は次のスライド以降で説明する。
+\end{frame}
+
+\begin{frame}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=.38]{HMM_EM.jpg}
+\caption{パラメータ$A$を求める計算の概念図}
+\label{fig:HMM_A}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Backward procedure}
+\FontMath
+$\beta_t(k)$は、動的計画法の一種であるbackward procedureによって、効率的に計算できる
+\begin{itemize}
+\item[cf.] \href{https://web.stanford.edu/~jurafsky/slp3/A.pdf}{https://web.stanford.edu/\~{}jurafsky/slp3/A.pdf}
+\end{itemize}
+\begin{align}
+\beta_{T-1}(k) & = p(x_T|z_{T-1}=s_k) = \sum_{z_T \in \mathcal{S}} p(z_T|z_{T-1}=s_k)p(x_T|z_T)
+= \sum_{l=1}^K A_{s_k, s_l} B_{s_l, x_T}
+\\
+\beta_{T-2}(k) & = p(x_{T-1},x_T|z_{T-2}=s_k)
+= \sum_{z_{T-1} \in \mathcal{S}} p(z_{T-1}|z_{T-2}=s_k)p(x_{T-1}|z_{T-1})p(x_T|z_{T-1})
+\notag \\ &
+= \sum_{l=1}^K A_{s_k, s_l} B_{s_l,x_{T-1}} \beta_{T-1}(l)
+\end{align}
+同様に考えて
+\begin{align}
+\beta_t(k) = \sum_{l=1}^K A_{s_k, s_l} B_{s_l, x_{t+1}} \beta_{t+1}(l)
 \end{align}
 \end{frame}
 
+\begin{frame}{Forward-backward algorithm}
+\begin{itemize}
+\item 隠れマルコフモデルについて、$\alpha_t(k)$と$\beta_t(k)$を上述の方法で求めるアルゴリズムを
+forward-backwardアルゴリズムと呼ぶ
+\begin{itemize}
+\item $\alpha_t(k)$がforwardに、$\beta_t(k)$がbackwardに、それぞれ対応
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{HMMのEMアルゴリズムのM step (2/3)}
+\FontMath
+$\sum_{\bm{z}_{1:T}}\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) 
+p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+= \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \beta_t(k)$より
+\begin{align}
+A_{s_l, s_k} & \propto \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \beta_t(k)
+\\
+\therefore A_{s_l, s_k} & = 
+\frac{ \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \beta_t(k) }
+{ \sum_{k=1}^K \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \beta_t(k) }
+\end{align}
+次は$B_{s_k,v_w}$を求める。
+\begin{align}
+\frac{\partial \mathcal{L}(A, B, \lambda, \mu) }{\partial B_{s_k, v_w}}
+& = 
+\frac{ \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_t = s_k \wedge x_t = v_w ) }{ B_{z_t,x_t} }
+- \mu_k
+\end{align}
+\begin{align}
+\therefore B_{s_k, v_w} = \frac{
+\sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_t = s_k \wedge x_t = v_w ) }{
+\sum_{w=1}^W \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_t = s_k \wedge x_t = v_w ) }
+\end{align}
+\end{frame}
+
+\begin{frame}
+\FontMath
+\begin{align}
+& \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_t = s_k \wedge x_t = v_w )
+= \sum_{t=1}^T \sum_{\bm{z}_{1:T}}   
+\mathbbm{1}( z_t = s_k \wedge x_t = v_w ) q(\bm{z}_{1:T})
+\notag \\ &
+= 
+\frac{1}{p(\bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})}
+\sum_{t=1}^T \sum_{\bm{z}_{1:T}}  
+\mathbbm{1}( z_t = s_k \wedge x_t = v_w )
+p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+\end{align}
+\begin{align}
+\sum_{\bm{z}_{1:T}}  
+\mathbbm{1}( z_t = s_k \wedge x_t = v_w )
+p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+= p(z_t = s_k, \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+\end{align}
+\end{frame}
 
 
 \end{document}
