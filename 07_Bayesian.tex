@@ -176,19 +176,24 @@ $\beta$ & $\beta + \frac{1}{2} \big( Ns + \frac{ \lambda_0 N (\bar{x} - \mu_0)^2
 \begin{frame}{正規ガンマ事後分布に対応する予測分布}
 \begin{itemize}
 \item 上記の設定のもとでの予測分布$p(x | \mathcal{D})$は
-$p(x|\mathcal{D}) = \int p(x|\mu,\tau)p(\mu,\tau|\mathcal{D}) d\mu d\tau$によって求められる
-\item 事後分布は、$p(\mu,\tau|\mathcal{D})=p(\mu|\tau,\mathcal{D})p(\tau|\mathcal{D})$と、正規分布とガンマ分布の積で書ける（正規ガンマ分布だから）。よって
+\vspace{-.1in}
 \begin{align}
-p(x|\mathcal{D}) = \int p(x|\mu,\tau)p(\mu|\tau,\mathcal{D})p(\tau|\mathcal{D}) d\mu d\tau
+p(x|\mathcal{D};\mu_0,\lambda_0,\alpha,\beta) = \int p(x|\mu,\tau)
+p(\mu,\tau|\mathcal{D};\mu_0,\lambda_0,\alpha,\beta) d\mu d\tau
+\notag
 \end{align}
 \vspace{-.2in}
 \begin{itemize}
-\item $p(x|\mu,\tau) \propto \exp[ - \frac{\tau}{2} (x - \mu)^2 ]$
-\item $p(\mu|\tau,\mathcal{D}) \propto \exp [ - \frac{\tau( \lambda_0 + N )}{2}  ( \mu - \frac{ \lambda_0 \mu_0 + N\bar{x} }{ \lambda_0 + N } )^2 ]$
-\item $p(\tau|\mathcal{D}) \propto \tau^{\alpha + \frac{N}{2} - 1}
-\exp [ - \tau ( \beta + \frac{Ns}{2} + \frac{ \lambda_0 N (\bar{x} - \mu_0)^2 }{ 2( \lambda_0 + N ) } ) ]$
+\item 事後分布は$p(\mu,\tau|\mathcal{D})=p(\mu|\tau,\mathcal{D};\mu_0,\lambda_)p(\tau|\mathcal{D};\mu_0,\lambda_0,\alpha,\beta)$と正規分布とガンマ分布の積で書ける
+\begin{align}
+p(x|\mu,\tau) & \propto \exp \Big( - \frac{\tau(x - \mu)^2}{2}  \Big) \notag \\
+p(\mu|\tau,\mathcal{D};\mu_0,\lambda_0) & \propto \exp \Big[ - \frac{\tau( \lambda_0 + N )}{2}  \Big( \mu - \frac{ \lambda_0 \mu_0 + N\bar{x} }{ \lambda_0 + N } \Big)^2 \Big] \notag \\
+p(\tau|\mathcal{D};\mu_0,\lambda_0,\alpha,\beta) & \propto \tau^{\alpha + \frac{N}{2} - 1}
+\exp \Big[ - \tau \Big\{ \beta + \frac{Ns}{2} + \frac{ \lambda_0 N (\bar{x} - \mu_0)^2 }{ 2( \lambda_0 + N ) } \Big\} \Big]
+\notag
+\end{align}
 \end{itemize}
-\item この予測分布がどういう分布になるかを、以下で示す
+\item 予測分布$p(x|\mathcal{D};\mu_0,\lambda_0,\alpha,\beta)$はどういう分布になるか？
 \end{itemize}
 \end{frame}
 
@@ -207,7 +212,8 @@ p(t;\nu) = \frac{\Gamma((\nu+1)/2)}{\sqrt{\nu\pi}\Gamma(\nu/2)}(1 + t^2/\nu)^{-(
 \begin{frame}{}
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[scale=.09]{Student_t_pdf.jpg}
+\includegraphics[scale=.093]{Student_t_pdf.jpg}
+\vspace{-.1in}
 \caption{\href{https://en.wikipedia.org/wiki/Student's_t-distribution}{https://en.wikipedia.org/wiki/Student's\_t-distribution}}
 \label{}
 \end{center}
@@ -226,7 +232,7 @@ p(x;\mu,\sigma^2) =\frac{\Gamma((\nu+1)/2)}{\sigma\sqrt{\nu\pi}\Gamma(\nu/2)} \b
 \item 英語版Wikipedia「\href{https://en.wikipedia.org/wiki/Student's_t-distribution}{\textit{t}-分布}」の「\href{https://en.wikipedia.org/wiki/Student's_t-distribution\#Bayesian_inference}{4.2 Bayesian Inference}」を参照
 \item MATLABの\href{https://www.mathworks.com/help/stats/prob.tlocationscaledistribution.html}{tLocationScaleDistributionの項}も参照
 \end{itemize}
-\item 以下では、予測分布がこの\textit{t} location-scale distributionになることを示す
+\item 以下、予測分布$p(x|\mathcal{D};\mu_0,\lambda_0,\alpha,\beta)$が\textit{t} location-scale分布になることを示す
 \end{itemize}
 \end{frame}
 
