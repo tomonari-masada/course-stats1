@@ -251,6 +251,7 @@ forward procedureによって、効率的に計算できる
 \item すると、データ尤度を以下のように表すことができる
 \begin{align}
 p(\bm{x}; A,B) = \sum_{k=1}^K p(\bm{x}_{1:T}, z_T=s_k; A,B) = \sum_{k=1}^K \alpha_T(k)
+\label{eq:data_LH}
 \end{align}
 \end{itemize}
 \end{frame}
@@ -587,7 +588,7 @@ A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1
 \\
 \therefore A_{s_l, s_k} & = \frac{ \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
 \mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) }
-{ \sum_{k=1}^K \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T \mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) }
+{ \sum_{k^\prime=1}^K \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T \mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_{k^\prime} ) }
 \end{align}
 \begin{align}
 & \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
@@ -601,18 +602,17 @@ A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1
 \sum_{t=1}^T \sum_{\bm{z}_{1:T}}  
 \mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) 
 p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+\notag \\ &
+= 
+\frac{1}{p(\bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})}
+\sum_{t=1}^T p(z_{t-1}=s_l, z_t=s_k, \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
 \end{align}
-$\sum_{\bm{z}_{1:T}}\mathbbm{1}( z_{t-1} = s_l \wedge z_t = s_k ) 
-p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})$
-の部分、
-
-つまり$p(z_{t-1}=s_l, z_t=s_k, \bm{x}_{1:T})$は、
-$\alpha_{t-1}(l) \equiv p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l; A, B)$と、
-
-$A_{s_l,s_k}$と$B_{s_k,x_t}$と、
+$p(z_{t-1}=s_l, z_t=s_k, \bm{x}_{1:T}; A, B)$は、
+$\alpha_{t-1}(l) \equiv p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l; A, B)$と
+$A_{s_l,s_k}$と$B_{s_k,x_t}$と
 $p(x_{t+1},\ldots,x_T|z_t=s_k;A,B)$とが分かれば計算できる（次のスライド）。
 
-この最後の値を$\beta_t(k) \equiv p(x_{t+1},\ldots,x_T|z_t=s_k;A,B)$とおく。
+$\beta_t(k) \equiv p(x_{t+1},\ldots,x_T|z_t=s_k;A,B)$とおく。
 \end{frame}
 
 \begin{frame}{}
@@ -620,29 +620,30 @@ $p(x_{t+1},\ldots,x_T|z_t=s_k;A,B)$とが分かれば計算できる（次のス
 下の式変形で、一つ目の等号は、条件付き確率の定義を使っただけ。
 
 二つ目の等号は、隠れマルコフモデルにおいて仮定していることに基づく。
+\vspace{-.1in}
 \begin{align}
-p(z_{t-1}=s_l, z_t=s_k, \bm{x}_{1:T})
- &
-= p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l) 
-\notag \\ & \mbox{ \ } \times
-p(z_t=s_k | x_1,\ldots, x_{t-1}, z_{t-1}=s_l)
-\notag \\ & \mbox{ \ } \times
-p(x_t| x_1,\ldots, x_{t-1}, z_{t-1}=s_l, z_t=s_k )
-\notag \\ & \mbox{ \ } \times
-p(x_{t+1}, \ldots, x_T | x_1,\ldots, x_{t-1}, x_t, z_{t-1}=s_l, z_t=s_k)
+& p(z_{t-1}=s_l, z_t=s_k, \bm{x}_{1:T};A,B)
 \notag \\ &
-= p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l) p(z_t=s_k | z_{t-1}=s_l)
-p(x_t| z_t=s_k )
+= p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l;A,B)
 \notag \\ & \mbox{ \ } \times
-p(x_{t+1}, \ldots, x_T | z_t=s_k)
+p(z_t=s_k | x_1,\ldots, x_{t-1}, z_{t-1}=s_l;A,B)
+\notag \\ & \mbox{ \ } \times
+p(x_t| x_1,\ldots, x_{t-1}, z_{t-1}=s_l, z_t=s_k;A,B )
+\notag \\ & \mbox{ \ } \times
+p(x_{t+1}, \ldots, x_T | x_1,\ldots, x_{t-1}, x_t, z_{t-1}=s_l, z_t=s_k;A,B)
+\notag \\ &
+= p(x_1,\ldots, x_{t-1}, z_{t-1}=s_l;A,B) 
+\notag \\ & \mbox{ \ } \times
+p(z_t=s_k | z_{t-1}=s_l;A)
+p(x_t| z_t=s_k;B)
+\notag \\ & \mbox{ \ } \times
+p(x_{t+1}, \ldots, x_T | z_t=s_k;A,B)
 \notag \\ &
 = \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \beta_t(k)
 \end{align}
-ただし、$t=1$の場合は別に扱う。
-$l\neq 0$のときは$p(z_0=s_l, z_t=s_k, \bm{x}_{1:T})=0$で、
-$l = 0$のときは$p(z_0=s_l, z_t=s_k, \bm{x}_{1:T})=A_{s_0,s_k} B_{s_k,x_t} \beta_t(k)$となる。
-
-\
+ただし、$t=1$の場合は別扱い。
+$l\neq 0$のときは$p(z_0=s_l, z_t=s_k, \bm{x}_{1:T};A,B)=0$で、
+$l = 0$のときは$p(z_0=s_l, z_t=s_k, \bm{x}_{1:T};A,B)=A_{s_0,s_k} B_{s_k,x_t} \beta_t(k)$となる。
 
 $\beta_t(k)$の求め方は次のスライド以降で説明する。
 \end{frame}
@@ -663,11 +664,13 @@ $\beta_t(k)$は、動的計画法の一種であるbackward procedureによっ�
 \begin{itemize}
 \item[cf.] \href{https://web.stanford.edu/~jurafsky/slp3/A.pdf}{https://web.stanford.edu/\~{}jurafsky/slp3/A.pdf}
 \end{itemize}
+\vspace{-.1in}
 \begin{align}
 \beta_{T-1}(k) & = p(x_T|z_{T-1}=s_k) = \sum_{z_T \in \mathcal{S}} p(z_T|z_{T-1}=s_k)p(x_T|z_T)
 = \sum_{l=1}^K A_{s_k, s_l} B_{s_l, x_T}
 \\
 \beta_{T-2}(k) & = p(x_{T-1},x_T|z_{T-2}=s_k)
+\notag \\ &
 = \sum_{z_{T-1} \in \mathcal{S}} p(z_{T-1}|z_{T-2}=s_k)p(x_{T-1}|z_{T-1})p(x_T|z_{T-1})
 \notag \\ &
 = \sum_{l=1}^K A_{s_k, s_l} B_{s_l,x_{T-1}} \beta_{T-1}(l)
@@ -682,9 +685,12 @@ $\beta_t(k)$は、動的計画法の一種であるbackward procedureによっ�
 \begin{itemize}
 \item 隠れマルコフモデルについて、$\alpha_t(k)$と$\beta_t(k)$を上述の方法で求めるアルゴリズムを
 forward-backwardアルゴリズムと呼ぶ
+\item[1.] $\alpha_t(k)$を求めるのがforward procedure
 \begin{itemize}
-\item $\alpha_t(k)$がforwardに、$\beta_t(k)$がbackwardに、それぞれ対応
+\item $A,B$が既知なら、forward procedureだけでデータ尤度$p(\bm{x};A,B)$を求めることができた
+（cf. 式\eqref{eq:data_LH}）
 \end{itemize}
+\item[2.] $\beta_t(k)$を求めるのがbackward procedure
 \end{itemize}
 \end{frame}
 
@@ -698,7 +704,7 @@ A_{s_l, s_k} & \propto \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \bet
 \\
 \therefore A_{s_l, s_k} & = 
 \frac{ \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \beta_t(k) }
-{ \sum_{k=1}^K \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \beta_t(k) }
+{ \sum_{k^\prime=1}^K \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_{k^\prime}} B_{s_{k^\prime},x_t} \beta_t(k^\prime) }
 \end{align}
 次は$B_{s_k,v_w}$を求める。
 \begin{align}
@@ -709,11 +715,11 @@ A_{s_l, s_k} & \propto \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \bet
 - \mu_k
 \end{align}
 \begin{align}
-\therefore B_{s_k, v_w} = \frac{
+B_{s_k, v_w} = \frac{
 \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
 \mathbbm{1}( z_t = s_k \wedge x_t = v_w ) }{
-\sum_{w=1}^W \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
-\mathbbm{1}( z_t = s_k \wedge x_t = v_w ) }
+\sum_{w^\prime=1}^W \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
+\mathbbm{1}( z_t = s_k \wedge x_t = v_{w^\prime} ) }
 \end{align}
 \end{frame}
 
@@ -730,12 +736,31 @@ A_{s_l, s_k} & \propto \sum_{t=1}^T \alpha_{t-1}(l) A_{s_l,s_k} B_{s_k,x_t} \bet
 \sum_{t=1}^T \sum_{\bm{z}_{1:T}}  
 \mathbbm{1}( z_t = s_k \wedge x_t = v_w )
 p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+\notag \\ &
+= 
+\frac{1}{p(\bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})}
+\sum_{t=1}^T \mathbbm{1}( x_t = v_w )
+p(z_t = s_k, \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+\end{align}
+
+\begin{align}
+p(z_t = s_k, \bm{x}_{1:T}; A, B)
+& = 
+p(x_1, \ldots, x_t, z_t = s_k; A, B)
+p(x_{t+1}, \ldots, x_T | x_1, \ldots, x_t, z_t = s_k; A, B)
+\notag \\ & = 
+p(x_1, \ldots, x_t, z_t = s_k; A, B)
+p(x_{t+1}, \ldots, x_T | z_t = s_k; A, B)
+\notag \\ & = 
+\alpha_t(k) \beta_t(k)
 \end{align}
 \begin{align}
-\sum_{\bm{z}_{1:T}}  
-\mathbbm{1}( z_t = s_k \wedge x_t = v_w )
-p(\bm{z}_{1:T} , \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
-= p(z_t = s_k, \bm{x}_{1:T}; A_{\mbox{\scriptsize old}}, B_{\mbox{\scriptsize old}})
+\therefore B_{s_k, v_w} 
+= 
+\frac{ \sum_{t=1}^T  \mathbbm{1}( x_t = v_w ) \alpha_t(k) \beta_t(k) }{ \sum_{w^\prime=1}^W \sum_{t=1}^T  \mathbbm{1}( x_t = v_{w^\prime} ) \alpha_t(k) \beta_t(k) }
+= 
+\frac{ \sum_{t=1}^T  \mathbbm{1}( x_t = v_w ) \alpha_t(k) \beta_t(k) }
+{ \sum_{t=1}^T \alpha_t(k) \beta_t(k) }
 \end{align}
 \end{frame}
 
