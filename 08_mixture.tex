@@ -114,7 +114,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 & p( \mathcal{X}, \mathcal{Z} ;\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \})
 = \prod_{i=1}^N p(z_i ; \theta_{z_i}) p(x_i | z_i ; \mu_{z_i}, \sigma_{z_i})
 \notag \\ &
-= \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
+= \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})^2 }{2\sigma_{z_i}^2} \bigg) \bigg]
 \label{eq:joint_MN}
 \end{align}
 \vspace{-.15in}
@@ -155,7 +155,7 @@ p(x;\mu_k,\sigma_k) = \frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\Big( - \frac{(x - \mu_
 & p(\mathcal{D};\bm{\theta}, \{ \mu_k \}, \{ \sigma_k \} )
 = \prod_{i=1}^N p(z_i ; \theta_{z_i}) p(x_i | z_i ; \mu_{z_i}, \sigma_{z_i})
 \notag \\ &
-= \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
+= \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})^2}{2\sigma_{z_i}^2} \bigg) \bigg]
 \notag \\ &
 = \prod_{k=1}^K \bigg[ \theta_k^{c_k} \times \frac{1}{ (\sqrt{2\pi\sigma_k^2} )^{c_k}} 
 \exp\bigg( - \frac{ \sum_{ \{ i : z_i = k \} } (x_i - \mu_k)^2 }{2\sigma_k^2} \bigg) \bigg]
@@ -245,7 +245,7 @@ $\frac{\partial L}{\partial \lambda} = 0$より、$1 - \sum_{k=1}^K \frac{c_k}{\
 & p(\mathcal{X}, \mathcal{Z};\bm{\theta},\{ \mu_k \}, \{ \sigma_k \})
 = \prod_{i=1}^N p(z_i ; \theta_{z_i}) p(x_i | z_i ; \mu_{z_i}, \sigma_{z_i})
 \notag \\ &
-= \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \bigg) \bigg]
+= \prod_{i=1}^N \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\bigg( - \frac{(x_i - \mu_{z_i})^2}{2\sigma_{z_i}^2} \bigg) \bigg]
 \notag
 \end{align}
 \end{itemize}
@@ -283,7 +283,7 @@ p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 = \ln \prod_{i=1}^N \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
 = \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \bigg)
 \notag \\ &
-= \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\Big( - \frac{(x_i - \mu_{z_i})}{2\sigma_{z_i}^2} \Big) \bigg] \bigg)
+= \sum_{i=1}^N \ln \bigg( \sum_{z_i=1}^K \bigg[ \theta_{z_i} \times \frac{1}{\sqrt{2\pi\sigma_{z_i}^2}}\exp\Big( - \frac{(x_i - \mu_{z_i})^2}{2\sigma_{z_i}^2} \Big) \bigg] \bigg)
 \label{eq:logLH_MN}
 \end{align}
 \end{itemize}
