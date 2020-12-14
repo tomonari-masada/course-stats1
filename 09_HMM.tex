@@ -25,12 +25,12 @@
 \begin{itemize}
 \item[例.] 天候の集合$\mathcal{S} = \{ s_{\mbox{\scriptsize sun}}, s_{\mbox{\scriptsize cloud}}, s_{\mbox{\scriptsize rain}} \}$
 \end{itemize}
-\item 以下の単純マルコフ性の仮定をおく
+\item 以下の\underline{単純マルコフ性}の仮定をおく
 \vspace{-.1in}
 \begin{align}
 p(z_i =s | z_1,\ldots, z_{i-1}) = p(z_i =s | z_{i-1}) \mbox{ for all $s \in \mathcal{S}$}
 \end{align}
-\item $s_k$から$s_l$に遷移する確率$p(z_t=s_l|z_{t-1}=s_k)$は、全ての$t$で等しいと仮定（斉時性の仮定）し、この確率を$A_{s_k,s_l}$と書く
+\item $s_k$から$s_l$に遷移する確率$p(z_t=s_l|z_{t-1}=s_k)$は、全ての$t$で等しいと仮定（\underline{斉時性}の仮定）し、この確率を$A_{s_k,s_l}$と書く
 \begin{itemize}
 \item $\sum_{l=1}^K A_{s_k, s_l} = 1$が、すべての$k$で成り立つ
 \end{itemize}
@@ -66,11 +66,14 @@ s_{\mbox{\scriptsize rain}} & 0 & 0.1 & 0.2 & 0.7
 
 \begin{frame}{状態列の尤度}
 \begin{itemize}
-\item 状態の列$\bm{z}_{1:T}\equiv(z_1,\ldots,z_T)$の尤度$p(\bm{z}_{1:T})$は
+\item 状態の列$\bm{z}_{1:T}\equiv(z_1,\ldots,z_T)$の尤度$p(\bm{z}_{1:T})$
+\end{itemize}
 \begin{align}
-p(\bm{z}_{1:T};A) & = p(z_1,\ldots,z_T;A) \notag \\
-& = p(z_0, z_1,\ldots,z_T;A) \notag \\
-& = p(z_T | z_{T-1},\ldots,z_1;A) \cdots p(z_2|z_1;A) p(z_1|z_0;A) \notag \\
+& p(\bm{z}_{1:T};A) 
+\notag \\ & = p(z_0,z_1,z_2,\ldots,z_T;A)
+\notag \\ 
+& = p(z_T | z_{T-1},\ldots,z_1;A) \cdots 
+p(z_3|z_2,z_1,z_0;A)p(z_2|z_1,z_0;A) p(z_1|z_0;A) \notag \\
 & = p(z_T | z_{T-1};A) \cdots p(z_2|z_1;A) p(z_1|z_0;A) \notag \\
 & = \prod_{t=1}^T p(z_t | z_{t-1};A) = \prod_{t=1}^T A_{z_{t-1}, z_t}
 \label{eq:seq_LH}
@@ -78,7 +81,6 @@ p(\bm{z}_{1:T};A) & = p(z_1,\ldots,z_T;A) \notag \\
 \vspace{-.1in}
 \begin{itemize}
 \item[問.] どこで単純マルコフ性の仮定を使っているか？
-\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -124,6 +126,9 @@ $\sum_{k=1}^K A_{s_l,s_k}=1$だから
 \item あなたは西暦2799年の世界に生きており、地球温暖化の研究をしている
 \item 歴史的な資料の中から、2020年夏の毎日のアイスクリームの売上の記録が見つかった
 \item この記録を元に、2020年夏の毎日の天候を推定したい
+\begin{itemize}
+\item 天候の観測データは失われてしまっている！
+\end{itemize}
 \item ただし、アイスクリームの売上は天候だけに依存すると仮定
 \begin{itemize}
 \item \href{https://web.stanford.edu/~jurafsky/slp3/A.pdf}{https://web.stanford.edu/\~{}jurafsky/slp3/A.pdf}
@@ -138,7 +143,7 @@ $\sum_{k=1}^K A_{s_l,s_k}=1$だから
 \begin{itemize}
 \item このとき、状態を表す確率変数$z_t$は潜在変数latent variableとなる
 \end{itemize}
-\item 隠れ状態の列$\bm{z}_{1:T}=(z_1,\ldots,z_T)$は、上述のとおり、単純マルコフ性と斉時性を持つと仮定する
+\item 隠れ状態の列$\bm{z}_{1:T}=(z_1,\ldots,z_T)$は、上述のとおり、\underline{単純マルコフ性}と\underline{斉時性}を持つと仮定する
 \item 時点$t$での観測結果を、確率変数$x_t$で表す
 \item 観測データ$x_t$について、以下のような独立性の仮定をおく
 \begin{align}
