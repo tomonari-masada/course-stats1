@@ -333,29 +333,29 @@ p(\mathcal{X}) & = \sum_{\mathcal{Z}} p(\mathcal{X}, \mathcal{Z})
 \item そこで、各$x_i$について$\bm{q}_i \equiv (q_{i,1}, \ldots, q_{i,K})$という$\sum_k q_{i,k}=1$を満たす変数を用意すると
 \begin{align}
 & \ln p(\mathcal{X}) = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
-\notag \\ & = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K q_{i,k} \frac{p(z_i) p(x_i | z_i)}{q_{i,k}} \Big)
+\notag \\ & = \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K q_{i,z_i} \frac{p(z_i) p(x_i | z_i)}{q_{i,z_i}} \Big)
 \geq 
-\sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+\sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,z_i}}
+\label{eq:LB}
 \end{align}
-\vspace{-.4in}
-\item この下界を$\mathcal{L}$と書くことにする
+\vspace{-.2in}
+\item この下界を$\mathcal{L}(\{ \bm{q}_i \},\bm{\theta},\{\mu_k\},\{\sigma_k\})$と書くことにする
 \end{itemize}
 \end{frame}
 
 \begin{frame}{観測データの対数尤度の下界の最大化}
 \begin{itemize}
-\item $\ln p(\mathcal{X})$の代わりに$\mathcal{L}$を最大化することで、
+\item $\ln p(\mathcal{X})$の代わりに$\mathcal{L}(\{ \bm{q}_i \},\bm{\theta},\{\mu_k\},\{\sigma_k\})$を最大化することによって、次の未知量を推定する
 \begin{itemize}
-\item $\{ \bm{q}_i \} \equiv \{ \bm{q}_1, \ldots, \bm{q}_N \}$と、
-\item モデルパラメータ$\bm{\Theta} \equiv \{ \bm{\theta}, \{ \mu_k \}, \{ \sigma_k \} \}$とを、
+\item 新たに導入した$\{ \bm{q}_i \} \equiv \{ \bm{q}_1, \ldots, \bm{q}_N \}$ where $\bm{q}_i=(q_{i,1},\ldots,q_{i,K})$
+\item モデルパラメータ$\bm{\Theta} \equiv \{ \bm{\theta}, \{ \mu_k \}, \{ \sigma_k \} \}$
 \end{itemize}
-\item[] 推定する。
 \item いま考えている単変量正規分布の混合分布の場合
 \begin{align}
 p(z_i=k) & = \theta_k \\
 p(x_i | z_i=k) & = \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp \bigg( - \frac{ ( x_i - \mu_k)^2 }{ 2\sigma_k^2 } \bigg)
 \end{align}
-\item 以下、推定計算を行う
+\item これらを式\eqref{eq:LB}に当てはめることで、以下、推定計算を行う
 \end{itemize}
 \end{frame}
 
@@ -443,16 +443,17 @@ q_{i,k} \leftarrow \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z
 \begin{align}
 \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
 \geq 
-\sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+\sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,z_i}}
+\notag
 \end{align}
 \item 左辺から右辺を引くと
 \end{itemize}
 \begin{align}
 & \sum_{i=1}^N \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
-- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,z_i}}
 \notag \\ &
-= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
-- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln \Big( \sum_{z_i=1}^K p(z_i) p(x_i | z_i) \Big)
+- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,z_i}}
 \notag
 \end{align}
 \end{frame}
@@ -461,18 +462,18 @@ q_{i,k} \leftarrow \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z
 （続き）
 \begin{align}
 &
-= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \Big( \sum_{z_i=1}^K p(x_i, z_i) \Big)
-- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,k}}
+= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln \Big( \sum_{z_i=1}^K p(x_i, z_i) \Big)
+- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln\frac{p(z_i) p(x_i | z_i)}{q_{i,z_i}}
 \notag \\
-& = \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln p(x_i)
-- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln\frac{p(x_i, z_i)}{q_{i,k}}
+& = \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln p(x_i)
+- \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln\frac{p(x_i, z_i)}{q_{i,z_i}}
 \notag \\& 
-= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \frac{p(x_i) q_{i,k}}{p(x_i , z_i)}
-= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,k} \ln \frac{q_{i,k}}{p(z_i | x_i)}
+= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln \frac{p(x_i) q_{i,k}}{p(x_i , z_i)}
+= \sum_{i=1}^N \sum_{z_i=1}^K q_{i,z_i} \ln \frac{q_{i,z_i}}{p(z_i | x_i)}
 \label{eq:diff}
 \end{align}
 \begin{itemize}
-\item $q_{i,k}=p(z_i | x_i)$のとき、等号が成立する
+\item $q_{i,k}=p(z_i = k| x_i)$のとき、等号が成立する
 \end{itemize}
 \end{frame}
 
@@ -499,7 +500,7 @@ $q$から$p$への{\small（$p$の$q$に対する）}
 \begin{itemize}
 \item $q_i(z_i)$を、$K$個のアイテム$\{1,\ldots,K\}$上に定義されたカテゴリカル分布とし、
 $q_i(z_i=k) \equiv q_{i,k}$と設定する
-\item 式\eqref{eq:diff}は、このカテゴリカル分布$q_i(z_i)$の、同じ$K$個のアイテム$\{1,\ldots,K\}$上に定義されたカテゴリカル分布$p(z_i|x_i)$に対する、カルバック・ライブラー情報量になっている
+\item 式\eqref{eq:diff}は$q_i(z_i)$の$p(z_i|x_i)$に対するカルバック・ライブラー情報量になっている
 \item ところで、式\eqref{eq:EM_q}より、
 \begin{align}
 q_{i,k} & = \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z_i = k) }
@@ -513,16 +514,16 @@ q_{i,k} & = \frac{ \theta_k p(x_i | z_i = k) }{ \sum_k \theta_k p(x_i | z_i = k)
 \begin{frame}{$q_{i,k}$とは何なのか(4/4)}
 \begin{itemize}
 \item つまり、式\eqref{eq:EM_q}は$q_{i,k} = p(z_i=k|x_i)$を意味している
-\item このとき、式\eqref{eq:diff}のカルバック・ライブラー情報量はゼロ！
+\item このとき、式\eqref{eq:diff}のカルバック・ライブラー情報量は\underline{ゼロ}！
 \item ただし、$q_{i,k}$は、モデルパラメータ$\bm{\theta},\{\mu_k\},\{\sigma_k\}$の値を固定し、
 $\ln p(x_i)$の下界を最大化することで求めたものである
-\item つまり、モデルパラメータの特定の値について式\eqref{eq:diff}をゼロにできるだけで、
-$\ln p(x_i)$が最大化できているわけではない
-\item Mステップでは、固定された$q_{i,k}$について、$\ln p(x_i)$の下界をできるだけ大きくすべく、
-パラメータの値を求めている
 \begin{itemize}
-\item Eステップでは、そのときのパラメータ値に対しては、$q_{i,k}$について最善の答えを得ていることは確か
+\item つまり、モデルパラメータの特定の値について式\eqref{eq:diff}をゼロにできるだけで、
+$\ln p(x_i)$が最大化できているわけではないが…
 \end{itemize}
+\item Eステップでは、その固定されたパラメータ値に対しては、各$q_{i,k}$について最善の答えを得ていることは確か
+\item Mステップでは、$\{ \bm{q}_i \}$の値を固定し、$\ln p(x_i)$の下界をできるだけ大きくすべく、
+パラメータの値を求めている
 \end{itemize}
 \end{frame}
 
@@ -530,13 +531,13 @@ $\ln p(x_i)$が最大化できているわけではない
 \begin{frame}{E stepで何をしているか}
 \begin{itemize}
 \item モデルのパラメータ$\bm{\Theta} \equiv \{ \bm{\theta}, \mu_1, \ldots, \mu_K, \sigma_1, \ldots, \sigma_K \}$の値を固定した状態で、
-対数尤度の下界$\mathcal{L}(\bm{\Theta})$を最大化する$q_i(z_i)$を求めているのが、E step
-\item パラメータ$\bm{\Theta}$の固定された値を$\bm{\Theta}_{\mbox{\scriptsize old}}$と書くことにする
+対数尤度の下界$\mathcal{L}(\bm{\Theta})$を最大化する$\{ \bm{q}_i \}$を求めているのが、E step
+\item パラメータ$\bm{\Theta}$の、固定された値を、$\bm{\Theta}_{\mbox{\scriptsize old}}$と書くことにする
 \item その最大化によって得られる答えは
 \begin{align}
-q_i(z_i) = p(z_i|x_i; \bm{\Theta}_{\mbox{\scriptsize old}})
+q_{i, k} = p(z_i = k|x_i; \bm{\Theta}_{\mbox{\scriptsize old}})
 \end{align}
-\item つまり、モデルパラメータを固定したうえで、観測データを所与とする潜在変数の条件付き分布を求めている
+\item つまり、モデルパラメータ$\bm{\Theta}$の値を固定したうえで、観測データを所与とする潜在変数の条件付き分布を求めている
 \end{itemize}
 \end{frame}
 
