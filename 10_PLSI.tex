@@ -2,7 +2,7 @@
 
 \input{mycmds.tex}
 
-\title{PLSI \\ (probabilistic latent semantic indexing)}
+\title{PLSI \\ (probabilistic latent semantic analysis)}
 \author{\texorpdfstring{正田 備也\newline\href{mailto:masada@rikkyo.ac.jp}{masada@rikkyo.ac.jp}}{正田 備也}}
 \date{}
 
@@ -38,7 +38,7 @@
 \begin{itemize}
 \item 政治について書かれたテキストと、スポーツについて書いたテキストとでは、どの単語がどのくらいの確率で出現するかが異なる、という考え方。
 \end{itemize}
-\item そこで、一つの文書に含まれる単語トークン群が、唯一の単語多項分布からではなく、複数の単語多項分布から生成されると、仮定する→\underline{PLSIモデル}
+\item そこで、一つの文書に含まれる単語トークン群が、唯一の単語多項分布からではなく、複数の単語多項分布から生成されると、仮定する→\underline{PLSAモデル}
 \begin{itemize}
 \item 同じ文書内に、異なる単語多項分布に由来する単語トークンが混ざっていてもよい、という考え方。
 \end{itemize}
@@ -49,7 +49,7 @@
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[scale=.21]{PLSI1.jpg}
-\caption{混合多項分布とPLSIの違い}
+\caption{混合多項分布とPLSAの違い}
 \label{}
 \end{center}
 \end{figure}\end{frame}
@@ -59,7 +59,7 @@
 \begin{center}
 \includegraphics[scale=.22]{PLSI2.jpg}
 \vspace{-.2in}
-\caption{PLSIでは同じ文書の単語トークンが複数の単語多項分布に由来}
+\caption{PLSAでは同じ文書の単語トークンが複数の単語多項分布に由来しうる}
 \label{}
 \end{center}
 \end{figure}
@@ -71,22 +71,51 @@
 \Large \tableofcontents[currentsection]
 \end{frame}
 
-\begin{frame}{PLSI (probabilistic latent semantic indexing)}
+\begin{frame}{PLSA (probabilistic latent semantic analysis)}
 \begin{itemize}
-\item LSI(latent semantic indexing)確率モデル化したモデル
+\item LSA(latent semantic analysis)をprobabilisticにしたモデル
 \begin{itemize}
-\item LSIについては、説明を割愛（実態は単なるSVD）
+\item LSAについては次スライドの図を参照（実態は単なるSVD）
 \end{itemize}
 \item 同じ文書内でも、単語トークンが異なる単語多項分布から生成される
 \item どの単語多項分布がどのくらいの確率で使われるかが、文書によって異なる
-\item PLSIにおける単語多項分布を、トピック(topic)と呼ぶ
+\item PLSAにおける単語多項分布を、トピック(topic)と呼ぶ
 \begin{itemize}
-\item PLSIは最もシンプルなトピックモデル
+\item PLSAは最もシンプルなトピックモデル
 \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{確率モデル}
+\begin{frame}{LSAの概念図}
+\FontMath
+\vspace{-.2in}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=0.47]{svd1.jpg}
+\caption{\href{https://liqiangguo.wordpress.com/2011/06/09/latent-semantic-analysis/}{LSAの概念図}}
+\label{fig:LSA}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item 左から順に、データ行列の特異値分解、低ランク近似、元のデータ行列の再現
+\item $m$が語彙サイズ、$n$が文書数、$k$がトピック数（$r$は元のデータ行列のランク）
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{確率モデルとしてのPLSA}
+\begin{itemize}
+\item PLSAは、行列分解ではなく、観測データの生成モデル
+\item 文書$d$の$i$番目の単語として$w$が現れる確率$p_d(x_i=w)$を、PLSAでは以下のようにモデリングする
+\begin{align}
+p_d(x_i=w) = \sum_{z_i=1}^K p(x_i=w|z_i) p_d(z_i)
+\end{align}
+\begin{itemize}
+\item $p_d(z=k)$は、文書$d$内の単語がトピック$k$を扱っている確率
+\item $p(x=w|z=k)$は、トピック$k$を扱うときに単語$w$が使われる確率
+\end{itemize}
+\end{itemize}
+
 \end{frame}
 
 
