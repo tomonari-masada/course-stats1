@@ -815,9 +815,20 @@ $p(X,Y,Z)=p(X)p(Z)p(Y|X,Z)$という分解
 \item このとき、$p(X,Z|Y)=\frac{p(X,Y,Z)}{p(Y)}=\frac{p(X)p(Z)p(Y|X,Z)}{p(Y)} \neq p(X|Y)p(Z|Y)$
 \end{itemize}
 \end{itemize}
-
-
 \end{frame}
+
+\begin{frame}{5つ目の課題（1月31日23:59まで）}
+\begin{itemize}
+\item コインがある。このコインの表が出る確率を$\mu$とする。
+\item $\mu$の事前分布は、下の密度関数を持つベータ分布だとする。
+\begin{align}
+f( \mu ; \alpha, \beta ) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \mu^{\alpha - 1} (1 - \mu)^{\beta - 1}
+\end{align}
+\item[問5-1] $\int \mu f( \mu ; \alpha, \beta ) d \mu$を計算せよ。
+\item[問5-2] このコインを投げたところ、表が$m$回出て、裏が$l$回出た。このとき、$\mu$の事後分布を求めよ。
+\end{itemize}
+\end{frame}
+
 
 
 \end{document}
