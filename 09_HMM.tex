@@ -321,7 +321,7 @@ $z_t$が所与のもとで$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立�
 \end{align}
 \vspace{-.2in}
 \begin{itemize}
-\item[注.] $p(A,B|C) = p(A|C)p(B|C)$と$P(A,B)=P(A)P(B)$は別物
+\item[注.] $p(A,B|C) = p(A|C)p(B|C)$と$p(A,B)=p(A)p(B)$は別物
 \begin{itemize}
 \item[cf.] \href{https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php}{\scriptsize https://www.probabilitycourse.com/chapter1/1\_4\_4\_conditional\_independence.php}
 \end{itemize}
@@ -331,13 +331,13 @@ $z_t$が所与のもとで$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立�
 
 \begin{frame}{問9.1}
 \begin{itemize}
-\item $P(A,B,C|D)=P(A|D)P(B,C|D)$、つまり、
+\item $p(A,B,C|D)=p(A|D)p(B,C|D)$、つまり、
 \item[] $D$が所与のもとで$A$と$B,C$が条件付き独立ならば、
-$P(A,B|D)=P(A|D)P(B|D)$、つまり、
+$p(A,B|D)=p(A|D)p(B|D)$、つまり、
 \item[] $D$が所与のもとで$A$と$B$が条件付き独立になることを、示せ。
-\item[答え] $P(A,B,C|D)=P(A|D)P(B,C|D)$の両辺を$C$について周辺化すると、
-左辺は$\sum_C P(A,B,C|D)=P(A,B|D)$となり、右辺は$\sum_C  P(A|D)P(B,C|D)=P(A|D)P(B|D)$となる。
-\item[] よって、$P(A,B|D) = P(A|D)P(B|D)$が言える。
+\item[答え] $p(A,B,C|D)=p(A|D)p(B,C|D)$の両辺を$C$について周辺化すると、
+左辺は$\sum_C p(A,B,C|D)=p(A,B|D)$となり、右辺は$\sum_C  p(A|D)p(B,C|D)=p(A|D)p(B|D)$となる。
+\item[] よって、$p(A,B|D) = p(A|D)p(B|D)$が言える。
 \end{itemize}
 \end{frame}
 
@@ -430,7 +430,7 @@ $z_t$が所与のとき$x_t$と$\bm{x}_{1:t-1},z_{t-1}$は条件付き独立で�
 \item これも動的計画法
 \end{itemize}
 \item 実はforward procedureとほとんど同じ計算をする
-\item 式~\eqref{eq:alpha_1}以降に現れる隠れ状態に関する和$\sum_{z_{t-1} \in \mathcal{S}}$を、
+\item 式~\eqref{eq:alpha_1}以降に現れる、隠れ状態に関する和$\sum_{z_{t-1} \in \mathcal{S}}$を、
 $\max_{z_{t-1} \in \mathcal{S}}$で置き換えて、計算を進めればいいだけ
 \item ただし、そのとき、同時に$\argmax_{z_{t-1} \in \mathcal{S}}$も記録しておく
 \item $t=T$まで計算が終わったら、途中で記録しておいた$\argmax_{z_{t-1} \in \mathcal{S}}$を逆にたどることで、隠れ状態の列が得られる
@@ -533,7 +533,6 @@ A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1
 \end{frame}
 
 \begin{frame}
-%\FontMath
 \begin{itemize}
 \item[cf.] \href{http://cs229.stanford.edu/section/cs229-hmm.pdf}{http://cs229.stanford.edu/section/cs229-hmm.pdf}
 \begin{align}
@@ -588,6 +587,7 @@ A,B & = \argmax_{A,B} \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \ln \frac{ p(\bm{x}_{1
 
 \begin{frame}
 \FontMath
+\vspace{-.1in}
 \begin{align}
 \frac{\partial \mathcal{L}(A, B, \{ \lambda_k \} , \{ \mu_k \}) }{\partial A_{s_l, s_k}}
 & = \frac{ \sum_{\bm{z}_{1:T}} q(\bm{z}_{1:T}) \sum_{t=1}^T 
@@ -770,6 +770,53 @@ p(x_{t+1}, \ldots, x_T | z_t = s_k; A, B)
 \frac{ \sum_{t=1}^T  \mathbbm{1}( x_t = v_w ) \alpha_t(k) \beta_t(k) }
 { \sum_{t=1}^T \alpha_t(k) \beta_t(k) }
 \end{align}
+\end{frame}
+
+\section{（補足）条件付き独立性}
+
+\begin{frame}\frametitle{Contents}
+\Large \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{条件付き独立性}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=0.3]{12859_2007_Article_1927_Fig3_HTML.jpg}
+\caption{条件付き独立性}
+\label{fig:CI}
+\vspace{-.2in}
+{\scriptsize cf. \href{https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-8-S6-S5}{https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-8-S6-S5}}
+\vspace{-.15in}
+
+{\scriptsize chainはhead-to-tail型、forkはtail-to-tail型、colliderはhead-to-head型とも呼ぶ。}
+\end{center}
+\end{figure}\end{frame}
+
+\begin{frame}{条件付き独立性の証明}
+\begin{itemize}
+\item chainについて$p(X,Z|Y)=p(X|Y)p(Z|Y)$を下に示す
+\begin{itemize}
+\item chainの図が表すのは
+$p(X,Y,Z)=p(Z|Y)p(Y|X)p(X)$という分解
+\item よって、
+$p(X,Z|Y)=\frac{p(X,Y,Z)}{p(Y)}=\frac{p(Z|Y)p(Y|X)p(X)}{p(Y)}=p(Z|Y)p(X|Y)$
+\end{itemize}
+\item forkについて$p(X,Z|Y)=p(X|Y)p(Z|Y)$を下に示す
+\begin{itemize}
+\item forkの図が表すのは
+$p(X,Y,Z)=p(X|Y)p(Z|Y)p(Y)$という分解
+\item よって、
+$p(X,Z|Y)=\frac{p(X,Y,Z)}{p(Y)}=\frac{p(X|Y)p(Z|Y)p(Y)}{p(Y)}=p(X|Y)p(Z|Y)$
+\end{itemize}
+\item colliderについて$p(X,Z|Y)\neq p(X|Y)p(Z|Y)$を下に示す
+\begin{itemize}
+\item colliderの図が表すのは
+$p(X,Y,Z)=p(X)p(Z)p(Y|X,Z)$という分解
+\item このとき、$p(X,Z|Y)=\frac{p(X,Y,Z)}{p(Y)}=\frac{p(X)p(Z)p(Y|X,Z)}{p(Y)} \neq p(X|Y)p(Z|Y)$
+\end{itemize}
+\end{itemize}
+
+
 \end{frame}
 
 
