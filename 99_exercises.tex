@@ -1,0 +1,99 @@
+\documentclass[aspectratio=169,unicode,dvipdfmx,14pt]{beamer}
+
+\input{mycmds.tex}
+
+\title{ \\5つ目の課題の答え}
+\author{\texorpdfstring{正田 備也\newline\href{mailto:masada@rikkyo.ac.jp}{masada@rikkyo.ac.jp}}{正田 備也}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{ガンマ関数の性質}
+授業中にも述べましたが、ガンマ関数$\Gamma(x)$について、次の等式が成立します。
+\begin{align}
+\Gamma(x+1) = x \Gamma(x)
+\label{eq1}
+\end{align}
+このことを、以下の議論で使います。
+\end{frame}
+
+
+\begin{frame}{ベータ分布の規格化定数}
+\FontMath
+また、ベータ分布の密度関数$f(\mu;\alpha,\beta)=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+\mu^{\alpha-1}(1 - \mu)^{\beta - 1}$を$[0,1]$の範囲で積分すると$1$になること、つまり
+\begin{align}
+1 = \int_0^1 \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+\mu^{\alpha-1}(1 - \mu)^{\beta - 1} d\mu
+\label{eq2}
+\end{align}
+であることも、以下の議論では利用します。
+
+（これは、積分すると$1$になるようにするには、$\mu^{\alpha-1}(1 - \mu)^{\beta - 1}$に$\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}$をかけ算しておく必要がある、ということでもあります。）
+
+特に、上の式\eqref{eq2}を変形すると
+\begin{align}
+\frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)} = \int_0^1 
+\mu^{\alpha-1}(1 - \mu)^{\beta - 1} d\mu
+\label{eq3}
+\end{align}
+となることに注意しましょう。
+\end{frame}
+
+
+\begin{frame}{問1}
+\FontMath
+\vspace{-.2in}
+\begin{align}
+\int_0^1 \mu f(\mu;\alpha,\beta) d\mu 
+& = \int_0^1 \mu \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+\mu^{\alpha-1}(1 - \mu)^{\beta - 1} d\mu
+\notag \\
+& = \int_0^1 \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+\mu^{\alpha}(1 - \mu)^{\beta - 1} d\mu
+&& \mbox{$\mu$と$\mu^{\alpha-1}$とをまとめた}
+\notag \\
+& = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \int_0^1 
+\mu^{\alpha}(1 - \mu)^{\beta - 1} d\mu
+&& \mbox{定数部分を積分の外に出した}
+\notag \\
+& = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} 
+\frac{\Gamma(\alpha+1)\Gamma(\beta)}{\Gamma(\alpha+\beta+1)}
+&& \mbox{式\eqref{eq3}の$\alpha$を$\alpha+1$で置き換えて使った}
+\notag \\ 
+& = \frac{\Gamma(\alpha+1)}{\Gamma(\alpha)}
+\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha+\beta+1)}
+&& \mbox{$\Gamma(\beta)$を分母分子でキャンセル}
+\notag \\ 
+& = \frac{\alpha\Gamma(\alpha)}{\Gamma(\alpha)}
+\frac{\Gamma(\alpha+\beta)}{(\alpha+\beta)\Gamma(\alpha+\beta)}
+&& \mbox{式\eqref{eq1}より}
+\notag \\
+& = \frac{\alpha}{\alpha+\beta}
+\end{align}
+\end{frame}
+
+\begin{frame}{問2}
+\FontMath
+（事後分布）∝（尤度）×（事前分布）なので、規格化定数を除き、$\mu$に依存する部分だけに着目すると
+\begin{align}
+\mbox{（事後分布）} & \propto \mu^m (1- \mu)^l \times \mu^{\alpha-1}(1 - \mu)^{\beta - 1}
+\notag \\
+& = \mu^{\alpha + m -1}(1 - \mu)^{\beta + l - 1}
+\end{align}
+これは、パラメータが$\alpha + m$と$\beta + l$のベータ分布$\mbox{Beta}(\alpha + m,\beta + l)$である。
+
+よってその密度関数は、規格化定数もきちんと書くと
+\begin{align}
+\frac{\Gamma(\alpha + m + \beta + l)}{\Gamma(\alpha+m)\Gamma(\beta+l)}
+\mu^{\alpha + m -1}(1 - \mu)^{\beta + l - 1}
+\end{align}
+となる。
+\end{frame}
+
+
+\end{document}
